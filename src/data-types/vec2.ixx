@@ -1,4 +1,4 @@
-export module null.sdk:vec2_t;
+export module null.sdk:data_types.vec2;
 
 #include <fast_operators.h>
 

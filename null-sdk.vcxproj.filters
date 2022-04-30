@@ -7,6 +7,9 @@
     <Filter Include="src\data-types">
       <UniqueIdentifier>{a7589b3c-f521-4b77-bc14-802f226fa1d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{0a888b4a-4f43-4ec7-abfb-ca3b83e71caf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fast_operators.h">
@@ -14,17 +17,23 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\data-types\color_t.ixx">
+    <ClCompile Include="src\data-types\color.ixx">
       <Filter>src\data-types</Filter>
     </ClCompile>
-    <ClCompile Include="src\data-types\rect_t.ixx">
+    <ClCompile Include="src\data-types\rect.ixx">
       <Filter>src\data-types</Filter>
     </ClCompile>
-    <ClCompile Include="src\data-types\vec2_t.ixx">
+    <ClCompile Include="src\data-types\vec2.ixx">
       <Filter>src\data-types</Filter>
     </ClCompile>
     <ClCompile Include="src\null-sdk.ixx">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\win.ixx">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data-types\callbacks.ixx">
+      <Filter>src\data-types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

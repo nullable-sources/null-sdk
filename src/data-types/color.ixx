@@ -1,4 +1,4 @@
-export module null.sdk:color_t;
+export module null.sdk:data_types.color;
 #include <fast_operators.h>
 
 struct color_t {
