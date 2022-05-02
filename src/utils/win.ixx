@@ -16,6 +16,24 @@ export namespace utils {
 	namespace win {
 		class c_window {
 		public:
+			struct time_data_t {
+				std::uint64_t ticks_per_second{ }, time{ };
+				float delta_time{ };
+				
+				void initialize() {
+					if(!QueryPerformanceFrequency((LARGE_INTEGER*)&ticks_per_second)) throw std::runtime_error("QueryPerformanceFrequency(&ticks_per_second) exception");
+					if(!QueryPerformanceCounter((LARGE_INTEGER*)&time)) throw std::runtime_error("QueryPerformanceCounter(&time) exception");
+				}
+
+				void begin_frame() {
+					std::uint64_t current_time{ 0 };
+					if(!QueryPerformanceCounter((LARGE_INTEGER*)&current_time)) throw std::runtime_error("QueryPerformanceCounter(&current_time) exception");
+
+					delta_time = (float)(current_time - time) / ticks_per_second;
+					time = current_time;
+				}
+			} time_data{ };
+
 			single_callbacks_t<e_window_callbacks> callbacks{ };
 
 			HWND wnd_handle{ nullptr };
@@ -39,13 +57,17 @@ export namespace utils {
 			std::uint32_t styles{ WS_OVERLAPPEDWINDOW };
 
 		public:
+			c_window() = default;
 			c_window(HINSTANCE _instance) : instance(_instance) { }
 
 			bool create() {
 				if(!RegisterClassA(&wnd_class)) throw std::runtime_error("register class error");
 
 				wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, NULL, NULL, instance, NULL);
-				if(wnd_handle) SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
+				if(wnd_handle) {
+					SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
+					time_data.initialize();
+				}
 
 				return wnd_handle != nullptr;
 			}
@@ -71,6 +93,8 @@ export namespace utils {
 						DispatchMessageA(&msg);
 						continue;
 					}
+
+					time_data.begin_frame();
 
 					function();
 				}
