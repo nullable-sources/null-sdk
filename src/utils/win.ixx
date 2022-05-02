@@ -79,8 +79,9 @@ export namespace utils {
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
 				c_window* window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0);
-				if(window && std::any_cast<bool>(window->callbacks.call<bool(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param))) {
-					return true;
+				if(window && window->callbacks.have_callback(e_window_callbacks::wnd_proc)) {
+					if(std::any_cast<bool>(window->callbacks.call<bool(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param)))
+						return true;
 				}
 
 				return DefWindowProcA(_wnd_handle, msg, w_param, l_param);

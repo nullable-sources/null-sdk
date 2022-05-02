@@ -15,19 +15,23 @@ public:
 
 	void remove(e_callbacks place, std::vector<std::any>::iterator callback) { callbacks[place].erase(callback); }
 
+	bool have_callbacks(e_callbacks place) { return !callbacks[place].empty() && callbacks[place].begin()->has_value(); }
+
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<std::is_same_v<typename std::function<function_t>::result_type, void>, void> call(e_callbacks place, args_t ...args) {
+		if(!have_callbacks(place)) throw std::runtime_error("callbacks empty");
+
 		for(std::any& callback : callbacks[place]) {
-			if(!callback.has_value()) throw std::runtime_error("callback empty");
 			std::any_cast<std::function<function_t>>(callback)(args...);
 		}
 	}
 
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<!std::is_same_v<typename std::function<function_t>::result_type, void>, std::vector<std::any>> call(e_callbacks place, args_t ...args) {
+		if(!have_callbacks(place)) throw std::runtime_error("callbacks empty");
+		
 		std::vector<std::any> results{ };
 		for(std::any& callback : callbacks[place]) {
-			if(!callback.has_value()) throw std::runtime_error("callback empty");
 			results.push_back(std::any_cast<std::function<function_t>>(callback)(args...));
 		}
 		return results;
@@ -44,15 +48,17 @@ public:
 	void set(e_callbacks place, std::function<function_t> function) { callbacks[place] = function; }
 	void remove(e_callbacks place) { callbacks[place] = nullptr; }
 
+	bool have_callback(e_callbacks place) { return callbacks[place].has_value(); }
+
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<std::is_same_v<typename std::function<function_t>::result_type, void>, void> call(e_callbacks place, args_t ...args) {
-		if(!callbacks[place].has_value()) throw std::runtime_error("callback empty");
+		if(!have_callback(place)) throw std::runtime_error("callback empty");
 		std::any_cast<std::function<function_t>>(callbacks[place])(args...);
 	}
 
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<!std::is_same_v<typename std::function<function_t>::result_type, void>, std::any> call(e_callbacks place, args_t ...args) {
-		if(!callbacks[place].has_value()) throw std::runtime_error("callback empty");
+		if(!have_callback(place)) throw std::runtime_error("callback empty");
 		return std::any_cast<std::function<function_t>>(callbacks[place])(args...);
 	}
 };
