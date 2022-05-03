@@ -10,7 +10,7 @@ import :data_types.callbacks;
 
 export namespace utils {
 	enum class e_window_callbacks {
-		wnd_proc //std::function<bool(HWND, UINT, WPARAM, LPARAM)>. If callback returns true then DefWindowProc call will be skipped and wndproc will return true
+		wnd_proc //std::function<bool(HWND, UINT, WPARAM, LPARAM)>. If callback returns true then DefWindowProc call will be skipped and wndproc will return true.
 	};
 
 	namespace win {

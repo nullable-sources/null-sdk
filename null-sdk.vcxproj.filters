@@ -35,5 +35,8 @@
     <ClCompile Include="src\data-types\callbacks.ixx">
       <Filter>src\data-types</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\enum_reflection.ixx">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
