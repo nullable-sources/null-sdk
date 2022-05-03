@@ -26,7 +26,7 @@ export namespace utils {
 				}
 
 				void begin_frame() {
-					std::uint64_t current_time{ 0 };
+					std::uint64_t current_time{ };
 					if(!QueryPerformanceCounter((LARGE_INTEGER*)&current_time)) throw std::runtime_error("QueryPerformanceCounter(&current_time) exception");
 
 					delta_time = (float)(current_time - time) / ticks_per_second;
