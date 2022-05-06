@@ -1,7 +1,5 @@
 module;
-
 #include <Windows.h>
-
 export module null.sdk:utils.win;
 import std.core;
 

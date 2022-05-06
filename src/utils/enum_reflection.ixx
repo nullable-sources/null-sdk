@@ -1,10 +1,9 @@
 //original - https://github.com/Neargye/magic_enum/tree/v0.5.0
 export module null.sdk:utils.enum_reflection;
-
 import std.core;
 
-export namespace utils::enum_reflection {
-    template <typename enum_t>
+namespace utils::enum_reflection {
+    export template <typename enum_t>
     struct range final {
         static constexpr int min = std::is_signed_v<std::underlying_type_t<enum_t>> ? -128 : 0;
         static constexpr int max = 128;
@@ -84,27 +83,27 @@ export namespace utils::enum_reflection {
         }
     }
 
-    template <typename enum_t, typename = std::decay_t<enum_t>>
+    export template <typename enum_t, typename = std::decay_t<enum_t>>
     constexpr auto count() noexcept {
         return impl::values<std::decay_t<enum_t>>(impl::range<std::decay_t<enum_t>>()).size();
     }
 
-    template <auto value, typename = std::decay_t<decltype(value)>>
+    export template <auto value, typename = std::decay_t<decltype(value)>>
     constexpr std::string_view name() noexcept {
         return impl::name<std::decay_t<decltype(value)>, value>();
     }
 
-    template <typename enum_t, typename = std::decay_t<enum_t>>
+    export template <typename enum_t, typename = std::decay_t<enum_t>>
     constexpr std::string_view name(enum_t value) noexcept {
         return impl::name<std::decay_t<enum_t>>(static_cast<int>(value));
     }
 
-    template <typename enum_t, typename = std::decay_t<enum_t>>
+    export template <typename enum_t, typename = std::decay_t<enum_t>>
     constexpr auto names() noexcept {
         return impl::names<std::decay_t<enum_t>>(std::make_index_sequence<count<enum_t>()>{ });
     }
 
-    template <typename enum_t, typename = std::decay_t<enum_t>>
+    export template <typename enum_t, typename = std::decay_t<enum_t>>
     constexpr auto members() noexcept {
         return impl::members<std::decay_t<enum_t>>(std::make_index_sequence<count<enum_t>()>{ });
     }

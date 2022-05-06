@@ -1,9 +1,9 @@
+module;
+#include <fast_operators.h>
 export module null.sdk:data_types.rect;
 import :data_types.vec2;
 
-#include <fast_operators.h>
-
-struct rect_t {
+export struct rect_t {
 	vec2_t min{ }, max{ };
 
 	rect_t() = default;
