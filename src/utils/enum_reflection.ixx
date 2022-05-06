@@ -1,5 +1,6 @@
 //original - https://github.com/Neargye/magic_enum/tree/v0.5.0
 export module null.sdk:utils.enum_reflection;
+
 import std.core;
 
 export namespace utils::enum_reflection {
@@ -66,9 +67,7 @@ export namespace utils::enum_reflection {
 
             std::array<enum_t, num_valid> values{};
             for(int i = 0, v = 0; i < n && v < num_valid; ++i) {
-                if(valid[i]) {
-                    values[v++] = static_cast<enum_t>(i + min<enum_t>());
-                }
+                if(valid[i]) values[v++] = static_cast<enum_t>(i + min<enum_t>());
             }
 
             return values;
@@ -77,6 +76,11 @@ export namespace utils::enum_reflection {
         template <typename enum_t, std::size_t... sequence>
         constexpr auto names(std::integer_sequence<std::size_t, sequence...>) noexcept {
             return std::array<std::string_view, sizeof...(sequence)>{ { name<enum_t, values<enum_t>(range<enum_t>())[sequence]>()... } };
+        }
+
+        template <typename enum_t, std::size_t... sequence>
+        constexpr auto members(std::integer_sequence<std::size_t, sequence...>)  noexcept {
+            return std::array<std::pair<enum_t, std::string_view>, sizeof...(sequence)>{ { { values<enum_t>(range<enum_t>())[sequence], name<enum_t, values<enum_t>(range<enum_t>())[sequence]>() }... } };
         }
     }
 
@@ -97,6 +101,11 @@ export namespace utils::enum_reflection {
 
     template <typename enum_t, typename = std::decay_t<enum_t>>
     constexpr auto names() noexcept {
-        return impl::names<std::decay_t<enum_t>>(std::make_index_sequence<count<enum_t>()>{});
+        return impl::names<std::decay_t<enum_t>>(std::make_index_sequence<count<enum_t>()>{ });
+    }
+
+    template <typename enum_t, typename = std::decay_t<enum_t>>
+    constexpr auto members() noexcept {
+        return impl::members<std::decay_t<enum_t>>(std::make_index_sequence<count<enum_t>()>{ });
     }
 }
