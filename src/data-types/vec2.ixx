@@ -2,7 +2,6 @@ module;
 #include <fast_operators.h>
 export module null.sdk:data_types.vec2;
 
-
 export struct vec2_t {
 	float x{ }, y{ };
 
