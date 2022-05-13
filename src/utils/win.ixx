@@ -112,12 +112,12 @@ export namespace utils {
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
 				c_window* window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0);
-				if(window && window->callbacks.have_callback(e_window_callbacks::wnd_proc)) {
-					if(int result; (result = std::any_cast<int>(window->callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param)) > -1))
+				if(c_window* window; window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0)) {
+					if(int result; window->callbacks.have_callback(e_window_callbacks::wnd_proc) && (result = std::any_cast<int>(window->callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param)) > -1))
 						return result;
-				}
 
-				if(int result; (result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param)) > -1) return result;
+					if(int result; (result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param)) > -1) return result;
+				}
 
 				return DefWindowProcA(_wnd_handle, msg, w_param, l_param);
 			}
