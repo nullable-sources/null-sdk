@@ -8,7 +8,7 @@ import :data_types.callbacks;
 
 export namespace utils {
 	enum class e_window_callbacks {
-		wnd_proc //std::function<bool(HWND, UINT, WPARAM, LPARAM)>. If callback returns true then DefWindowProc call will be skipped and wndproc will return true.
+		wnd_proc //std::function<int(HWND, UINT, WPARAM, LPARAM)>. If callback returns > -1 then DefWindowProc call will be skipped.
 	};
 
 	namespace win {
@@ -113,8 +113,8 @@ export namespace utils {
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
 				c_window* window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0);
 				if(window && window->callbacks.have_callback(e_window_callbacks::wnd_proc)) {
-					if(std::any_cast<bool>(window->callbacks.call<bool(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param)))
-						return true;
+					if(int result; (result = std::any_cast<int>(window->callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param)) > -1))
+						return result;
 				}
 
 				if(int result; (result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param)) > -1) return result;
