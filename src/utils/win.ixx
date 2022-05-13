@@ -107,7 +107,7 @@ export namespace utils {
 			virtual void render_create() { }
 			virtual void render_destroy() { }
 			virtual void render_main_loop() { }
-			virtual int render_wnd_proc() { return -1; } //will be ignored if it returns -1
+			virtual int render_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return -1; } //will be ignored if it returns -1
 
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
@@ -117,7 +117,7 @@ export namespace utils {
 						return true;
 				}
 
-				if(int result; (result = window->render_wnd_proc()) > -1) return result;
+				if(int result; (result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param)) > -1) return result;
 
 				return DefWindowProcA(_wnd_handle, msg, w_param, l_param);
 			}
