@@ -65,12 +65,15 @@ export namespace utils {
 				if(wnd_handle) {
 					SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
 					time_data.initialize();
+					render_create();
 				}
 
 				return wnd_handle != nullptr;
 			}
 
 			void destroy() {
+				render_destroy();
+
 				if(!wnd_handle) throw std::runtime_error("window handle is nullptr");
 				if(!instance) throw std::runtime_error("instance is nullptr");
 
@@ -92,11 +95,19 @@ export namespace utils {
 						continue;
 					}
 
+					render_main_loop();
+
 					time_data.begin_frame();
 
 					function();
 				}
 			}
+
+			//virtual methods for render
+			virtual void render_create() { }
+			virtual void render_destroy() { }
+			virtual void render_main_loop() { }
+			virtual int render_wnd_proc() { return -1; } //will be ignored if it returns -1
 
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
@@ -105,6 +116,8 @@ export namespace utils {
 					if(std::any_cast<bool>(window->callbacks.call<bool(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param)))
 						return true;
 				}
+
+				if(int result; (result = window->render_wnd_proc()) > -1) return result;
 
 				return DefWindowProcA(_wnd_handle, msg, w_param, l_param);
 			}
