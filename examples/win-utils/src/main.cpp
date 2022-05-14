@@ -1,7 +1,7 @@
 ﻿#include <Windows.h>
 import null.sdk;
 
-int wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+int wnd_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
     std::cout << "wnd proc" << std::endl;
     return -1;
 }

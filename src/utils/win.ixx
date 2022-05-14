@@ -61,7 +61,7 @@ export namespace utils {
 			bool create() {
 				if(!RegisterClassA(&wnd_class)) throw std::runtime_error("register class error");
 
-				wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, NULL, NULL, instance, NULL);
+				wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, instance, nullptr);
 				if(wnd_handle) {
 					SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
 					time_data.initialize();
@@ -89,7 +89,7 @@ export namespace utils {
 
 				MSG msg{ };
 				while(msg.message != WM_QUIT) {
-					if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+					if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 						TranslateMessage(&msg);
 						DispatchMessageA(&msg);
 						continue;
@@ -109,6 +109,12 @@ export namespace utils {
 			virtual void render_main_loop() { }
 			virtual int render_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return -1; } //will be ignored if it returns -1
 
+			//use for get size from wnd_handle
+			vec2_t get_window_size() {
+				RECT wnd_rect{ 0, 0, 0, 0 };
+				GetClientRect(wnd_handle, &wnd_rect);
+				return { wnd_rect.right - wnd_rect.left, wnd_rect.bottom - wnd_rect.top };
+			}
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
 				if(c_window* window; window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0)) {
