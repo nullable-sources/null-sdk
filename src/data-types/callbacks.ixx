@@ -15,7 +15,21 @@ public:
 
 	void remove(e_callbacks place, std::vector<std::any>::iterator callback) { callbacks[place].erase(callback); }
 
-	bool have_callbacks(e_callbacks place) { return !callbacks[place].empty() && callbacks[place].begin()->has_value(); }
+	bool have_callbacks(e_callbacks place) {
+		if(callbacks.empty() || callbacks[place].empty()) return false;
+		for(std::any& callback : callbacks[place]) if(callback.has_value()) return true;
+		return false;
+	}
+
+	bool empty() {
+		if(callbacks.empty()) return false;
+		for(std::vector<std::any>& _callbacks : callbacks) {
+			for(std::any& callback : _callbacks) {
+				if(callback.has_value()) return true;
+			}
+		}
+		return false;
+	}
 
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<std::is_same_v<typename std::function<function_t>::result_type, void>, void> call(e_callbacks place, args_t ...args) {
@@ -48,7 +62,12 @@ public:
 	void set(e_callbacks place, std::function<function_t> function) { callbacks[place] = function; }
 	void remove(e_callbacks place) { callbacks[place] = nullptr; }
 
-	bool have_callback(e_callbacks place) { return callbacks[place].has_value(); }
+	bool have_callback(e_callbacks place) { return !callbacks.empty() && callbacks[place].has_value(); }
+	bool empty() {
+		if(callbacks.empty()) return false;
+		for(std::any& callback : callbacks) if(callback.has_value()) return true;
+		return false;
+	}
 
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<std::is_same_v<typename std::function<function_t>::result_type, void>, void> call(e_callbacks place, args_t ...args) {
