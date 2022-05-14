@@ -95,18 +95,18 @@ export namespace utils {
 						continue;
 					}
 
-					render_main_loop();
-
+					render_main_loop_begin();
 					time_data.begin_frame();
-
 					function();
+					render_main_loop_end();
 				}
 			}
 
 			//virtual methods for render
 			virtual void render_create() { }
 			virtual void render_destroy() { }
-			virtual void render_main_loop() { }
+			virtual void render_main_loop_begin() { }
+			virtual void render_main_loop_end() { }
 			virtual int render_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return -1; } //will be ignored if it returns -1
 
 			//use for get size from wnd_handle
