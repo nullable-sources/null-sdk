@@ -26,6 +26,7 @@
     <ClCompile Include="src\data-types\color.ixx" />
     <ClCompile Include="src\data-types\rect.ixx" />
     <ClCompile Include="src\data-types\vec2.ixx" />
+    <ClCompile Include="src\math.ixx" />
     <ClCompile Include="src\null-sdk.ixx" />
     <ClCompile Include="src\utils\enum_reflection.ixx" />
     <ClCompile Include="src\utils\win.ixx" />

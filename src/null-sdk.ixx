@@ -7,5 +7,7 @@ export import :data_types.rect;
 export import :data_types.color;
 export import :data_types.callbacks;
 
+export import :math;
+
 export import :utils.win;
 export import :utils.enum_reflection;

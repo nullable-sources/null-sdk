@@ -38,5 +38,8 @@
     <ClCompile Include="src\utils\enum_reflection.ixx">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\math.ixx">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
