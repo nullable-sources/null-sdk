@@ -23,8 +23,8 @@ public:
 
 	bool empty() {
 		if(callbacks.empty()) return false;
-		for(std::vector<std::any>& _callbacks : callbacks) {
-			for(std::any& callback : _callbacks) {
+		for(auto& [place, callbacks_list] : callbacks) {
+			for(std::any& callback : callbacks_list) {
 				if(callback.has_value()) return true;
 			}
 		}
@@ -65,7 +65,7 @@ public:
 	bool have_callback(e_callbacks place) { return !callbacks.empty() && callbacks[place].has_value(); }
 	bool empty() {
 		if(callbacks.empty()) return false;
-		for(std::any& callback : callbacks) if(callback.has_value()) return true;
+		for(auto& [place, callback] : callbacks) if(callback.has_value()) return true;
 		return false;
 	}
 
