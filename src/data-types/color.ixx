@@ -40,7 +40,7 @@ export struct color_t {
 
 	operator std::uint32_t() {
 		color_t converted = convert<int>();
-		return ((int)converted.a() << 24) | ((int)converted.b() << 16) | ((int)converted.g() << 8) | (int)converted.r();
+		return ((std::uint32_t)converted.a() << 24) | ((std::uint32_t)converted.b() << 16) | ((std::uint32_t)converted.g() << 8) | (std::uint32_t)converted.r();
 	}
 
 	class_create_spaceship_operator(color_t);
