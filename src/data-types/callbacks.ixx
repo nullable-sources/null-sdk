@@ -10,7 +10,7 @@ public:
 	template <typename function_t>
 	std::vector<std::any>::iterator add(e_callbacks place, std::function<function_t> function) {
 		callbacks[place].push_back(function);
-		return callbacks[place].end() - 1;
+		return std::prev(callbacks[place].end());
 	}
 
 	void remove(e_callbacks place, std::vector<std::any>::iterator callback) { callbacks[place].erase(callback); }
