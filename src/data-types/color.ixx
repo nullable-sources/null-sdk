@@ -4,8 +4,8 @@ export module null.sdk:data_types.color;
 
 export struct color_t {
 	enum class e_channels_type { bit8 /*0 - 255*/, arithmetic /*0.0 - 1.0*/ };
-	std::array<float, 4> channels{ };
-	e_channels_type channels_type{ };
+	std::array<float, 4> channels{ 255, 255, 255, 255 };
+	e_channels_type channels_type{ e_channels_type::bit8 };
 
 	color_t() = default;
 	color_t(color_t clr, int _a) : channels_type(clr.channels_type), channels(clr.channels) { if(clr.channels_type != e_channels_type::bit8) convert<int>(); a() = _a; }
