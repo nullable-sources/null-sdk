@@ -1,7 +1,12 @@
-export module null.sdk:data_types.callbacks;
-import std.core;
+#pragma once
+#include <type_traits>
+#include <functional>
+#include <stdexcept>
+#include <vector>
+#include <map>
+#include <any>
 
-export template <typename e_callbacks>
+template <typename e_callbacks>
 struct array_callbacks_t {
 private:
 	std::map<e_callbacks, std::vector<std::any>> callbacks{ };
@@ -52,7 +57,7 @@ public:
 	}
 };
 
-export template <typename e_callbacks>
+template <typename e_callbacks>
 struct single_callbacks_t {
 private:
 	std::map<e_callbacks, std::any> callbacks{ };

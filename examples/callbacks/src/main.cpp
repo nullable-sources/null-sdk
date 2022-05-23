@@ -1,4 +1,5 @@
-﻿import null.sdk;
+﻿#include <iostream>
+#include <null-sdk.h>
 
 enum class e_calls {
     first,

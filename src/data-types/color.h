@@ -1,8 +1,11 @@
-module;
-#include <fast_operators.h>
-export module null.sdk:data_types.color;
+#pragma once
+#include <array>
+#include <stdexcept>
+#include <algorithm>
 
-export struct color_t {
+#include <utils/fast_operators.h>
+
+struct color_t {
 	enum class e_channels_type { bit8 /*0 - 255*/, arithmetic /*0.0 - 1.0*/ };
 	std::array<float, 4> channels{ 255, 255, 255, 255 };
 	e_channels_type channels_type{ e_channels_type::bit8 };

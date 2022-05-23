@@ -1,5 +1,5 @@
 #pragma once
-import std.core;
+#include <type_traits>
 
 #define class_create_operators(return_type, op, op_func, ...)   \
     return_type operator op(__VA_ARGS__) const op_func          \

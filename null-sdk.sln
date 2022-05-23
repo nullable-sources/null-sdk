@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{9E
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "callbacks", "examples\callbacks\callbacks.vcxproj", "{89CFD0B0-57E6-4C44-9639-0A838E0C9B74}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enum-reflection", "examples\enum-reflection\enum-reflection.vcxproj", "{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug|x64 = debug|x64
@@ -45,14 +43,6 @@ Global
 		{89CFD0B0-57E6-4C44-9639-0A838E0C9B74}.release|x64.Build.0 = release|x64
 		{89CFD0B0-57E6-4C44-9639-0A838E0C9B74}.release|x86.ActiveCfg = release|Win32
 		{89CFD0B0-57E6-4C44-9639-0A838E0C9B74}.release|x86.Build.0 = release|Win32
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.debug|x64.ActiveCfg = debug|x64
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.debug|x64.Build.0 = debug|x64
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.debug|x86.ActiveCfg = debug|Win32
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.debug|x86.Build.0 = debug|Win32
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.release|x64.ActiveCfg = release|x64
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.release|x64.Build.0 = release|x64
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.release|x86.ActiveCfg = release|Win32
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3}.release|x86.Build.0 = release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,7 +50,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4D0B61D1-1831-471E-ADFE-D0E30DE1626B} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
 		{89CFD0B0-57E6-4C44-9639-0A838E0C9B74} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
-		{2690FC00-6051-4973-9A39-D3E5CF7FB2B3} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E157402-D310-4C20-B49B-36E839222464}

@@ -1,5 +1,5 @@
-﻿#include <Windows.h>
-import null.sdk;
+﻿#include <iostream>
+#include <null-sdk.h>
 
 int wnd_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
     std::cout << "wnd proc" << std::endl;
