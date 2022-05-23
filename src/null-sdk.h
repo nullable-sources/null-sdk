@@ -1,4 +1,7 @@
 #pragma once
+#include <format>
+#include <numeric>
+#include <algorithm>
 
 #include <utils/win/win.h>
 
