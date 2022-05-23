@@ -1,5 +1,5 @@
 #pragma once
-#include "vec2.h"
+#include <data-types/vec2.h>
 
 struct rect_t {
 	vec2_t min{ }, max{ };
