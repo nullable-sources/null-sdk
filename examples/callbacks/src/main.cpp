@@ -8,7 +8,6 @@ enum class e_calls {
 
 int main() {
     {
-        vec2_t a{ };
         std::cout << "single example" << std::endl;
         single_callbacks_t<e_calls> callbacks{ };
         callbacks.set<void()>(e_calls::first, []() { std::cout << "e_calls::first" << std::endl; });
