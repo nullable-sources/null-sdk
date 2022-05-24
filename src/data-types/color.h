@@ -16,10 +16,10 @@ struct color_t {
 	color_t(float _r, float _g, float _b, float _a = 1.f) : channels_type(e_channels_type::arithmetic), channels({ _r, _g, _b, _a }) { }
 	color_t(int _r, int _g, int _b, int _a = 255) : channels_type(e_channels_type::bit8), channels({ (float)_r, (float)_g, (float)_b, (float)_a }) { }
 
-	float& r() { return channels[0]; }
-	float& g() { return channels[1]; }
-	float& b() { return channels[2]; }
-	float& a() { return channels[3]; }
+	float& r() { return channels[0]; } float r() const { return channels[0]; }
+	float& g() { return channels[1]; } float g() const { return channels[1]; }
+	float& b() { return channels[2]; } float b() const { return channels[2]; }
+	float& a() { return channels[3]; } float a() const { return channels[3]; }
 
 	template <typename channels_t>
 	void set_channels_type() {
