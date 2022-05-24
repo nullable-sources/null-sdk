@@ -13,12 +13,12 @@ private:
 
 public:
 	template <typename function_t>
-	std::vector<std::any>::iterator add(e_callbacks place, std::function<function_t> function) {
+	std::vector<std::any>::iterator add(e_callbacks place, const std::function<function_t>& function) {
 		callbacks[place].push_back(function);
 		return std::prev(callbacks[place].end());
 	}
 
-	void remove(e_callbacks place, std::vector<std::any>::iterator callback) { callbacks[place].erase(callback); }
+	void remove(e_callbacks place, const std::vector<std::any>::iterator& callback) { callbacks[place].erase(callback); }
 
 	bool have_callbacks(e_callbacks place) {
 		if(callbacks.empty() || callbacks[place].empty()) return false;
@@ -64,7 +64,7 @@ private:
 
 public:
 	template <typename function_t>
-	void set(e_callbacks place, std::function<function_t> function) { callbacks[place] = function; }
+	void set(e_callbacks place, const std::function<function_t>& function) { callbacks[place] = function; }
 	void remove(e_callbacks place) { callbacks[place] = nullptr; }
 
 	bool have_callback(e_callbacks place) { return !callbacks.empty() && callbacks[place].has_value(); }

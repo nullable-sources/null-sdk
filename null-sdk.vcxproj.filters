@@ -27,9 +27,6 @@
     <ClInclude Include="src\utils\fast_operators.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\math\math.h">
-      <Filter>src\math</Filter>
-    </ClInclude>
     <ClInclude Include="src\data-types\callbacks.h">
       <Filter>src\data-types</Filter>
     </ClInclude>
@@ -41,6 +38,9 @@
     </ClInclude>
     <ClInclude Include="src\data-types\vec2.h">
       <Filter>src\data-types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\math.h">
+      <Filter>src\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
