@@ -58,7 +58,7 @@ namespace utils::win {
 		}
 	}
 
-	vec2_t c_window::get_window_size() {
+	vec2_t c_window::get_window_size() const {
 		RECT wnd_rect{ 0, 0, 0, 0 };
 		GetClientRect(wnd_handle, &wnd_rect);
 		return { wnd_rect.right - wnd_rect.left, wnd_rect.bottom - wnd_rect.top };

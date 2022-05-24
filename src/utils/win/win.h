@@ -59,7 +59,7 @@ namespace utils {
 			virtual int render_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return -1; } //will be ignored if it returns -1
 
 			//use for get size from wnd_handle
-			vec2_t get_window_size();
+			vec2_t get_window_size() const;
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param);
 		};
