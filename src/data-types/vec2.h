@@ -21,7 +21,7 @@ struct vec2_t {
 	bool operator==(const vec2_t& a) const = default;
 	std::partial_ordering operator<=>(const vec2_t& a) const {
 		if(operator==(a)) return std::partial_ordering::equivalent;
-		if(x < a.x && y < a.x) return std::partial_ordering::less;
+		if(x < a.x && y < a.y) return std::partial_ordering::less;
 		if(x > a.x && y > a.y) return std::partial_ordering::greater;
 		return std::partial_ordering::unordered;
 	}
