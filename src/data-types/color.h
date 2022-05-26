@@ -46,5 +46,5 @@ struct color_t {
 		return ((std::uint32_t)converted.a() << 24) | ((std::uint32_t)converted.b() << 16) | ((std::uint32_t)converted.g() << 8) | (std::uint32_t)converted.r();
 	}
 
-	class_create_spaceship_operator(color_t);
+	bool operator==(const color_t& a) const = default;
 };

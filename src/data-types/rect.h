@@ -18,5 +18,11 @@ struct rect_t {
 	class_create_arithmetic_operators(rect_t, *, { return rect_t(min * a.min, max * a.max); }, { min *= a.min; max *= a.max; return *this; });
 	class_create_arithmetic_operators(rect_t, / , { return rect_t(min / a.min, max / a.max); }, { min /= a.min; max /= a.max; return *this; });
 
-	class_create_spaceship_operator(rect_t);
+	bool operator==(const rect_t& a) const = default;
+	std::partial_ordering operator<=>(const rect_t& a) const {
+		if(operator==(a)) return std::partial_ordering::equivalent;
+		if(min < a.min && max < a.max) return std::partial_ordering::less;
+		if(min > a.min && max > a.max) return std::partial_ordering::greater;
+		return std::partial_ordering::unordered;
+	}
 };
