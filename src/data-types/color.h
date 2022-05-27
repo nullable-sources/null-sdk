@@ -46,5 +46,5 @@ struct color_t {
 		return ((std::uint32_t)converted.a() << 24) | ((std::uint32_t)converted.b() << 16) | ((std::uint32_t)converted.g() << 8) | (std::uint32_t)converted.r();
 	}
 
-	bool operator==(const color_t& a) const = default;
+	bool operator==(const color_t&) const = default;
 };

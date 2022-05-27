@@ -9,6 +9,10 @@
     class_create_operators(class_t, op, op_func, const class_t& a)                  \
     class_t& operator op##=(const class_t& a) op_comparison_func                    \
 
+#define class_create_logic_operators(class_t, op, op_func, op_comparison_func)	\
+    class_create_operators(bool, op, op_func, const class_t& a)					\
+	class_create_operators(bool, op##=, op_comparison_func, const class_t& a)	\
+
 //thx lagcomp/csgo_sdk for this superior code
 #define enum_create_cast_operator(enum_t, op) inline constexpr auto operator op(enum_t a) { return static_cast<std::underlying_type_t<enum_t>>(a); }
 

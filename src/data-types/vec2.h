@@ -16,13 +16,9 @@ struct vec2_t {
 	class_create_arithmetic_operators(vec2_t, +, { return vec2_t(x + a.x, y + a.y); }, { x += a.x; y += a.y; return *this; });
 	class_create_arithmetic_operators(vec2_t, -, { return vec2_t(x - a.x, y - a.y); }, { x -= a.x; y -= a.y; return *this; });
 	class_create_arithmetic_operators(vec2_t, *, { return vec2_t(x * a.x, y * a.y); }, { x *= a.x; y *= a.y; return *this; });
-	class_create_arithmetic_operators(vec2_t, / , { return vec2_t(x / a.x, y / a.y); }, { x /= a.x; y /= a.y; return *this; });
+	class_create_arithmetic_operators(vec2_t, /, { return vec2_t(x / a.x, y / a.y); }, { x /= a.x; y /= a.y; return *this; });
 
 	bool operator==(const vec2_t& a) const = default;
-	std::partial_ordering operator<=>(const vec2_t& a) const {
-		if(operator==(a)) return std::partial_ordering::equivalent;
-		if(x < a.x && y < a.y) return std::partial_ordering::less;
-		if(x > a.x && y > a.y) return std::partial_ordering::greater;
-		return std::partial_ordering::unordered;
-	}
+	class_create_logic_operators(vec2_t, <, { return x < a.x && y < a.y; }, { return x <= a.x && y <= a.y; });
+	class_create_logic_operators(vec2_t, >, { return x > a.x && y > a.y; }, { return x >= a.x && y >= a.y; });
 };
