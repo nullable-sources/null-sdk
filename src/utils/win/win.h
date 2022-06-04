@@ -20,7 +20,7 @@ namespace utils {
 				void begin_frame();
 			} time_data{ };
 
-			single_callbacks_t<e_window_callbacks> callbacks{ };
+			array_callbacks_t<e_window_callbacks> callbacks{ };
 
 			HWND wnd_handle{ nullptr };
 			HINSTANCE instance{ };
