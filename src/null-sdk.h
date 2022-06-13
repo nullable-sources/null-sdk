@@ -1,6 +1,7 @@
 #pragma once
 #include <format>
 #include <numeric>
+#include <ranges>
 #include <fstream>
 
 #include <utils/win/win.h>

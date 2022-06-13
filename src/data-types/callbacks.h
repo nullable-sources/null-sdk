@@ -63,7 +63,7 @@ public:
 	bool have_callback(const e_callbacks& place) { return !callbacks.empty() && callbacks[place].has_value(); }
 	bool empty() {
 		if(callbacks.empty()) return true;
-		return std::ranges::find_if(callbacks, [](const auto& callback) { return callback.has_value(); }) == callbacks.end();
+		return std::ranges::find_if(callbacks, [](const auto& callback) { return callback.second.has_value(); }) == callbacks.end();
 	}
 
 	template <typename function_t, typename ...args_t>
