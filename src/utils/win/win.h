@@ -6,7 +6,7 @@
 
 namespace utils {
 	enum class e_window_callbacks {
-		wnd_proc //std::function<int(HWND, UINT, WPARAM, LPARAM)>. If callback returns > -1 then DefWindowProc call will be skipped.
+		wnd_proc //std::function<int(HWND, UINT, WPARAM, LPARAM)>. If callback returns != -1 then DefWindowProc call will be skipped.
 	};
 
 	namespace win {
