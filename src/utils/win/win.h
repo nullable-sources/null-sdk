@@ -60,6 +60,7 @@ namespace utils {
 
 			//use for get size from wnd_handle
 			vec2_t get_window_size() const;
+
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param);
 		};

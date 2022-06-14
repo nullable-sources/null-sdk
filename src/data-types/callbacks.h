@@ -23,17 +23,17 @@ public:
 
 	bool have_callbacks(const e_callbacks& place) {
 		if(callbacks.empty() || callbacks[place].empty()) return false;
-		return std::ranges::find_if(callbacks[place], [](const auto& callback) { return callback.has_value(); }) != callbacks[place].end();
+		return std::ranges::find_if(callbacks[place], [](const std::any& callback) { return callback.has_value(); }) != callbacks[place].end();
 	}
 
 	bool empty() {
 		if(callbacks.empty()) return true;
-		return std::ranges::find_if(callbacks, [=](const auto& callback) { return have_callbacks(callback.first); }) == callbacks.end();
+		return std::ranges::find_if(callbacks, [=](const std::any& callback) { return have_callbacks(callback.first); }) == callbacks.end();
 	}
 
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<std::is_same_v<typename std::function<function_t>::result_type, void>, void> call(const e_callbacks& place, args_t ...args) {
-		std::ranges::for_each(callbacks[place], [=](const auto& callback) {
+		std::ranges::for_each(callbacks[place], [=](const std::any& callback) {
 			if(callback.has_value())
 				std::any_cast<std::function<function_t>>(callback)(args...);
 			});
@@ -42,7 +42,7 @@ public:
 	template <typename function_t, typename ...args_t>
 	std::enable_if_t<!std::is_same_v<typename std::function<function_t>::result_type, void>, std::vector<std::any>> call(const e_callbacks& place, args_t ...args) {
 		std::vector<std::any> results{ };
-		std::ranges::for_each(callbacks[place], [&](const auto& callback) {
+		std::ranges::for_each(callbacks[place], [&](const std::any& callback) {
 			if(callback.has_value())
 				results.push_back(std::any_cast<std::function<function_t>>(callback)(args...));
 			});
@@ -63,7 +63,7 @@ public:
 	bool have_callback(const e_callbacks& place) { return !callbacks.empty() && callbacks[place].has_value(); }
 	bool empty() {
 		if(callbacks.empty()) return true;
-		return std::ranges::find_if(callbacks, [](const auto& callback) { return callback.second.has_value(); }) == callbacks.end();
+		return std::ranges::find_if(callbacks, [](const std::pair<e_callbacks, std::any>& callback) { return callback.second.has_value(); }) == callbacks.end();
 	}
 
 	template <typename function_t, typename ...args_t>

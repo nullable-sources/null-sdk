@@ -66,13 +66,13 @@ namespace utils::win {
 
 	LRESULT WINAPI c_window::wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
 		if(c_window* window; window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0)) {
-			std::vector<std::any> results = window->callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param);
+			const std::vector<std::any>& results = window->callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param);
 
-			std::vector<std::any>::iterator first_result = std::ranges::find_if(results, [](const auto& result) { return result.has_value() && std::any_cast<int>(result) != -1; });
+			const auto& first_result = std::ranges::find_if(results, [](const auto& result) { return result.has_value() && std::any_cast<int>(result) != -1; });
 			if(first_result != results.end()) return std::any_cast<int>(*first_result);
 			
 
-			if(int result; (result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param)) > -1) return result;
+			if(int result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param); result > -1) return result;
 		}
 
 		return DefWindowProcA(_wnd_handle, msg, w_param, l_param);

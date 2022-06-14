@@ -35,7 +35,7 @@ struct color_t {
 
 		if (converted.channels_type == channels_type) return *this;
 
-		std::transform(channels.begin(), channels.end(), converted.channels.begin(),
+		std::ranges::transform(channels, converted.channels.begin(),
 			[=](float& channel) { return channels_type == e_channels_type::bit8 ? channel / 255.f : channel * 255.f; });
 
 		return converted;
