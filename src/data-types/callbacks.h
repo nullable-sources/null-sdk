@@ -28,7 +28,7 @@ public:
 
 	bool empty() {
 		if(callbacks.empty()) return true;
-		return std::ranges::find_if(callbacks, [=](const std::any& callback) { return have_callbacks(callback.first); }) == callbacks.end();
+		return std::ranges::find_if(callbacks, [=](const std::pair<e_callbacks, std::vector<std::any>>& callback) { return have_callbacks(callback.first); }) == callbacks.end();
 	}
 
 	template <typename function_t, typename ...args_t>
