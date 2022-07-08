@@ -36,7 +36,7 @@ namespace utils::wrapper::dll {
                 return method != nullptr;
             }
 
-            return_t operator()(args_t... args) { method(args...); }
+            return_t operator()(args_t... args) { return method(args...); }
         };
 
     public:
