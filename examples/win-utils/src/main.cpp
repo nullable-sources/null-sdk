@@ -21,8 +21,8 @@ int main(HINSTANCE instance) {
         window.create();
         window.main_loop([&]() { std::cout << window.time_data.time << std::endl; });
         window.destroy();
-    } catch (std::exception exp) {
-        std::cout << exp.what() << std::endl;
+    } catch(const std::exception& exception) {
+        std::cout << exception.what() << std::endl;
     }
 
     return 0;
