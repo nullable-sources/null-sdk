@@ -4,7 +4,7 @@
 //https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress
 class c_kernel32_dll : public utils::wrapper::dll::i_dll {
 public:
-    c_method<void, LPSYSTEM_INFO> get_native_system_info{ this, "GetNativeSystemInfo" };
+    c_method<void(LPSYSTEM_INFO lpSystemInfo)> get_native_system_info{ this, "GetNativeSystemInfo" };
 } kernel32{ "kernel32.dll" };
 
 int main() {

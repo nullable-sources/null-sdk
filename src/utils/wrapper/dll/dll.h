@@ -22,8 +22,11 @@ namespace utils::wrapper::dll {
             virtual bool load() = 0;
         };
 
+        template<typename>
+        class c_method;
+
         template <typename return_t, typename ...args_t>
-        class c_method : public i_method {
+        class c_method<return_t(args_t...)> : public i_method {
         public:
             using i_method::i_method;
 
