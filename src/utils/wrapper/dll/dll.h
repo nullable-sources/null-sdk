@@ -5,18 +5,36 @@
 #include <stdexcept>
 #include <functional>
 #include <Windows.h>
+#include <map>
 
 namespace utils::wrapper::dll {
     class i_dll {
     public:
+        static inline std::map<std::string, HMODULE> loaded_dlls{ };
+
+    public:
         class i_method {
         public:
-            i_dll* parent{ };
-            std::string name{ };
+            static inline std::vector<i_method*> wrapped_methods{ };
 
         public:
-            i_method(i_dll* _parent, std::string _name) : parent(_parent), name(_name) {
-                parent->wrapped_methods.push_back(this);
+            std::string dll{ }, name{ };
+
+        public:
+            i_method(i_dll* _dll, const std::string& _name) : i_method(_dll->name, _name) { }
+            i_method(const std::string& _dll, const std::string& _name) : dll(_dll), name(_name) {
+                if(i_method* finded = find()) {
+                    *this = *finded;
+                } else wrapped_methods.push_back(this);
+            }
+
+            i_method* find() {
+                if(auto finded = std::ranges::find_if(wrapped_methods, [&](i_method* method) {
+                    return method->name == name && method->dll == dll;
+                    }); finded != wrapped_methods.end()) {
+                    return *finded;
+                }
+                return nullptr;
             }
 
             virtual bool load() = 0;
@@ -35,27 +53,26 @@ namespace utils::wrapper::dll {
 
         public:
             bool load() override {
-                method = (method_t)GetProcAddress(parent->module, name.c_str());
+                if(!loaded_dlls[dll]) i_dll{ dll }.load();
+                if(c_method* finded = (c_method*)find(); finded && finded->method) {
+                    method = finded->method;
+                } else method = (method_t)GetProcAddress(loaded_dlls[dll], name.c_str());
                 return method != nullptr;
             }
 
-            return_t operator()(args_t... args) { return method(args...); }
+            return_t operator()(args_t... args) {
+                if(!method && !load()) throw std::runtime_error(std::format("cant get '{}' method", name));
+                return method(args...);
+            }
         };
 
     public:
         std::string name{ };
-        HMODULE module{ };
-
-        std::vector<i_method*> wrapped_methods{ };
 
     public:
         void load() {
-            module = GetModuleHandleA(name.c_str());
-            if(!module) throw std::runtime_error(std::format("cant get '{}' module", name));
-
-            std::ranges::for_each(wrapped_methods, [](i_method* method) {
-                if(!method->load()) throw std::runtime_error(std::format("cant load '{}' method", method->name));
-                });
+            loaded_dlls[name] = GetModuleHandleA(name.c_str());
+            if(!loaded_dlls[name]) throw std::runtime_error(std::format("cant get '{}' module", name));
         }
     };
 }
