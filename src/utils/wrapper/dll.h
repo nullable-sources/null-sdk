@@ -7,7 +7,7 @@
 #include <Windows.h>
 #include <map>
 
-namespace utils::wrapper::dll {
+namespace utils::wrapper {
     class i_dll {
     public:
         static inline std::map<std::string, HMODULE> loaded_dlls{ };

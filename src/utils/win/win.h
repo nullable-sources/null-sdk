@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <format>
 
 #include <data-types/vec2.h>
 #include <data-types/callbacks.h>
@@ -64,5 +65,54 @@ namespace utils {
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param);
 		};
+	}
+
+	namespace console {
+		struct handle_t {
+			HANDLE out{ }, in{ };
+
+			void get() { out = GetStdHandle(STD_OUTPUT_HANDLE); in = GetStdHandle(STD_INPUT_HANDLE); }
+			void set() { if(out) SetStdHandle(STD_OUTPUT_HANDLE, out); if(in) SetStdHandle(STD_INPUT_HANDLE, in); }
+
+			void set_mode() {
+				SetConsoleMode(out, ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
+				SetConsoleMode(in, ENABLE_INSERT_MODE | ENABLE_EXTENDED_FLAGS | ENABLE_PROCESSED_INPUT | ENABLE_QUICK_EDIT_MODE);
+			}
+
+			operator bool() { return out && in; }
+		};
+
+		inline handle_t handle{ }, old_handle{ };
+
+		static void attach() {
+			old_handle.get();
+
+			if(!AllocConsole()) throw std::runtime_error("cant alloc console");
+
+			handle.get();
+			handle.set_mode();
+		}
+
+		static void detach() {
+			FreeConsole();
+			old_handle.set();
+		}
+
+		template <typename... args_t>
+		static void print(std::string_view text, args_t... args) {
+			if(!handle) return;
+
+			std::string buf = std::vformat(text, std::make_format_args(args...));
+			WriteConsoleA(handle.out, buf.c_str(), (DWORD)buf.size(), nullptr, nullptr);
+		}
+
+		static char read_key() {
+			char key{ };
+			DWORD keys_read{};
+
+			if(handle) ReadConsoleA(handle.in, &key, 1, &keys_read, nullptr);
+
+			return key;
+		}
 	}
 }

@@ -27,7 +27,7 @@
     <ClInclude Include="src\null-sdk.h" />
     <ClInclude Include="src\utils\fast_operators.h" />
     <ClInclude Include="src\utils\win\win.h" />
-    <ClInclude Include="src\utils\wrapper\dll\dll.h" />
+    <ClInclude Include="src\utils\wrapper\dll.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp" />

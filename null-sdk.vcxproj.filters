@@ -19,9 +19,6 @@
     <Filter Include="src\utils\wrapper">
       <UniqueIdentifier>{858bf603-8ca8-4e78-b8a7-4b85074b56b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\utils\wrapper\dll">
-      <UniqueIdentifier>{3bb00b4b-a3a6-457a-a28b-ad620c1539f7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -48,8 +45,8 @@
     <ClInclude Include="src\math\math.h">
       <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\wrapper\dll\dll.h">
-      <Filter>src\utils\wrapper\dll</Filter>
+    <ClInclude Include="src\utils\wrapper\dll.h">
+      <Filter>src\utils\wrapper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

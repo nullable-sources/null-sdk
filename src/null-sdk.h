@@ -4,7 +4,7 @@
 #include <ranges>
 #include <fstream>
 
-#include <utils/wrapper/dll/dll.h>
+#include <utils/wrapper/dll.h>
 #include <utils/win/win.h>
 
 #include <math/math.h>
