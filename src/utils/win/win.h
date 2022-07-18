@@ -46,6 +46,7 @@ namespace utils {
 		public:
 			c_window() = default;
 			c_window(HINSTANCE _instance) : instance(_instance) { }
+			c_window(HWND _wnd_handle) : wnd_handle(_wnd_handle) { }
 
 			bool create();
 			void destroy();
