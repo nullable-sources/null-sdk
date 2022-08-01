@@ -7,8 +7,8 @@ struct vec2_t {
 	float x{ }, y{ };
 
 	vec2_t() = default;
-	template <typename t> vec2_t(t _value) : x(_value), y(_value) { }
-	template <typename t1, typename t2> vec2_t(t1 _x, t2 _y) : x(_x), y(_y) { }
+	vec2_t(auto _value) : x(_value), y(_value) { }
+	vec2_t(auto _x, auto _y) : x(_x), y(_y) { }
 
 	float length() const { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
 

@@ -1,17 +1,14 @@
-#include "win.h"
+#include <utils/win/win.h>
 
 namespace utils::win {
 	void c_window::time_data_t::initialize() {
-		if(!QueryPerformanceFrequency((LARGE_INTEGER*)&ticks_per_second)) throw std::runtime_error("QueryPerformanceFrequency(&ticks_per_second) exception");
-		if(!QueryPerformanceCounter((LARGE_INTEGER*)&time)) throw std::runtime_error("QueryPerformanceCounter(&time) exception");
+		last_frame = std::chrono::steady_clock::now();
 	}
 
 	void c_window::time_data_t::begin_frame() {
-		std::uint64_t current_time{ };
-		if(!QueryPerformanceCounter((LARGE_INTEGER*)&current_time)) throw std::runtime_error("QueryPerformanceCounter(&current_time) exception");
-
-		delta_time = (float)(current_time - time) / ticks_per_second;
-		time = current_time;
+		std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now();
+		delta_time = std::chrono::duration_cast<std::chrono::duration<float>>(current_time - last_frame).count();
+		last_frame = current_time;
 	}
 
 	bool c_window::create() {

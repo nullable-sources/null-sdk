@@ -14,7 +14,7 @@ namespace utils {
 		class c_window {
 		public:
 			struct time_data_t {
-				std::uint64_t ticks_per_second{ }, time{ };
+				std::chrono::steady_clock::time_point last_frame{ };
 				float delta_time{ };
 				
 				void initialize();

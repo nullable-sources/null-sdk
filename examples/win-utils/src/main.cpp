@@ -19,7 +19,7 @@ int main(HINSTANCE instance) {
 
     try {
         window.create();
-        window.main_loop([&]() { std::cout << window.time_data.time << std::endl; });
+        window.main_loop([&]() { std::cout << window.time_data.delta_time << std::endl; });
         window.destroy();
     } catch(const std::exception& exception) {
         std::cout << exception.what() << std::endl;

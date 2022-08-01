@@ -4,6 +4,8 @@
 #include <ranges>
 #include <fstream>
 
+#include <utils/memory/memory.h>
+
 #include <utils/wrapper/dll.h>
 #include <utils/win/win.h>
 

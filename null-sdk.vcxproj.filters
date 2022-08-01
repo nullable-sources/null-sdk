@@ -19,6 +19,9 @@
     <Filter Include="src\utils\wrapper">
       <UniqueIdentifier>{858bf603-8ca8-4e78-b8a7-4b85074b56b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\memory">
+      <UniqueIdentifier>{0310520a-d5db-4074-95c9-a0298848f223}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\wrapper\dll.h">
       <Filter>src\utils\wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\memory\memory.h">
+      <Filter>src\utils\memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
