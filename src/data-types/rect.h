@@ -11,7 +11,11 @@ struct rect_t {
 
 	bool contains(const vec2_t& point) const { return min <= point && max >= point; }
 	bool contains(const rect_t& rect) const { return contains(rect.min) || contains(rect.max); }
-	bool intersects(const rect_t& rect) const { return !((rect.max.y <= min.y || rect.max.x <= min.x) || (rect.min.y >= max.y || rect.min.x >= max.y)); }
+	bool intersects(const rect_t& rect) const { 
+		if((rect.min.x <= min.x && rect.max.x <= min.x) || (rect.min.x >= max.x && rect.max.x >= max.x)) return false;
+		if((rect.min.y <= min.y && rect.max.y <= min.y) || (rect.min.y >= max.y && rect.max.y >= max.y)) return false;
+		return true;
+	}
 
 	vec2_t size() const { return max - min; }
 	vec2_t center() const { return (min + max) / 2.f; }
