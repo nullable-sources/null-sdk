@@ -26,9 +26,11 @@
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\null-sdk.h" />
     <ClInclude Include="src\utils\fast_operators.h" />
-    <ClInclude Include="src\utils\memory\memory.h" />
+    <ClInclude Include="src\utils\memory\address.h" />
+    <ClInclude Include="src\utils\memory\module.h" />
+    <ClInclude Include="src\utils\memory\pe_image.h" />
+    <ClInclude Include="src\utils\memory\signature.h" />
     <ClInclude Include="src\utils\win\win.h" />
-    <ClInclude Include="src\utils\wrapper\dll.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp" />

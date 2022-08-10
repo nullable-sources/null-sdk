@@ -4,14 +4,18 @@
 #include <utils/fast_operators.h>
 
 struct vec2_t {
+public:
 	float x{ }, y{ };
 
+public:
 	vec2_t() = default;
 	vec2_t(auto _value) : x(_value), y(_value) { }
 	vec2_t(auto _x, auto _y) : x(_x), y(_y) { }
 
+public:
 	float length() const { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
 
+public:
 	class_create_operators(vec2_t, -, { return vec2_t(-x, -y); });
 	class_create_arithmetic_operators(vec2_t, +, { return vec2_t(x + a.x, y + a.y); }, { x += a.x; y += a.y; return *this; });
 	class_create_arithmetic_operators(vec2_t, -, { return vec2_t(x - a.x, y - a.y); }, { x -= a.x; y -= a.y; return *this; });

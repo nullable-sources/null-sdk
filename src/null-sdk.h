@@ -4,9 +4,12 @@
 #include <ranges>
 #include <fstream>
 
-#include <utils/memory/memory.h>
+//@note: I gave a hard shit, I'll rewrite it normally later
+#include <utils/memory/address.h>
+#include <utils/memory/signature.h>
+#include <utils/memory/pe_image.h>
+#include <utils/memory/module.h>
 
-#include <utils/wrapper/dll.h>
 #include <utils/win/win.h>
 
 #include <math/math.h>

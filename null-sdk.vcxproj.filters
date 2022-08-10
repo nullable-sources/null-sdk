@@ -16,9 +16,6 @@
     <Filter Include="src\utils\win">
       <UniqueIdentifier>{9aff64ce-5b8a-4c08-abac-d4773c38f783}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\utils\wrapper">
-      <UniqueIdentifier>{858bf603-8ca8-4e78-b8a7-4b85074b56b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\utils\memory">
       <UniqueIdentifier>{0310520a-d5db-4074-95c9-a0298848f223}</UniqueIdentifier>
     </Filter>
@@ -48,10 +45,16 @@
     <ClInclude Include="src\math\math.h">
       <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\wrapper\dll.h">
-      <Filter>src\utils\wrapper</Filter>
+    <ClInclude Include="src\utils\memory\address.h">
+      <Filter>src\utils\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\memory\memory.h">
+    <ClInclude Include="src\utils\memory\signature.h">
+      <Filter>src\utils\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\memory\pe_image.h">
+      <Filter>src\utils\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\memory\module.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
   </ItemGroup>

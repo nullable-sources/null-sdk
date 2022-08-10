@@ -13,7 +13,7 @@
     class_create_operators(bool, op, op_func, const class_t& a)					\
 	class_create_operators(bool, op##=, op_comparison_func, const class_t& a)	\
 
-//thx lagcomp/csgo_sdk for this superior code
+//@credits: thx lagcomp/csgo_sdk for this superior code
 #define enum_create_cast_operator(enum_t, op) inline constexpr auto operator op(enum_t a) { return static_cast<std::underlying_type_t<enum_t>>(a); }
 
 #define enum_create_bit_operator(enum_t, op, use_enum_type)                                                                                                 \

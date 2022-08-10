@@ -18,14 +18,14 @@ namespace utils::win {
 		if(wnd_handle) {
 			SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
 			time_data.initialize();
-			render_create();
+			on_create();
 		}
 
 		return wnd_handle != nullptr;
 	}
 
 	void c_window::destroy() {
-		render_destroy();
+		on_destroy();
 
 		if(!wnd_handle) throw std::runtime_error("window handle is nullptr");
 		if(!instance) throw std::runtime_error("instance is nullptr");
@@ -34,7 +34,7 @@ namespace utils::win {
 		UnregisterClassA(name.c_str(), instance);
 	}
 
-	void c_window::main_loop(std::function<void()> function) {
+	void c_window::main_loop() {
 		if(!wnd_handle) throw std::runtime_error("window handle is nullptr");
 
 		ShowWindow(wnd_handle, SW_SHOWDEFAULT);
@@ -48,28 +48,23 @@ namespace utils::win {
 				continue;
 			}
 
-			render_main_loop_begin();
 			time_data.begin_frame();
-			function();
-			render_main_loop_end();
+			on_main_loop();
 		}
 	}
 
 	vec2_t c_window::get_window_size() const {
-		RECT wnd_rect{ 0, 0, 0, 0 };
+		RECT wnd_rect{ };
 		GetClientRect(wnd_handle, &wnd_rect);
 		return { wnd_rect.right - wnd_rect.left, wnd_rect.bottom - wnd_rect.top };
 	}
 
 	LRESULT WINAPI c_window::wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
-		if(c_window* window; window = (c_window*)GetWindowLongPtrA(_wnd_handle, 0)) {
-			const std::vector<std::any>& results = window->callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::wnd_proc, _wnd_handle, msg, w_param, l_param);
-
-			const auto& first_result = std::ranges::find_if(results, [](const auto& result) { return result.has_value() && std::any_cast<int>(result) != -1; });
-			if(first_result != results.end()) return std::any_cast<int>(*first_result);
-			
-
-			if(int result = window->render_wnd_proc(_wnd_handle, msg, w_param, l_param); result > -1) return result;
+		if(c_window * window{ (c_window*)GetWindowLongPtrA(_wnd_handle, 0) }) {
+			const std::vector<std::any>& results{ window->on_wnd_proc(_wnd_handle, msg, w_param, l_param) };
+			if(const auto& first_result{ std::ranges::find_if(results, [](const auto& result) { return result.has_value() && std::any_cast<int>(result) != -1; }) };
+				first_result != results.end())
+				return std::any_cast<int>(*first_result);
 		}
 
 		return DefWindowProcA(_wnd_handle, msg, w_param, l_param);

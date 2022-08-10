@@ -7,7 +7,10 @@
 
 namespace utils {
 	enum class e_window_callbacks {
-		wnd_proc //std::function<int(HWND, UINT, WPARAM, LPARAM)>. If callback returns != -1 then DefWindowProc call will be skipped.
+		on_create, //@note: void()
+		on_destroy, //@note: void()
+		on_main_loop, //@note: void()
+		on_wnd_proc //@note: int(HWND, UINT, WPARAM, LPARAM). If callback returns != -1 then DefWindowProc call will be skipped.
 	};
 
 	namespace win {
@@ -17,10 +20,12 @@ namespace utils {
 				std::chrono::steady_clock::time_point last_frame{ };
 				float delta_time{ };
 				
+			public:
 				void initialize();
 				void begin_frame();
 			} time_data{ };
 
+		public:
 			array_callbacks_t<e_window_callbacks> callbacks{ };
 
 			HWND wnd_handle{ nullptr };
@@ -45,23 +50,22 @@ namespace utils {
 
 		public:
 			c_window() = default;
-			c_window(HINSTANCE _instance) : instance(_instance) { }
-			c_window(HWND _wnd_handle) : wnd_handle(_wnd_handle) { }
+			c_window(const HINSTANCE& _instance) : instance(_instance) { }
+			c_window(const HWND& _wnd_handle) : wnd_handle(_wnd_handle) { }
 
+		public:
 			bool create();
 			void destroy();
 
-			void main_loop(std::function<void()> function);
+			void main_loop();
 
-			//virtual methods for render
-			virtual void render_create() { }
-			virtual void render_destroy() { }
-			virtual void render_main_loop_begin() { }
-			virtual void render_main_loop_end() { }
-			virtual int render_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return -1; } //will be ignored if it returns -1
-
-			//use for get size from wnd_handle
+			//@note: use for get size from wnd_handle
 			vec2_t get_window_size() const;
+
+			virtual void on_create() { callbacks.call<void()>(e_window_callbacks::on_create); }
+			virtual void on_destroy() { callbacks.call<void()>(e_window_callbacks::on_destroy); }
+			virtual void on_main_loop() { callbacks.call<void()>(e_window_callbacks::on_main_loop); }
+			virtual std::vector<std::any> on_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::on_wnd_proc, _wnd_handle, msg, w_param, l_param); }
 
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param);
@@ -70,8 +74,10 @@ namespace utils {
 
 	namespace console {
 		struct handle_t {
+		public:
 			HANDLE out{ }, in{ };
 
+		public:
 			void get() { out = GetStdHandle(STD_OUTPUT_HANDLE); in = GetStdHandle(STD_INPUT_HANDLE); }
 			void set() { if(out) SetStdHandle(STD_OUTPUT_HANDLE, out); if(in) SetStdHandle(STD_INPUT_HANDLE, in); }
 
@@ -80,6 +86,7 @@ namespace utils {
 				SetConsoleMode(in, ENABLE_INSERT_MODE | ENABLE_EXTENDED_FLAGS | ENABLE_PROCESSED_INPUT | ENABLE_QUICK_EDIT_MODE);
 			}
 
+		public:
 			operator bool() { return out && in; }
 		};
 
@@ -103,7 +110,7 @@ namespace utils {
 		static void print(std::string_view text, args_t... args) {
 			if(!handle) return;
 
-			std::string buf = std::vformat(text, std::make_format_args(args...));
+			std::string buf{ std::vformat(text, std::make_format_args(args...)) };
 			WriteConsoleA(handle.out, buf.c_str(), (DWORD)buf.size(), nullptr, nullptr);
 		}
 

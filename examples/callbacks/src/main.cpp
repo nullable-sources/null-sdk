@@ -27,13 +27,13 @@ int main() {
             callbacks.call<void()>(e_calls::first);
 
             callbacks.add<int()>(e_calls::second, []() { std::cout << "e_calls::second" << std::endl; return 1; });
-            std::vector<std::any>::iterator second = callbacks.add<int()>(e_calls::second, []() { std::cout << "e_calls::second" << std::endl; return 2; });
-            for(std::any result : callbacks.call<int()>(e_calls::second)) {
+            auto second{ callbacks.add<int()>(e_calls::second, []() { std::cout << "e_calls::second" << std::endl; return 2; }) };
+            for(const std::any& result : callbacks.call<int()>(e_calls::second)) {
                 std::cout << std::any_cast<int>(result) << " ";
             } std::cout << std::endl;
 
             callbacks.remove(e_calls::second, second);
-            for(std::any result : callbacks.call<int()>(e_calls::second)) {
+            for(const std::any& result : callbacks.call<int()>(e_calls::second)) {
                 std::cout << std::any_cast<int>(result) << " ";
             } std::cout << std::endl;
         }
