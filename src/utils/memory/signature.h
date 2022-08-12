@@ -26,21 +26,16 @@ namespace memory {
         }
 
         address_t& find() {
-            PIMAGE_NT_HEADERS nt_headers{ pe_image->nt_headers() };
+            if(!address) {
+                PIMAGE_NT_HEADERS nt_headers{ pe_image->nt_headers() };
+                auto finded{ std::ranges::search(std::views::iota((std::uintptr_t)nt_headers->OptionalHeader.ImageBase) | std::views::take((std::uintptr_t)nt_headers->OptionalHeader.SizeOfImage), bytes,
+                    [](const std::uint8_t& image_byte, const std::int32_t& byte) { return byte == -1 || image_byte == byte; },
+                    [](const std::uintptr_t& image_byte) { return *(std::uint8_t*)image_byte; }, [](const std::int32_t& byte) { return byte; }
+                    ) };
 
-            int finded_offset{ };
-            for(const auto& image_byte : std::views::iota((std::uintptr_t)nt_headers->OptionalHeader.ImageBase) | std::views::take((std::uintptr_t)nt_headers->OptionalHeader.SizeOfImage)) {
-                if(bytes[finded_offset] == -1 || *(std::uint8_t*)image_byte == bytes[finded_offset]) {
-                    if(!address) address = image_byte;
-
-                    finded_offset++;
-                    if(finded_offset == bytes.size()) return *this;
-                } else if(address) {
-                    finded_offset = address = 0;
-                }
+                if(!finded.empty()) address = finded.front();
+                else throw std::runtime_error(std::format("cant find '{}' signature", signature));
             }
-
-            if(!address) throw std::runtime_error(std::format("cant find '{}' signature", signature));
             return *this;
         }
     };

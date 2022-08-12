@@ -1,5 +1,4 @@
 #pragma once
-#include <stacktrace>
 #include <utils/win/win.h>
 
 //@credits: thx lagcomp/csgo_sdk for this superior code
