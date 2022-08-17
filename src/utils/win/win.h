@@ -49,7 +49,7 @@ namespace utils {
 			std::uint32_t styles{ WS_OVERLAPPEDWINDOW };
 
 		public:
-			c_window() = default;
+			c_window() : wnd_handle(GetActiveWindow()) { }
 			c_window(const HINSTANCE& _instance) : instance(_instance) { }
 			c_window(const HWND& _wnd_handle) : wnd_handle(_wnd_handle) { }
 
@@ -61,6 +61,32 @@ namespace utils {
 
 			//@note: use for get size from wnd_handle
 			vec2_t get_window_size() const;
+
+			template<typename char_t>
+			void write_clipboard(std::basic_string_view<char_t> str) {
+				if(!OpenClipboard(wnd_handle)) throw std::runtime_error("cant open clipboard");
+
+				EmptyClipboard();
+				HGLOBAL data{ GlobalAlloc(GMEM_DDESHARE, sizeof(char_t) * (str.length() + 1)) };
+				std::memcpy(GlobalLock(data), str.data(), sizeof(char_t) * (str.length() + 1));
+				GlobalUnlock(data);
+
+				SetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT, data);
+				if(!CloseClipboard()) throw std::runtime_error("cant clise clipboard");
+			}
+
+			template <typename char_t>
+			std::basic_string<char_t> read_clipboard() {
+				if(!OpenClipboard(wnd_handle)) throw std::runtime_error("cant open clipboard");
+
+				std::basic_string<char_t> clipboard{ };
+				if(HANDLE data{ GetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT) }) {
+					clipboard = (char_t*)GlobalLock(data);
+				} else throw std::runtime_error("cant get clipboard data");
+
+				if(!CloseClipboard()) throw std::runtime_error("cant clise clipboard");
+				return clipboard;
+			}
 
 			virtual void on_create() { callbacks.call<void()>(e_window_callbacks::on_create); }
 			virtual void on_destroy() { callbacks.call<void()>(e_window_callbacks::on_destroy); }
