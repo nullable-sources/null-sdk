@@ -57,6 +57,9 @@
     <ClInclude Include="src\utils\memory\module.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\encoding.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">

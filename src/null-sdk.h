@@ -10,7 +10,7 @@
 #include <utils/memory/pe_image.h>
 #include <utils/memory/module.h>
 
-#include <utils/win/win.h>
+#include <utils/encoding.h>
 
 #include <math/math.h>
 
