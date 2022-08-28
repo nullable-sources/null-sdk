@@ -19,7 +19,6 @@ namespace memory {
 
         public:
             i_export(const address_t& _address) : address_t{_address} { }
-            i_export(std::string_view _name) : i_export(stored_modules.back(), _name) { }
             i_export(std::string_view _module_name, std::string_view _name) : i_export(find_stored_module(_module_name), _name) { }
             i_export(c_module* _module, std::string_view _name) : module(_module), name(_name), address_t{ _module->get_export(_name) } {
                 if(i_export* finded = module->find_stored_export(_name)) *this = *finded;
@@ -33,7 +32,7 @@ namespace memory {
         template <typename return_t, typename ...args_t>
         class c_export<return_t(args_t...)> : public i_export {
         public: using i_export::i_export;
-              typedef return_t(*prototype_t)(args_t...);
+            typedef return_t(*prototype_t)(args_t...);
 
         public:
             return_t operator()(args_t... args) {

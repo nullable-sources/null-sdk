@@ -8,6 +8,10 @@ namespace memory {
         std::uintptr_t address{ };
 
     public:
+        address_t() { }
+        address_t(auto value) : address((std::uintptr_t)value) { }
+
+    public:
         template <typename cast_t> cast_t cast() { return (cast_t)address; }
 
         address_t& deref() { address = *cast<std::uintptr_t*>(); return *this; }

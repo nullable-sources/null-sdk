@@ -3,7 +3,7 @@
 
 class c_kernel32_dll : public memory::c_module {
 public: using c_module::c_module;
-    c_export<void(LPSYSTEM_INFO lpSystemInfo)> get_native_system_info{ "GetNativeSystemInfo" };
+    c_export<void(LPSYSTEM_INFO lpSystemInfo)> get_native_system_info{ "kernel32.dll", "GetNativeSystemInfo" };
     c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep{ this, "Beep" };
     c_export<void(DWORD dwMilliseconds)> sleep{ "kernel32.dll", "Sleep" };
 } kernel32{ "kernel32.dll" };
