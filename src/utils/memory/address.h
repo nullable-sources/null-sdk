@@ -21,7 +21,7 @@ namespace memory {
 
         address_t& jump(const std::intptr_t& _offset) {
             address_t return_address{ address_t{ *this }.offset(_offset) };
-            return return_address.offset({ address_t{ return_address }.deref().cast<std::uint32_t>(), sizeof(std::uint32_t) });
+            return return_address.offset({ address_t{ return_address }.deref(), sizeof(std::uint32_t) });
         }
 
     public:

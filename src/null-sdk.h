@@ -4,11 +4,11 @@
 #include <ranges>
 #include <fstream>
 
-//@note: I gave a hard shit, I'll rewrite it normally later
 #include <utils/memory/address.h>
 #include <utils/memory/signature.h>
 #include <utils/memory/pe_image.h>
 #include <utils/memory/module.h>
+#include <utils/memory/minhook-wrapper.h>
 
 #include <utils/encoding.h>
 
