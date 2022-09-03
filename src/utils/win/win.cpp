@@ -12,7 +12,7 @@ namespace utils::win {
 	}
 
 	bool c_window::create() {
-		if(!RegisterClassA(&wnd_class)) throw std::runtime_error("register class error");
+		if(!RegisterClassA(&wnd_class)) throw std::runtime_error{ "register class error" };
 
 		wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, instance, nullptr);
 		if(wnd_handle) {
@@ -27,15 +27,15 @@ namespace utils::win {
 	void c_window::destroy() {
 		on_destroy();
 
-		if(!wnd_handle) throw std::runtime_error("window handle is nullptr");
-		if(!instance) throw std::runtime_error("instance is nullptr");
+		if(!wnd_handle) throw std::runtime_error{ "window handle is nullptr" };
+		if(!instance) throw std::runtime_error{ "instance is nullptr" };
 
 		DestroyWindow(wnd_handle);
 		UnregisterClassA(name.c_str(), instance);
 	}
 
 	void c_window::main_loop() {
-		if(!wnd_handle) throw std::runtime_error("window handle is nullptr");
+		if(!wnd_handle) throw std::runtime_error{ "window handle is nullptr" };
 
 		ShowWindow(wnd_handle, SW_SHOWDEFAULT);
 		UpdateWindow(wnd_handle);

@@ -36,7 +36,7 @@ namespace memory {
 
         public:
             return_t operator()(args_t... args) {
-                if(!address) throw std::runtime_error(std::format("'{}' export address == nullptr", name.empty() ? "unknown" : name));
+                if(!address) throw std::runtime_error{ std::format("'{}' export address == nullptr", name.empty() ? "unknown" : name) };
                 return ((prototype_t)address)(args...);
             }
         };
@@ -53,7 +53,7 @@ namespace memory {
                 *this = *finded;
             } else {
                 pe_image = pe_image_t{ (std::uintptr_t)GetModuleHandleA(name.data()) };
-                if(!pe_image.base_address) throw std::runtime_error(std::format("cant get '{}' module", name));
+                if(!pe_image.base_address) throw std::runtime_error{ std::format("cant get '{}' module", name) };
                 stored_modules.push_back(this);
             }
         }

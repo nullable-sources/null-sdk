@@ -63,6 +63,9 @@
     <ClInclude Include="src\utils\memory\minhook-wrapper.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\data-types\vec3.h">
+      <Filter>src\data-types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">

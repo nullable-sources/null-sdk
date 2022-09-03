@@ -11,7 +11,7 @@ namespace memory {
 
     public:
         signature_t(pe_image_t& _pe_image, std::string_view _signature) : pe_image(&_pe_image), signature(_signature) {
-            if(signature.empty()) throw std::runtime_error("signature empty");
+            if(signature.empty()) throw std::runtime_error{ "signature empty" };
             to_bytes();
         }
 
@@ -34,7 +34,7 @@ namespace memory {
                     ) };
 
                 if(!finded.empty()) address = finded.front();
-                else throw std::runtime_error(std::format("cant find '{}' signature", signature));
+                else throw std::runtime_error{ std::format("cant find '{}' signature", signature) };
             }
             return *this;
         }

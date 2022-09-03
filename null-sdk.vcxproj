@@ -23,6 +23,7 @@
     <ClInclude Include="src\data-types\color.h" />
     <ClInclude Include="src\data-types\rect.h" />
     <ClInclude Include="src\data-types\vec2.h" />
+    <ClInclude Include="src\data-types\vec3.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\null-sdk.h" />
     <ClInclude Include="src\utils\encoding.h" />

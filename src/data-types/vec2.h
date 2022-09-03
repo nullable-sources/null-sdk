@@ -13,7 +13,7 @@ public:
 	vec2_t(auto _x, auto _y) : x(_x), y(_y) { }
 
 public:
-	float length() const { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); }
+	float length() const { return std::hypot(x, y); }
 
 public:
 	class_create_operators(vec2_t, -, { return vec2_t(-x, -y); });

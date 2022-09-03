@@ -28,7 +28,7 @@ public:
 	void set_channels_type() {
 		if constexpr (std::is_same<channels_t, int>::value) channels_type = e_channels_type::bit8;
 		else if constexpr (std::is_same<channels_t, float>::value) channels_type = e_channels_type::arithmetic;
-		else throw std::runtime_error("wrong conversion type");
+		else throw std::runtime_error{ "wrong conversion type" };
 	}
 
 	template <typename convert_t>

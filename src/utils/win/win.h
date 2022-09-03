@@ -64,7 +64,7 @@ namespace utils {
 
 			template<typename char_t>
 			void write_clipboard(std::basic_string_view<char_t> str) {
-				if(!OpenClipboard(wnd_handle)) throw std::runtime_error("cant open clipboard");
+				if(!OpenClipboard(wnd_handle)) throw std::runtime_error{ "cant open clipboard" };
 
 				EmptyClipboard();
 				HGLOBAL data{ GlobalAlloc(GMEM_DDESHARE, sizeof(char_t) * (str.length() + 1)) };
@@ -72,19 +72,19 @@ namespace utils {
 				GlobalUnlock(data);
 
 				SetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT, data);
-				if(!CloseClipboard()) throw std::runtime_error("cant clise clipboard");
+				if(!CloseClipboard()) throw std::runtime_error{ "cant clise clipboard" };
 			}
 
 			template <typename char_t>
 			std::basic_string<char_t> read_clipboard() {
-				if(!OpenClipboard(wnd_handle)) throw std::runtime_error("cant open clipboard");
+				if(!OpenClipboard(wnd_handle)) throw std::runtime_error{ "cant open clipboard" };
 
 				std::basic_string<char_t> clipboard{ };
 				if(HANDLE data{ GetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT) }) {
 					clipboard = (char_t*)GlobalLock(data);
-				} else throw std::runtime_error("cant get clipboard data");
+				} else throw std::runtime_error{ "cant get clipboard data" };
 
-				if(!CloseClipboard()) throw std::runtime_error("cant clise clipboard");
+				if(!CloseClipboard()) throw std::runtime_error{ "cant clise clipboard" };
 				return clipboard;
 			}
 
@@ -121,7 +121,7 @@ namespace utils {
 		static void attach() {
 			old_handle.get();
 
-			if(!AllocConsole()) throw std::runtime_error("cant alloc console");
+			if(!AllocConsole()) throw std::runtime_error{ "cant alloc console" };
 
 			handle.get();
 			handle.set_mode();
