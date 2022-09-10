@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wrapper-dll", "examples\wra
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minhook-wrapper", "examples\minhook-wrapper\minhook-wrapper.vcxproj", "{D0F8303C-E690-497B-9F37-D496E3332577}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "commands", "examples\commands\commands.vcxproj", "{4CA2F77C-1BCA-4D7C-896C-16957C575B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug|x64 = debug|x64
@@ -63,6 +65,14 @@ Global
 		{D0F8303C-E690-497B-9F37-D496E3332577}.release|x64.Build.0 = release|x64
 		{D0F8303C-E690-497B-9F37-D496E3332577}.release|x86.ActiveCfg = release|Win32
 		{D0F8303C-E690-497B-9F37-D496E3332577}.release|x86.Build.0 = release|Win32
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.debug|x64.ActiveCfg = debug|x64
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.debug|x64.Build.0 = debug|x64
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.debug|x86.ActiveCfg = debug|Win32
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.debug|x86.Build.0 = debug|Win32
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.release|x64.ActiveCfg = release|x64
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.release|x64.Build.0 = release|x64
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.release|x86.ActiveCfg = release|Win32
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45}.release|x86.Build.0 = release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +82,7 @@ Global
 		{89CFD0B0-57E6-4C44-9639-0A838E0C9B74} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
 		{D15B09AA-42C2-4DFB-8053-189390DE1B80} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
 		{D0F8303C-E690-497B-9F37-D496E3332577} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
+		{4CA2F77C-1BCA-4D7C-896C-16957C575B45} = {9EBC70E3-60BE-414E-A51C-0F8BB096CFD1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E157402-D310-4C20-B49B-36E839222464}
