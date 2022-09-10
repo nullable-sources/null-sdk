@@ -73,42 +73,32 @@ namespace utils {
 	}
 
 	namespace console {
-		void buffer_t::redirect(std::string_view stream_name, std::ios::openmode open_mode, auto& original_buffer) {
-			stream = std::ofstream{ stream_name.data(), open_mode };
-			buffer = original_buffer.rdbuf(stream.rdbuf());
-		}
-
-		void buffer_t::restore(auto& original_buffer) {
-			stream.close();
-			original_buffer.rdbuf(buffer);
-		}
-
 		void attach() {
 			if(!AllocConsole()) throw std::runtime_error{ "cant alloc console" };
 
-			out.redirect("CONOUT$", std::ios::out, std::cout);
-			in.redirect("CONIN$", std::ios::in, std::cin);
+			freopen_s(&old_out, "CONOUT$", "w", stdout);
+			freopen_s(&old_in, "CONIN$", "r", stdin);
 		}
 
 		void detach() {
-			out.restore(std::cout);
-			in.restore(std::cin);
+			fclose(old_out);
+			fclose(old_in);
 			FreeConsole();
 		}
 
-		void i_command::handle() {
-			std::string line{ };
-			std::getline(std::cin, line);
-			if(line.empty()) return;
+		bool i_command::handle(std::string_view str) {
+			if(str.empty()) return false;
 
-			for(std::string_view command : line | std::views::split(';')) {
+			for(std::string_view command : str | std::views::split(';')) {
 				std::ranges::filter_view args{ command | std::views::split(' ') | std::views::filter([](std::string_view arg) { return !arg.empty(); }) };
 				if(args.empty()) continue;
 
 				if(auto finded{ std::ranges::find_if(i_command::registered_commands, [&](const auto& command) { return command->name() == std::string{ (*args.begin()).begin(), (*args.begin()).end() }; }) }; finded != i_command::registered_commands.end()) {
-					(*finded)->execute({ std::next(args.begin()), args.end() });
+					return (*finded)->execute({ std::next(args.begin()), args.end() });
 				}
 			}
+
+			return false;
 		}
 	}
 }

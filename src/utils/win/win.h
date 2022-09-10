@@ -102,13 +102,7 @@ namespace utils {
 	}
 
 	namespace console {
-		struct buffer_t {
-			std::ofstream stream{ };
-			std::streambuf* buffer{ };
-
-			void redirect(std::string_view stream_name, std::ios::openmode open_mode, auto& original_buffer);
-			void restore(auto& original_buffer);
-		} inline out{ }, in{ };
+		inline FILE* old_out{ }, *old_in{ };
 
 		void attach();
 		void detach();
@@ -122,13 +116,13 @@ namespace utils {
 		public:
 			static inline std::vector<i_command*> registered_commands{ };
 
-			static void handle();
+			static bool handle(std::string_view str);
 
 		public:
 			i_command() { registered_commands.push_back(this); }
 
 		public:
-			virtual void execute(const std::vector<std::string>& args) { }
+			virtual bool execute(const std::vector<std::string>& args) = 0;
 
 			virtual std::string name() = 0;
 			virtual std::string description() = 0;

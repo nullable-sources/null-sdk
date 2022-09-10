@@ -3,10 +3,12 @@
 namespace commands {
     struct help_t : utils::console::i_command {
     public:
-        void execute(const std::vector<std::string>&) override {
+        bool execute(const std::vector<std::string>&) override {
             for(const auto& command : registered_commands) {
                 std::cout << command->name() << " " << command->description() << std::endl;
             }
+
+            return true;
         }
 
         std::string name() override { return "/help"; }
@@ -15,10 +17,12 @@ namespace commands {
 
     struct test_t : utils::console::i_command {
     public:
-        void execute(const std::vector<std::string>& args) override {
+        bool execute(const std::vector<std::string>& args) override {
             std::cout << "args: ";
             for(std::string_view arg : args) std::cout << "[" << arg << "] ";
             std::cout << std::endl;
+
+            return true;
         }
 
         std::string name() override { return "/test"; }
@@ -27,5 +31,9 @@ namespace commands {
 }
 
 int main() {
-    while(true) { utils::console::i_command::handle(); }
+    while(true) {
+        std::string line{ };
+        std::getline(std::cin, line);
+        utils::console::i_command::handle(line);
+    }
 }
