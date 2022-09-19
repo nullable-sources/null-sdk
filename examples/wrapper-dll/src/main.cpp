@@ -22,6 +22,11 @@ int main() {
         }
 
         {
+            memory::c_module::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep{ "kernel32.dll", "Beep" };
+            beep(750, 300);
+        }
+
+        {
             memory::c_module::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep{ memory::c_module{ "kernel32.dll" }.get_export("Beep") };
             beep(750, 300);
         }
