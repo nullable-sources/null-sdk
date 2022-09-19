@@ -7,7 +7,7 @@ namespace utils {
 		}
 
 		void c_window::time_data_t::begin_frame() {
-			std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now();
+			std::chrono::steady_clock::time_point current_time{ std::chrono::steady_clock::now() };
 			delta_time = std::chrono::duration_cast<std::chrono::duration<float>>(current_time - last_frame).count();
 			last_frame = current_time;
 		}

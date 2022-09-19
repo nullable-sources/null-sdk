@@ -74,7 +74,7 @@ namespace memory {
             return nullptr;
         }
 
-        address_t get_export(std::string_view _name) {
+        virtual address_t get_export(std::string_view _name) {
             if(i_export* finded = find_stored_export(_name)) return (address_t)(*finded);
             return address_t{ (std::uintptr_t)GetProcAddress(pe_image.base_address.cast<HMODULE>(), _name.data()) };
         }
