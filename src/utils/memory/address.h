@@ -14,7 +14,7 @@ namespace memory {
     public:
         template <typename cast_t> cast_t cast() { return (cast_t)address; }
 
-        address_t& deref() { address = *cast<std::uintptr_t*>(); return *this; }
+        address_t& deref(int steps = 1) { address = *cast<std::uintptr_t*>(); if(steps > 1) deref(); return *this; }
 
         address_t& offset(const std::intptr_t& offset) { address += offset; return *this; }
         address_t& offset(const std::vector<std::intptr_t>& offsets) { std::ranges::for_each(offsets, [&](const std::intptr_t& _offset) { address += _offset; }); return *this; }
