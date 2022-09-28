@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="src\data-types\callbacks.h" />
     <ClInclude Include="src\data-types\color.h" />
+    <ClInclude Include="src\data-types\matrix.h" />
     <ClInclude Include="src\data-types\rect.h" />
     <ClInclude Include="src\data-types\vec2.h" />
     <ClInclude Include="src\data-types\vec3.h" />

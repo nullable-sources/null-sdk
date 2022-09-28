@@ -16,6 +16,7 @@ public:
 	float length() const { return std::hypot(x, y, z); }
 	float dist_to(const vec3_t& a) { return vec3_t{ *this - a }.length(); }
 	vec3_t& normalize() { return *this = { std::isfinite(x) ? std::remainder(x, 360.f) : 0.f, std::isfinite(y) ? std::remainder(y, 360.f) : 0.f, 0.f }; }
+	float dot(const vec3_t& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
 
 public:
 	class_create_operators(vec3_t, -, { return vec3_t(-x, -y, -z); });

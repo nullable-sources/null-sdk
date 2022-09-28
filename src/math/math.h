@@ -2,6 +2,7 @@
 #include <numbers>
 #include <data-types/vec3.h>
 #include <data-types/rect.h>
+#include <data-types/matrix.h>
 
 namespace math {
 	//@note: if you want a vec2_t without changing the values use std::min/std::max
