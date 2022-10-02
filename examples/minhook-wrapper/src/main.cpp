@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <null-sdk.h>
 
-struct message_box_t : memory::minhook::hook_t<message_box_t, int(WINAPI*)(HWND, LPCWSTR, LPCWSTR, UINT)> {
+struct message_box_t : memory::hook_t<message_box_t, int(WINAPI*)(HWND, LPCWSTR, LPCWSTR, UINT)> {
     static int WINAPI hook(HWND hwnd, LPCWSTR text, LPCWSTR caption, UINT type) {
         return original(hwnd, L"hooked", caption, type);
     }
