@@ -20,7 +20,7 @@ namespace memory {
 			if constexpr(type == e_hook_type::standard) {
 				if(MH_STATUS status{ MH_CreateHook(address, &hook_class_t::hook, (LPVOID*)&original) }; status != MH_OK) return status;
 			} else if constexpr(type == e_hook_type::proxy) {
-				if(MH_STATUS status{ MH_CreateHook(address, &hook_class_t::proxy, (LPVOID*)&original) }; status != MH_OK) return status;
+				if(MH_STATUS status{ MH_CreateHook(address, &hook_class_t::hook_proxy, (LPVOID*)&original) }; status != MH_OK) return status;
 			}
 			if(MH_STATUS status{ MH_EnableHook(address) }; status != MH_OK) return status;
 			return MH_OK;
@@ -34,3 +34,36 @@ namespace memory {
 		static MH_STATUS destroy() { return MH_Uninitialize(); }
 	}
 }
+
+/*@note: what structures with different e_hook_type should look like
+* 
+* 	- e_hook_type::standard
+* struct my_hook_t : memory::hook_t<my_hook_t, void(*)()> {
+*	static void hook() {
+*		...
+*		original();
+*		...
+*	}
+* };
+* 
+*	- e_hook_type::proxy
+* struct my_hook_t : memory::hook_t<my_hook_t, void(*)(), memory::e_hook_type::proxy> {
+*	static void hook() {
+*		...
+*		original_proxy();
+*		...
+*	}
+* 
+*	static void hook_proxy() {
+*		...
+*		hook();
+*		...
+*	}
+* 
+*	static void original_proxy() {
+*		...
+*		original();
+*		...
+*	}
+* };
+*/
