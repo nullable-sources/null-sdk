@@ -7,7 +7,7 @@ namespace memory {
         static inline std::vector<c_module*> stored_modules{ };
 
         static c_module* find_stored_module(std::string_view name) {
-            if(auto finded = std::ranges::find_if(stored_modules, [&](c_module* module) { return module->name == name; }); finded != stored_modules.end()) return *finded;
+            if(auto finded{ std::ranges::find_if(stored_modules, [&](c_module* module) { return module->name == name; }) }; finded != stored_modules.end()) return *finded;
             return nullptr;
         }
 
@@ -21,7 +21,7 @@ namespace memory {
             i_export(const address_t& _address) : address_t{_address} { }
             i_export(std::string_view _module_name, std::string_view _name) : name(_name) {
                 if(module = find_stored_module(_module_name)) {
-                    if(i_export* finded = module->find_stored_export(_name)) *this = *finded;
+                    if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
                     else {
                         address = module->get_export(_name);
                         module->stored_exports.push_back(this);
@@ -31,7 +31,7 @@ namespace memory {
                 }
             }
             i_export(c_module* _module, std::string_view _name) : module(_module), name(_name), address_t{ _module->get_export(_name) } {
-                if(i_export* finded = module->find_stored_export(_name)) *this = *finded;
+                if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
                 else module->stored_exports.push_back(this);
             }
         };
@@ -46,6 +46,7 @@ namespace memory {
 
         public:
             return_t operator()(args_t... args) {
+                if(module && !address) { address = module->load_export(name); }
                 if(!address) throw std::runtime_error{ std::format("'{}' export address == nullptr", name.empty() ? "unknown" : name) };
                 return ((prototype_t)address)(args...);
             }
@@ -59,7 +60,7 @@ namespace memory {
 
     public:
         c_module(std::string_view _name, bool store = true) : name(_name) {
-            if(c_module* finded = find_stored_module(_name)) {
+            if(c_module* finded{ find_stored_module(_name) }) {
                 *this = *finded;
             } else {
                 pe_image = pe_image_t{ (std::uintptr_t)GetModuleHandleA(name.data()) };
@@ -69,14 +70,16 @@ namespace memory {
         }
 
     public:
-        i_export* find_stored_export(std::string_view _name) {
-            if(auto finded = std::ranges::find_if(stored_exports, [&](i_export* _export) { return _export->name == _name; }); finded != stored_exports.end()) return (*finded);
+        virtual i_export* find_stored_export(std::string_view _name) {
+            if(auto finded{ std::ranges::find_if(stored_exports, [&](i_export* _export) { return _export->name == _name; }) }; finded != stored_exports.end()) return (*finded);
             return nullptr;
         }
 
         virtual address_t get_export(std::string_view _name) {
-            if(i_export* finded = find_stored_export(_name)) return (address_t)(*finded);
-            return address_t{ (std::uintptr_t)GetProcAddress(pe_image.base_address.cast<HMODULE>(), _name.data()) };
+            if(i_export* finded{ find_stored_export(_name) }) return (address_t)(*finded);
+            return load_export(name);
         }
+
+        virtual address_t load_export(std::string_view _name) { return address_t{ (std::uintptr_t)GetProcAddress(pe_image.base_address.cast<HMODULE>(), _name.data()) }; }
     };
 }
