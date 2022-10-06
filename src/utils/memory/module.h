@@ -18,6 +18,7 @@ namespace memory {
             std::string name{ };
 
         public:
+            i_export() { }
             i_export(const address_t& _address) : address_t{_address} { }
             i_export(std::string_view _module_name, std::string_view _name) : name(_name) {
                 if(module = find_stored_module(_module_name)) {
