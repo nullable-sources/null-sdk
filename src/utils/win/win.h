@@ -9,14 +9,14 @@
 #include <data-types/callbacks.h>
 
 namespace utils {
-	enum class e_window_callbacks {
-		on_create, //@note: void()
-		on_destroy, //@note: void()
-		on_main_loop, //@note: void()
-		on_wnd_proc //@note: int(HWND, UINT, WPARAM, LPARAM). If callback returns != -1 then DefWindowProc call will be skipped.
-	};
-
 	namespace win {
+		enum class e_window_callbacks {
+			on_create, //@note: void()
+			on_destroy, //@note: void()
+			on_main_loop, //@note: void()
+			on_wnd_proc //@note: int(HWND, UINT, WPARAM, LPARAM). If callback returns != -1 then DefWindowProc call will be skipped.
+		};
+
 		class c_window {
 		public:
 			struct time_data_t {
