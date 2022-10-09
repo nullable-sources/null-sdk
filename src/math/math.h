@@ -18,4 +18,14 @@ namespace math {
 
 	//@note: std::lerp does not support non-arithmetic types
 	static auto lerp(auto a, auto b, auto t) { return a + t * (b - a); }
+
+	static float degrees_to_radians(float degrees) {
+		static constexpr float pi{ std::numbers::pi_v<float> / 180.f };
+		return degrees * pi;
+	}
+
+	static float radians_to_degrees(float radians) {
+		static constexpr float pi{ 180.f / std::numbers::pi_v<float> };
+		return radians * pi;
+	}
 }
