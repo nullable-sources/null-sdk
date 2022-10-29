@@ -5,50 +5,72 @@
 
 #include <utils/fast_operators.h>
 
-struct color_t {
-public:
-	enum class e_channels_type { bit8 /*0 - 255*/, arithmetic /*0.0 - 1.0*/ };
-	std::array<float, 4> channels{ 255, 255, 255, 255 };
-	e_channels_type channels_type{ e_channels_type::bit8 };
+namespace null::sdk {
+	template <typename channel_t>
+	struct i_color {
+	public:
+		std::array<channel_t, 4> channels{ };
+
+	public:
+		i_color() { }
+
+		i_color(channel_t _rgba) : i_color{ _rgba, _rgba, _rgba, _rgba } { };
+		i_color(channel_t _r, channel_t _g, channel_t _b, channel_t _a) : channels{ _r, _g, _b, _a } { }
+
+		i_color(const i_color<channel_t>& color, channel_t _a) : i_color{ color.r(), color.g(), color.b(), _a } { }
+
+	public:
+		channel_t& r() { return channels[0]; } channel_t r() const { return channels[0]; }
+		channel_t& g() { return channels[1]; } channel_t g() const { return channels[1]; }
+		channel_t& b() { return channels[2]; } channel_t b() const { return channels[2]; }
+		channel_t& a() { return channels[3]; } channel_t a() const { return channels[3]; }
+
+		template<typename cast_t>
+		i_color<cast_t> cast() const { return i_color<cast_t>{ (cast_t)r(), (cast_t)g(), (cast_t)b(), (cast_t)a() }; }
+
+	public:
+		bool operator==(const i_color<channel_t>&) const = default;
+
+		template <typename color_channel_t>
+		i_color<channel_t> operator*(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r()* color.r(), g()* color.g(), b()* color.b(), a()* color.a() }; }
+		template <typename color_channel_t>
+		i_color<channel_t> operator*=(const i_color<color_channel_t>& color) { *this = *this * color; return *this; }
+
+		template <typename color_channel_t>
+		i_color<channel_t> operator/(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r() / color.r(), g() / color.g(), b() / color.b(), a() / color.a() }; }
+		template <typename color_channel_t>
+		i_color<channel_t> operator/=(const i_color<color_channel_t>& color) { *this = *this / color; return *this; }
+	};
+}
+
+template <typename channels_t = int>
+struct color_t : null::sdk::i_color<int> {
+public: using i_color::i_color;
+	 color_t() : i_color{ 255 } { }
+
+	 color_t(float _rgba) : i_color{ _rgba * 255 } { }
+	 color_t(int _r, int _g, int _b, int _a = 255) : i_color{ _r, _g, _b, _a } { }
+	 color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
+
+	 color_t(const i_color<int>& color) : i_color{ color } { }
+	 color_t(const i_color<int>& color, float _a) : i_color{ color, _a * 255 } { }
 
 public:
-	color_t() { };
-	color_t(color_t clr, int _a) : channels_type(clr.channels_type), channels(clr.channels) { if(clr.channels_type != e_channels_type::bit8) convert<int>(); a() = _a; }
-	color_t(color_t clr, float _a) : channels_type(clr.channels_type), channels(clr.channels) { if(clr.channels_type != e_channels_type::arithmetic) convert<float>(); a() = _a; }
-	color_t(float _r, float _g, float _b, float _a = 1.f) : channels_type(e_channels_type::arithmetic), channels({ _r, _g, _b, _a }) { }
-	color_t(int _r, int _g, int _b, int _a = 255) : channels_type(e_channels_type::bit8), channels({ (float)_r, (float)_g, (float)_b, (float)_a }) { }
+	operator i_color<float>() const { return this->cast<float>() / i_color<float>{ 255.f }; }
+};
+
+template <>
+struct color_t<float> : null::sdk::i_color<float> {
+public: using i_color::i_color;
+	 color_t() : i_color{ 1.f } { }
+
+	 color_t(int _rgba) : i_color{ _rgba / 255.f } { }
+	 color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ _r, _g, _b, _a } { }
+	 color_t(int _r, int _g, int _b, int _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
+
+	 color_t(const i_color<float>& color) : i_color{ color } { }
+	 color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
 
 public:
-	float& r() { return channels[0]; } float r() const { return channels[0]; }
-	float& g() { return channels[1]; } float g() const { return channels[1]; }
-	float& b() { return channels[2]; } float b() const { return channels[2]; }
-	float& a() { return channels[3]; } float a() const { return channels[3]; }
-
-	template <typename channels_t>
-	void set_channels_type() {
-		if constexpr (std::is_same<channels_t, int>::value) channels_type = e_channels_type::bit8;
-		else if constexpr (std::is_same<channels_t, float>::value) channels_type = e_channels_type::arithmetic;
-		else throw std::runtime_error{ "wrong conversion type" };
-	}
-
-	template <typename convert_t>
-	color_t convert() {
-		color_t converted{ };
-		converted.set_channels_type<convert_t>();
-
-		if (converted.channels_type == channels_type) return *this;
-
-		std::ranges::transform(channels, converted.channels.begin(),
-			[=](float& channel) { return channels_type == e_channels_type::bit8 ? channel / 255.f : channel * 255.f; });
-
-		return converted;
-	}
-
-public:
-	operator std::uint32_t() {
-		color_t converted{ convert<int>() };
-		return ((std::uint32_t)converted.a() << 24) | ((std::uint32_t)converted.b() << 16) | ((std::uint32_t)converted.g() << 8) | (std::uint32_t)converted.r();
-	}
-
-	bool operator==(const color_t&) const = default;
+	operator i_color<int>() const { return i_color<float>{ *this * i_color<int>{ 255 } }.cast<int>(); }
 };
