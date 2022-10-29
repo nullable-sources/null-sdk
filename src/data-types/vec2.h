@@ -8,9 +8,15 @@ public:
 	float x{ }, y{ };
 
 public:
-	vec2_t() = default;
-	vec2_t(auto _value) : x(_value), y(_value) { }
-	vec2_t(auto _x, auto _y) : x(_x), y(_y) { }
+	vec2_t() { }
+
+	template <typename t>
+		requires std::is_arithmetic_v<t>
+	vec2_t(t _value) : vec2_t{ (float)_value, (float)_value } { }
+
+	template <typename t>
+		requires std::is_arithmetic_v<t>
+	vec2_t(t _x, t _y) : x{ (float)_x }, y{ (float)_y } { }
 
 public:
 	float length() const { return std::hypot(x, y); }

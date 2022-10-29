@@ -10,8 +10,8 @@ namespace memory {
         std::vector<std::int32_t> bytes{ };
 
     public:
-        signature_t(const c_module& module, std::string_view _signature) : signature_t(module.pe_image, _signature) { }
-        signature_t(const pe_image_t& _pe_image, std::string_view _signature) : pe_image(_pe_image), signature(_signature) {
+        signature_t(const c_module& module, std::string_view _signature) : signature_t{ module.pe_image, _signature } { }
+        signature_t(const pe_image_t& _pe_image, std::string_view _signature) : pe_image{ _pe_image }, signature{ _signature } {
             if(signature.empty()) throw std::runtime_error{ "signature empty" };
             to_bytes();
         }

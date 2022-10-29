@@ -15,7 +15,7 @@ namespace memory {
 		static inline prototype_t original{ };
 
 	public:
-		static MH_STATUS setup(address_t address) {
+		static MH_STATUS setup(const address_t& address) {
 			hooked_address = address;
 			if constexpr(type == e_hook_type::standard) {
 				if(MH_STATUS status{ MH_CreateHook(address, &hook_class_t::hook, (LPVOID*)&original) }; status != MH_OK) return status;

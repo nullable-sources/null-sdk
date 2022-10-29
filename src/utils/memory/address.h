@@ -9,10 +9,10 @@ namespace memory {
 
     public:
         address_t() { }
-        address_t(auto value) : address((std::uintptr_t)value) { }
+        address_t(auto value) : address{ (std::uintptr_t)value } { }
 
     public:
-        template <typename cast_t> cast_t cast() { return (cast_t)address; }
+        template <typename cast_t> cast_t cast() const { return (cast_t)address; }
 
         address_t& deref(int steps = 1) { address = *cast<std::uintptr_t*>(); if(steps > 1) deref(); return *this; }
 
@@ -25,8 +25,8 @@ namespace memory {
         }
 
     public:
-        template <typename cast_t> operator cast_t() { return cast<cast_t>(); }
-        operator bool() { return address; }
+        template <typename cast_t> operator cast_t() const { return cast<cast_t>(); }
+        operator bool() const { return address; }
     };
 
     struct vtable_t : private address_t {

@@ -16,7 +16,7 @@ private:
 
 public:
 	array_callbacks_t() { }
-	array_callbacks_t(const callbacks_t& _callbacks) : callbacks(_callbacks) { }
+	array_callbacks_t(const callbacks_t& _callbacks) : callbacks{ _callbacks } { }
 
 public:
 	template <typename function_t>
@@ -65,7 +65,7 @@ private:
 
 public:
 	single_callbacks_t() { }
-	single_callbacks_t(const callbacks_t& _callbacks) : callbacks(_callbacks) { }
+	single_callbacks_t(const callbacks_t& _callbacks) : callbacks{ _callbacks } { }
 
 public:
 	template <typename function_t>

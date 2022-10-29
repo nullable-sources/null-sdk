@@ -19,8 +19,8 @@ namespace memory {
 
         public:
             i_export() { }
-            i_export(const address_t& _address) : address_t{_address} { }
-            i_export(std::string_view _module_name, std::string_view _name) : name(_name) {
+            i_export(const address_t& _address) : address_t{ _address } { }
+            i_export(std::string_view _module_name, std::string_view _name) : name{ _name } {
                 if(module = find_stored_module(_module_name)) {
                     if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
                     else {
@@ -31,7 +31,7 @@ namespace memory {
                     address = c_module{ _module_name, false }.get_export(name);
                 }
             }
-            i_export(c_module* _module, std::string_view _name) : module(_module), name(_name), address_t{ _module->get_export(_name) } {
+            i_export(c_module* _module, std::string_view _name) : module{ _module }, name{ _name }, address_t{ _module->get_export(_name) } {
                 if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
                 else module->stored_exports.push_back(this);
             }
@@ -60,7 +60,7 @@ namespace memory {
         std::vector<i_export*> stored_exports{ };
 
     public:
-        c_module(std::string_view _name, bool store = true) : name(_name) {
+        c_module(std::string_view _name, bool store = true) : name{ _name } {
             if(c_module* finded{ find_stored_module(_name) }) {
                 *this = *finded;
             } else {

@@ -8,9 +8,13 @@ public:
 	float x{ }, y{ }, z{ };
 
 public:
-	vec3_t() = default;
-	vec3_t(auto _value) : x(_value), y(_value), z(_value) { }
-	vec3_t(auto _x, auto _y, auto _z) : x(_x), y(_y), z(_z) { }
+	vec3_t() { }
+	template <typename t>
+		requires std::is_arithmetic_v<t>
+	vec3_t(t _value) : vec3_t{ _value, _value, _value } { }
+	template <typename t>
+		requires std::is_arithmetic_v<t>
+	vec3_t(t _x, t _y, t _z) : x{ _x }, y{ _y }, z{ _z } { }
 
 public:
 	float length() const { return std::hypot(x, y, z); }

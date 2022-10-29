@@ -6,10 +6,17 @@ public:
 	vec2_t min{ }, max{ };
 
 public:
-	rect_t() = default;
-	rect_t(auto _value) : min(_value), max(_value) { }
-	rect_t(auto _min, auto _max) : min(_min), max(_max) { }
-	rect_t(auto min_x, auto min_y, auto max_x, auto max_y) : min(min_x, min_y), max(max_x, max_y) { }
+	rect_t() { }
+
+	template <typename t>
+		requires std::is_arithmetic_v<t> || std::is_same_v<std::remove_cv_t<t>, vec2_t>
+	rect_t(t _value) : rect_t{ _value, _value } { }
+	template <typename t>
+		requires std::is_arithmetic_v<t> || std::is_same_v<std::remove_cv_t<t>, vec2_t>
+	rect_t(t _min, t _max) : min{ _min }, max{ _max } { }
+	template <typename t>
+		requires std::is_arithmetic_v<t>
+	rect_t(t min_x, t min_y, t max_x, t max_y) : min{ min_x, min_y }, max{ max_x, max_y } { }
 
 public:
 	bool contains(const vec2_t& point) const { return min <= point && max >= point; }

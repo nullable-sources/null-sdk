@@ -52,9 +52,9 @@ namespace utils {
 			std::uint32_t styles{ WS_OVERLAPPEDWINDOW };
 
 		public:
-			c_window() : wnd_handle(GetActiveWindow()) { }
-			c_window(const HINSTANCE& _instance) : instance(_instance) { }
-			c_window(const HWND& _wnd_handle) : wnd_handle(_wnd_handle) { }
+			c_window() : wnd_handle{ GetActiveWindow() } { }
+			c_window(const HINSTANCE& _instance) : instance{ _instance } { }
+			c_window(const HWND& _wnd_handle) : wnd_handle{ _wnd_handle } { }
 
 		public:
 			bool create();
