@@ -63,6 +63,7 @@ public:
 
 	color_t(const i_color<int>& color) : i_color{ color } { }
 	color_t(const i_color<int>& color, float _a) : i_color{ color, _a * 255 } { }
+	color_t(const i_color<float>& color) : i_color{ color_t<float>{ color } } { }
 
 public:
 	operator i_color<float>() const { return this->cast<float>() / i_color<float>{ 255.f }; }
@@ -88,6 +89,7 @@ public:
 
 	color_t(const i_color<float>& color) : i_color{ color } { }
 	color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
+	color_t(const i_color<int>& color) : i_color{ color_t<int>{ color } } { }
 
 public:
 	operator i_color<int>() const { return i_color<float>{ *this * i_color<int>{ 255 } }.cast<int>(); }
