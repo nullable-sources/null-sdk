@@ -46,14 +46,23 @@ namespace null::sdk {
 template <typename channels_t = int>
 struct color_t : null::sdk::i_color<int> {
 public: using i_color::i_color;
-	 color_t() : i_color{ 255 } { }
+	struct palette_t {
+		static inline const i_color<int> white	{ 255,	255,	255,	255 };
+		static inline const i_color<int> black	{ 0,	0,		0,		255 };
+		static inline const i_color<int> red	{ 255,	0,		0,		255 };
+		static inline const i_color<int> green	{ 0,	255,	0,		255 };
+		static inline const i_color<int> blue	{ 0,	0,		255,	255 };
+	};
 
-	 color_t(float _rgba) : i_color{ _rgba * 255 } { }
-	 color_t(int _r, int _g, int _b, int _a = 255) : i_color{ _r, _g, _b, _a } { }
-	 color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
+public:
+	color_t() : i_color{ 255 } { }
 
-	 color_t(const i_color<int>& color) : i_color{ color } { }
-	 color_t(const i_color<int>& color, float _a) : i_color{ color, _a * 255 } { }
+	color_t(float _rgba) : i_color{ _rgba * 255 } { }
+	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ _r, _g, _b, _a } { }
+	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
+
+	color_t(const i_color<int>& color) : i_color{ color } { }
+	color_t(const i_color<int>& color, float _a) : i_color{ color, _a * 255 } { }
 
 public:
 	operator i_color<float>() const { return this->cast<float>() / i_color<float>{ 255.f }; }
@@ -62,14 +71,23 @@ public:
 template <>
 struct color_t<float> : null::sdk::i_color<float> {
 public: using i_color::i_color;
-	 color_t() : i_color{ 1.f } { }
+	struct palette_t {
+		static inline const i_color<float> white{ 1.f, 1.f, 1.f, 1.f };
+		static inline const i_color<float> black{ 0.f, 0.f, 0.f, 1.f };
+		static inline const i_color<float> red	{ 1.f, 0.f, 0.f, 1.f };
+		static inline const i_color<float> green{ 0.f, 1.f, 0.f, 1.f };
+		static inline const i_color<float> blue	{ 0.f, 0.f, 1.f, 1.f };
+	};
 
-	 color_t(int _rgba) : i_color{ _rgba / 255.f } { }
-	 color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ _r, _g, _b, _a } { }
-	 color_t(int _r, int _g, int _b, int _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
+public:
+	color_t() : i_color{ 1.f } { }
 
-	 color_t(const i_color<float>& color) : i_color{ color } { }
-	 color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
+	color_t(int _rgba) : i_color{ _rgba / 255.f } { }
+	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ _r, _g, _b, _a } { }
+	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
+
+	color_t(const i_color<float>& color) : i_color{ color } { }
+	color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
 
 public:
 	operator i_color<int>() const { return i_color<float>{ *this * i_color<int>{ 255 } }.cast<int>(); }
