@@ -19,9 +19,8 @@ namespace memory {
     public:
         std::vector<std::int32_t> to_bytes() {
             if(!bytes.empty()) return bytes;
-            for(std::string_view byte : signature | std::views::split(' ') | std::views::transform([](const auto& splited) { return std::string_view{ splited }; })) {
-                if(byte.contains("?")) bytes.push_back(-1);
-                else bytes.push_back(strtoul(byte.data(), nullptr, 16));
+            for(std::string_view byte : signature | std::views::split(' ') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
+                bytes.push_back(byte.contains("?") ? -1 : strtoul(byte.data(), nullptr, 16));
             }
             return bytes;
         }

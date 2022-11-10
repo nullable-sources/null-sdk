@@ -89,7 +89,7 @@ namespace utils {
 		bool i_command::handle(std::string_view str) {
 			if(str.empty()) return false;
 
-			for(std::string_view command : str | std::views::split(';') | std::views::transform([](const auto& splited) { return std::string_view{ splited }; })) {
+			for(std::string_view command : str | std::views::split(';') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
 				std::ranges::filter_view args{ command | std::views::split(' ') | std::views::filter([](const auto& arg) { return !arg.empty(); }) };
 				if(args.empty()) continue;
 
