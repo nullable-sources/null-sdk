@@ -122,7 +122,7 @@ namespace utils {
 			i_command() { registered_commands.push_back(this); }
 
 		public:
-			virtual bool execute(const std::vector<std::string>& args) = 0;
+			virtual bool execute(const std::vector<std::string_view>& args) = 0;
 
 			virtual std::string name() = 0;
 			virtual std::string description() = 0;

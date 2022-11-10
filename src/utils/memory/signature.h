@@ -19,7 +19,7 @@ namespace memory {
     public:
         std::vector<std::int32_t> to_bytes() {
             if(!bytes.empty()) return bytes;
-            for(std::string_view byte : std::views::split(signature, std::string_view{ " " })) {
+            for(std::string_view byte : signature | std::views::split(' ') | std::views::transform([](const auto& splited) { return std::string_view{ splited }; })) {
                 if(byte.contains("?")) bytes.push_back(-1);
                 else bytes.push_back(strtoul(byte.data(), nullptr, 16));
             }

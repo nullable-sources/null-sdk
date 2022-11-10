@@ -3,7 +3,7 @@
 namespace commands {
     struct help_t : utils::console::i_command {
     public:
-        bool execute(const std::vector<std::string>&) override {
+        bool execute(const std::vector<std::string_view>&) override {
             for(const auto& command : registered_commands) {
                 std::cout << command->name() << " " << command->description() << std::endl;
             }
@@ -17,7 +17,7 @@ namespace commands {
 
     struct test_t : utils::console::i_command {
     public:
-        bool execute(const std::vector<std::string>& args) override {
+        bool execute(const std::vector<std::string_view>& args) override {
             std::cout << "args: ";
             for(std::string_view arg : args) std::cout << "[" << arg << "] ";
             std::cout << std::endl;
