@@ -19,6 +19,14 @@ public:
 	rect_t(t min_x, t min_y, t max_x, t max_y) : min{ min_x, min_y }, max{ max_x, max_y } { }
 
 public:
+	template <typename t>
+		requires std::is_aggregate_v<t>
+	rect_t& from_min(t size) { max = min + size; return *this; }
+	
+	template <typename t>
+		requires std::is_aggregate_v<t>
+	rect_t& from_max(t size) { min = max - size; return *this; }
+
 	bool contains(const vec2_t& point) const { return min <= point && max >= point; }
 	bool contains(const rect_t& rect) const { return contains(rect.min) || contains(rect.max); }
 	bool intersects(const rect_t& rect) const { 
