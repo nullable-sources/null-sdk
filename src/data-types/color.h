@@ -103,10 +103,10 @@ public:
 	hsv_color_t() : channels{ 0.f, 0.f, 1.f, 1.f } { }
 
 	hsv_color_t(const null::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
-		double max{ std::ranges::max(rgba.channels) };
-		double delta{ max - std::ranges::min(rgba.channels) };
+		float max{ std::ranges::max(rgba.channels) };
+		float delta{ max - std::ranges::min(rgba.channels) };
 
-		if(delta <= 0.f) channels = { 0.f, 0.f, (float)max, rgba.a() };
+		if(delta <= 0.f) channels = { 0.f, 0.f, max, rgba.a() };
 		else {
 			if(max == rgba.r())			h() = std::fmodf((rgba.g() - rgba.b()) / delta, 6.f);
 			else if(max == rgba.g())	h() = (rgba.b() - rgba.r()) / delta + 2.;
@@ -129,7 +129,7 @@ public:
 	operator null::sdk::i_color<float>() const {
 		float chroma{ v() * s() };
 		float prime{ std::fmod(h() / 60.f, 6.f) };
-		float x{ chroma * (1.f - std::fabs(fmod(prime, 2.f) - 1.f)) };
+		float x{ chroma * (1.f - std::fabs(std::fmod(prime, 2.f) - 1.f)) };
 
 		null::sdk::i_color<float> rgba{ };
 		switch((int)prime) {
@@ -138,7 +138,7 @@ public:
 			case 2: rgba.r() = 0.f;		rgba.g() = chroma;	rgba.b() = x;		break;
 			case 3: rgba.r() = 0.f;		rgba.g() = x;		rgba.b() = chroma;	break;
 			case 4: rgba.r() = x;		rgba.g() = 0.f;		rgba.b() = chroma;	break;
-			case 5: rgba.r() = chroma;	rgba.g() = 0.f;		rgba.b() = x;	break;
+			case 5: rgba.r() = chroma;	rgba.g() = 0.f;		rgba.b() = x;		break;
 		}
 
 		float m{ v() - chroma };
