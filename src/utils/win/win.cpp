@@ -90,11 +90,11 @@ namespace utils {
 			if(str.empty()) return false;
 
 			for(std::string_view command : str | std::views::split(';') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
-				std::ranges::filter_view args{ command | std::views::split(' ') | std::views::filter([](const auto& arg) { return !arg.empty(); }) };
+				std::vector<std::string_view> args{ command | std::views::split(' ') | std::views::transform([](const auto& arg) { return std::string_view{ arg }; }) | std::views::filter([](const std::string_view& arg) { return !arg.empty(); }) | std::ranges::to<std::vector>() };
 				if(args.empty()) continue;
 
-				if(auto finded{ std::ranges::find_if(i_command::registered_commands, [&](const auto& command) { return command->name() == std::string{ (*args.begin()).begin(), (*args.begin()).end() }; }) }; finded != i_command::registered_commands.end()) {
-					return (*finded)->execute({ std::next(args.begin()), args.end() });
+				if(auto finded{ std::ranges::find_if(i_command::registered_commands, [&](i_command* command) { return command->name() == args.front(); }) }; finded != i_command::registered_commands.end()) {
+					return (*finded)->execute(args | std::views::drop(1) | std::ranges::to<std::vector>());
 				}
 			}
 

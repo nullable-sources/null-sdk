@@ -66,7 +66,7 @@ namespace utils {
 			vec2_t get_window_size() const;
 
 			template<typename char_t>
-			void write_clipboard(std::basic_string_view<char_t> str) {
+			void write_clipboard(std::basic_string_view<char_t> str) const {
 				if(!OpenClipboard(wnd_handle)) throw std::runtime_error{ "cant open clipboard" };
 
 				EmptyClipboard();
@@ -79,7 +79,7 @@ namespace utils {
 			}
 
 			template <typename char_t>
-			std::basic_string<char_t> read_clipboard() {
+			std::basic_string<char_t> read_clipboard() const {
 				if(!OpenClipboard(wnd_handle)) throw std::runtime_error{ "cant open clipboard" };
 
 				std::basic_string<char_t> clipboard{ };

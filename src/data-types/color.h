@@ -103,14 +103,14 @@ public:
 	hsv_color_t() : channels{ 0.f, 0.f, 1.f, 1.f } { }
 
 	hsv_color_t(const null::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
-		float max{ std::ranges::max(rgba.channels) };
-		float delta{ max - std::ranges::min(rgba.channels) };
+		float max{ std::ranges::max(rgba.channels | std::ranges::views::take(3)) };
+		float delta{ max - std::ranges::min(rgba.channels | std::ranges::views::take(3)) };
 
 		if(delta <= 0.f) channels = { 0.f, 0.f, max, rgba.a() };
 		else {
 			if(max == rgba.r())			h() = std::fmodf((rgba.g() - rgba.b()) / delta, 6.f);
-			else if(max == rgba.g())	h() = (rgba.b() - rgba.r()) / delta + 2.;
-			else if(max == rgba.b())	h() = (rgba.r() - rgba.g()) / delta + 4.;
+			else if(max == rgba.g())	h() = (rgba.b() - rgba.r()) / delta + 2.f;
+			else if(max == rgba.b())	h() = (rgba.r() - rgba.g()) / delta + 4.f;
 			h() *= 60.f;
 			if(h() < 0.f) h() += 360.f;
 
