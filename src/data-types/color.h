@@ -18,6 +18,7 @@ namespace null::sdk {
 		i_color(channel_t _r, channel_t _g, channel_t _b, channel_t _a) : channels{ _r, _g, _b, _a } { }
 
 		i_color(const i_color<channel_t>& color, channel_t _a) : i_color{ color.r(), color.g(), color.b(), _a } { }
+		i_color(const std::vector<channel_t>& _channels) { std::ranges::copy(_channels, channels.begin()); }
 
 	public:
 		channel_t& r() { return channels[0]; } const channel_t& r() const { return channels[0]; }
@@ -26,20 +27,28 @@ namespace null::sdk {
 		channel_t& a() { return channels[3]; } const channel_t& a() const { return channels[3]; }
 
 		template<typename cast_t>
-		i_color<cast_t> cast() const { return i_color<cast_t>{ (cast_t)r(), (cast_t)g(), (cast_t)b(), (cast_t)a() }; }
+		i_color<cast_t> cast() const { return i_color<cast_t>{ channels | std::views::transform([](const channel_t& channel) { return (cast_t)channel; }) | std::ranges::to<std::vector>() }; }
 
 	public:
 		bool operator==(const i_color<channel_t>&) const = default;
 
 		template <typename color_channel_t>
-		i_color<channel_t> operator*(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r()* color.r(), g()* color.g(), b()* color.b(), a()* color.a() }; }
+		i_color<channel_t> operator*(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r() * color.r(), g() * color.g(), b() * color.b(), a() * color.a() }; }
+		template <typename color_channel_t>
+		i_color<channel_t> operator*(const color_channel_t& color) const { return i_color<channel_t>{ channels | std::views::transform([=](const channel_t& channel) { return channel * color; }) | std::ranges::to<std::vector>() }; }
 		template <typename color_channel_t>
 		i_color<channel_t> operator*=(const i_color<color_channel_t>& color) { *this = *this * color; return *this; }
+		template <typename color_channel_t>
+		i_color<channel_t> operator*=(const color_channel_t& color) { *this = *this * color; return *this; }
 
 		template <typename color_channel_t>
 		i_color<channel_t> operator/(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r() / color.r(), g() / color.g(), b() / color.b(), a() / color.a() }; }
 		template <typename color_channel_t>
+		i_color<channel_t> operator/(const color_channel_t color) const { return i_color<channel_t>{ channels | std::views::transform([=](const channel_t& channel) { return channel / color; }) | std::ranges::to<std::vector>() }; }
+		template <typename color_channel_t>
 		i_color<channel_t> operator/=(const i_color<color_channel_t>& color) { *this = *this / color; return *this; }
+		template <typename color_channel_t>
+		i_color<channel_t> operator/=(const color_channel_t& color) { *this = *this / color; return *this; }
 	};
 }
 
@@ -66,7 +75,7 @@ public:
 	color_t(const i_color<float>& color) : i_color{ color_t<float>{ color } } { }
 
 public:
-	operator i_color<float>() const { return this->cast<float>() / i_color<float>{ 255.f }; }
+	operator i_color<float>() const { return this->cast<float>() / 255.f; }
 };
 
 template <>
@@ -91,8 +100,11 @@ public:
 	color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
 	color_t(const i_color<int>& color) : i_color{ color_t<int>{ color } } { }
 
+private:
+	color_t<float> round() { std::ranges::transform(channels, channels.begin(), [](const float& channel) { return std::round(channel); }); return *this; }
+
 public:
-	operator i_color<int>() const { return i_color<float>{ *this * i_color<int>{ 255 } }.cast<int>(); }
+	operator i_color<int>() const { return color_t<float>{ *this * 255 }.round().cast<int>(); }
 };
 
 struct hsv_color_t {
@@ -101,12 +113,12 @@ public:
 
 public:
 	hsv_color_t() : channels{ 0.f, 0.f, 1.f, 1.f } { }
-
+	hsv_color_t(float _h, float _s, float _v, float _a) : channels{ _h, _s, _v, _a } { }
 	hsv_color_t(const null::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
-		float max{ std::ranges::max(rgba.channels | std::ranges::views::take(3)) };
-		float delta{ max - std::ranges::min(rgba.channels | std::ranges::views::take(3)) };
+		double max{ std::ranges::max(rgba.channels | std::views::take(3)) };
+		double delta{ max - std::ranges::min(rgba.channels | std::views::take(3)) };
 
-		if(delta <= 0.f) channels = { 0.f, 0.f, max, rgba.a() };
+		if(delta <= 0.f) channels = { 0.f, 0.f, (float)max, rgba.a() };
 		else {
 			if(max == rgba.r())			h() = std::fmodf((rgba.g() - rgba.b()) / delta, 6.f);
 			else if(max == rgba.g())	h() = (rgba.b() - rgba.r()) / delta + 2.f;
@@ -127,9 +139,9 @@ public:
 
 public:
 	operator null::sdk::i_color<float>() const {
-		float chroma{ v() * s() };
-		float prime{ std::fmod(h() / 60.f, 6.f) };
-		float x{ chroma * (1.f - std::fabs(std::fmod(prime, 2.f) - 1.f)) };
+		double chroma{ v() * s() };
+		double prime{ std::fmod(h() / 60.f, 6.f) };
+		double x{ chroma * (1.f - std::fabs(std::fmod(prime, 2.f) - 1.f)) };
 
 		null::sdk::i_color<float> rgba{ };
 		switch((int)prime) {
@@ -141,7 +153,7 @@ public:
 			case 5: rgba.r() = chroma;	rgba.g() = 0.f;		rgba.b() = x;		break;
 		}
 
-		float m{ v() - chroma };
-		return null::sdk::i_color<float>{ rgba.r() + m, rgba.g() + m, rgba.b() + m, a() };
+		double m{ v() - chroma };
+		return null::sdk::i_color<double>{ rgba.r() + m, rgba.g() + m, rgba.b() + m, a() }.cast<float>();
 	}
 };
