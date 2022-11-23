@@ -1,7 +1,7 @@
 #pragma once
 #include <type_traits>
 
-#define impl_default_arithmetic_comparison_func(op, variable_name) { *this op##= *this op variable_name; }
+#define impl_default_arithmetic_comparison_func(op, variable_name) { return *this op##= *this op variable_name; }
 #define impl_default_logic_comparison_func(op, variable_name)      { return *this op variable_name || *this == variable_name; }
 
 #define impl_class_create_operator(return_type, op, op_func, args, ...) __VA_ARGS__ return_type operator op##args op_func
