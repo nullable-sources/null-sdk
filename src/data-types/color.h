@@ -30,25 +30,16 @@ namespace null::sdk {
 		i_color<cast_t> cast() const { return i_color<cast_t>{ channels | std::views::transform([](const channel_t& channel) { return (cast_t)channel; }) | std::ranges::to<std::vector>() }; }
 
 	public:
+		//@note: i hope i will live to see the moment when they add support https://en.cppreference.com/w/cpp/ranges/zip_view
+		class_create_operators(i_color<channel_t>, -, { return i_color<channel_t>(-r(), -g(), -b(), -a()); }, ());
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, +, { return i_color<channel_t>(r() + color.r(), g() + color.g(), b() + color.b(), a() + color.a()); }, impl_default_arithmetic_comparison_func(+, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, -, { return i_color<channel_t>(r() - color.r(), g() - color.g(), b() - color.b(), a() - color.a()); }, impl_default_arithmetic_comparison_func(-, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, *, { return i_color<channel_t>(r() * color.r(), g() * color.g(), b() * color.b(), a() * color.a()); }, impl_default_arithmetic_comparison_func(*, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, /, { return i_color<channel_t>(r() / color.r(), g() / color.g(), b() / color.b(), a() / color.a()); }, impl_default_arithmetic_comparison_func(/, color), template <typename other_channel_t>);
+
 		bool operator==(const i_color<channel_t>&) const = default;
-
-		template <typename color_channel_t>
-		i_color<channel_t> operator*(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r() * color.r(), g() * color.g(), b() * color.b(), a() * color.a() }; }
-		template <typename color_channel_t>
-		i_color<channel_t> operator*(const color_channel_t& color) const { return i_color<channel_t>{ channels | std::views::transform([=](const channel_t& channel) { return channel * color; }) | std::ranges::to<std::vector>() }; }
-		template <typename color_channel_t>
-		i_color<channel_t> operator*=(const i_color<color_channel_t>& color) { *this = *this * color; return *this; }
-		template <typename color_channel_t>
-		i_color<channel_t> operator*=(const color_channel_t& color) { *this = *this * color; return *this; }
-
-		template <typename color_channel_t>
-		i_color<channel_t> operator/(const i_color<color_channel_t>& color) const { return i_color<channel_t>{ r() / color.r(), g() / color.g(), b() / color.b(), a() / color.a() }; }
-		template <typename color_channel_t>
-		i_color<channel_t> operator/(const color_channel_t color) const { return i_color<channel_t>{ channels | std::views::transform([=](const channel_t& channel) { return channel / color; }) | std::ranges::to<std::vector>() }; }
-		template <typename color_channel_t>
-		i_color<channel_t> operator/=(const i_color<color_channel_t>& color) { *this = *this / color; return *this; }
-		template <typename color_channel_t>
-		i_color<channel_t> operator/=(const color_channel_t& color) { *this = *this / color; return *this; }
+		class_create_logic_operators(color, i_color<channel_t>, <, { return r() < color.r() && g() < color.g() && b() < color.b() && a() < color.a(); });
+		class_create_logic_operators(color, i_color<channel_t>, >, { return r() > color.r() && g() > color.g() && b() > color.b() && a() > color.a(); });
 	};
 }
 
@@ -75,7 +66,7 @@ public:
 	color_t(const i_color<float>& color) : i_color{ color_t<float>{ color } } { }
 
 public:
-	operator i_color<float>() const { return this->cast<float>() / 255.f; }
+	operator i_color<float>() const { return this->cast<float>() / color_t<float>{ 255.f }; }
 };
 
 template <>
@@ -104,7 +95,7 @@ private:
 	color_t<float> round() { std::ranges::transform(channels, channels.begin(), [](const float& channel) { return std::round(channel); }); return *this; }
 
 public:
-	operator i_color<int>() const { return color_t<float>{ *this * 255 }.round().cast<int>(); }
+	operator i_color<int>() const { return color_t<float>{ *this * color_t<int>{ 255 } }.round().cast<int>(); }
 };
 
 struct hsv_color_t {
