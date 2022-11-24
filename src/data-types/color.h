@@ -15,6 +15,7 @@ namespace null::sdk {
 		i_color() { }
 
 		i_color(channel_t _rgba) : i_color{ _rgba, _rgba, _rgba, _rgba } { };
+		i_color(channel_t _rgb, channel_t _a) : i_color{ _rgb, _rgb, _rgb, _a } { }
 		i_color(channel_t _r, channel_t _g, channel_t _b, channel_t _a) : channels{ _r, _g, _b, _a } { }
 
 		i_color(const i_color<channel_t>& color, channel_t _a) : i_color{ color.r(), color.g(), color.b(), _a } { }
@@ -58,6 +59,11 @@ public:
 	color_t() : i_color{ 255 } { }
 
 	color_t(float _rgba) : i_color{ _rgba * 255 } { }
+	
+	color_t(int	_rgb, float	_a) : i_color{ _rgb, _a * 255 } { }
+	color_t(float _rgb, int	_a) : i_color{ _rgb * 255, _a } { }
+	color_t(float _rgb, float _a) : i_color{ _rgb * 255, _a * 255 } { }
+	
 	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ _r, _g, _b, _a } { }
 	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
 
@@ -84,6 +90,11 @@ public:
 	color_t() : i_color{ 1.f } { }
 
 	color_t(int _rgba) : i_color{ _rgba / 255.f } { }
+
+	color_t(float _rgb, int	_a) : i_color{ _rgb, _a / 255.f } { }
+	color_t(int _rgb, float _a) : i_color{ _rgb / 255.f, _a } { }
+	color_t(int _rgb, int _a) : i_color{ _rgb / 255.f, _a / 255.f } { }
+	
 	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ _r, _g, _b, _a } { }
 	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
 
@@ -104,7 +115,8 @@ public:
 
 public:
 	hsv_color_t() : channels{ 0.f, 0.f, 1.f, 1.f } { }
-	hsv_color_t(float _h, float _s, float _v, float _a) : channels{ _h, _s, _v, _a } { }
+	hsv_color_t(float _h, float _a = 1.f) : hsv_color_t{ _h, 1.f, 1.f, _a } { }
+	hsv_color_t(float _h, float _s, float _v, float _a = 1.f) : channels{ _h, _s, _v, _a } { }
 	hsv_color_t(const null::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
 		double max{ std::ranges::max(rgba.channels | std::views::take(3)) };
 		double delta{ max - std::ranges::min(rgba.channels | std::views::take(3)) };
@@ -147,4 +159,14 @@ public:
 		double m{ v() - chroma };
 		return null::sdk::i_color<double>{ rgba.r() + m, rgba.g() + m, rgba.b() + m, a() }.cast<float>();
 	}
+
+	class_create_operators(hsv_color_t, -, { return hsv_color_t(-h(), -s(), -v(), -a()); }, ());
+	class_create_arithmetic_operators(color, hsv_color_t, +, { return hsv_color_t(h() + color.h(), s() + color.s(), v() + color.v(), a() + color.a()); });
+	class_create_arithmetic_operators(color, hsv_color_t, -, { return hsv_color_t(h() - color.h(), s() - color.s(), v() - color.v(), a() - color.a()); });
+	class_create_arithmetic_operators(color, hsv_color_t, *, { return hsv_color_t(h() * color.h(), s() * color.s(), v() * color.v(), a() * color.a()); });
+	class_create_arithmetic_operators(color, hsv_color_t, /, { return hsv_color_t(h() / color.h(), s() / color.s(), v() / color.v(), a() / color.a()); });
+	
+	bool operator==(const hsv_color_t&) const = default;
+	class_create_logic_operators(color, hsv_color_t, <, { return h() < color.h() && s() < color.s() && v() < color.v() && a() < color.a(); });
+	class_create_logic_operators(color, hsv_color_t, >, { return h() > color.h() && s() > color.s() && v() > color.v() && a() > color.a(); });
 };
