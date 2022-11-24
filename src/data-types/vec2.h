@@ -30,6 +30,6 @@ public:
 	class_create_arithmetic_operators(vec, vec2_t, /, { return vec2_t(x / vec.x, y / vec.y); });
 
 	bool operator==(const vec2_t&) const = default;
-	class_create_logic_operators(vec, vec2_t, <, { return x < vec.x && y < vec.y; });
-	class_create_logic_operators(vec, vec2_t, >, { return x > vec.x && y > vec.y; });
+	class_create_logic_operators(vec, vec2_t, <, { return x < vec.x && y < vec.y; }, { return x <= vec.x && y <= vec.y; });
+	class_create_logic_operators(vec, vec2_t, >, { return x > vec.x && y > vec.y; }, { return x >= vec.x && y >= vec.y; });
 };

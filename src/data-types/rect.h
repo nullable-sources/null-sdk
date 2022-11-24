@@ -46,6 +46,6 @@ public:
 	class_create_arithmetic_operators(rect, rect_t, /, { return rect_t(min / rect.min, max / rect.max); });
 
 	bool operator==(const rect_t&) const = default;
-	class_create_logic_operators(rect, rect_t, <, { return min < rect.min && max < rect.max; });
-	class_create_logic_operators(rect, rect_t, >, { return min > rect.min && max > rect.max; });
+	class_create_logic_operators(rect, rect_t, <, { return min < rect.min && max < rect.max; }, { return min <= rect.min && max <= rect.max; });
+	class_create_logic_operators(rect, rect_t, >, { return min > rect.min && max > rect.max; }, { return min >= rect.min && max >= rect.max; });
 };

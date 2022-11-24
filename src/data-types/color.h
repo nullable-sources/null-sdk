@@ -33,14 +33,14 @@ namespace null::sdk {
 	public:
 		//@note: i hope i will live to see the moment when they add support https://en.cppreference.com/w/cpp/ranges/zip_view
 		class_create_operators(i_color<channel_t>, -, { return i_color<channel_t>(-r(), -g(), -b(), -a()); }, ());
-		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, +, { return i_color<channel_t>(r() + color.r(), g() + color.g(), b() + color.b(), a() + color.a()); }, impl_default_arithmetic_comparison_func(+, color), template <typename other_channel_t>);
-		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, -, { return i_color<channel_t>(r() - color.r(), g() - color.g(), b() - color.b(), a() - color.a()); }, impl_default_arithmetic_comparison_func(-, color), template <typename other_channel_t>);
-		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, *, { return i_color<channel_t>(r() * color.r(), g() * color.g(), b() * color.b(), a() * color.a()); }, impl_default_arithmetic_comparison_func(*, color), template <typename other_channel_t>);
-		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, /, { return i_color<channel_t>(r() / color.r(), g() / color.g(), b() / color.b(), a() / color.a()); }, impl_default_arithmetic_comparison_func(/, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, +, { return i_color<channel_t>(r() + color.r(), g() + color.g(), b() + color.b(), a() + color.a()); }, impl_default_arithmetic_assignment_func(+, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, -, { return i_color<channel_t>(r() - color.r(), g() - color.g(), b() - color.b(), a() - color.a()); }, impl_default_arithmetic_assignment_func(-, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, *, { return i_color<channel_t>(r() * color.r(), g() * color.g(), b() * color.b(), a() * color.a()); }, impl_default_arithmetic_assignment_func(*, color), template <typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<channel_t>, i_color<other_channel_t>, /, { return i_color<channel_t>(r() / color.r(), g() / color.g(), b() / color.b(), a() / color.a()); }, impl_default_arithmetic_assignment_func(/, color), template <typename other_channel_t>);
 
 		bool operator==(const i_color<channel_t>&) const = default;
-		class_create_logic_operators(color, i_color<channel_t>, <, { return r() < color.r() && g() < color.g() && b() < color.b() && a() < color.a(); });
-		class_create_logic_operators(color, i_color<channel_t>, >, { return r() > color.r() && g() > color.g() && b() > color.b() && a() > color.a(); });
+		class_create_logic_operators(color, i_color<channel_t>, <, { return r() < color.r() && g() < color.g() && b() < color.b() && a() < color.a(); }, { return r() <= color.r() && g() <= color.g() && b() <= color.b() && a() <= color.a(); });
+		class_create_logic_operators(color, i_color<channel_t>, >, { return r() > color.r() && g() > color.g() && b() > color.b() && a() > color.a(); }, { return r() >= color.r() && g() >= color.g() && b() >= color.b() && a() >= color.a(); });
 	};
 }
 
@@ -167,6 +167,6 @@ public:
 	class_create_arithmetic_operators(color, hsv_color_t, /, { return hsv_color_t(h() / color.h(), s() / color.s(), v() / color.v(), a() / color.a()); });
 	
 	bool operator==(const hsv_color_t&) const = default;
-	class_create_logic_operators(color, hsv_color_t, <, { return h() < color.h() && s() < color.s() && v() < color.v() && a() < color.a(); });
-	class_create_logic_operators(color, hsv_color_t, >, { return h() > color.h() && s() > color.s() && v() > color.v() && a() > color.a(); });
+	class_create_logic_operators(color, hsv_color_t, <, { return h() < color.h() && s() < color.s() && v() < color.v() && a() < color.a(); }, { return h() <= color.h() && s() <= color.s() && v() <= color.v() && a() <= color.a(); });
+	class_create_logic_operators(color, hsv_color_t, >, { return h() > color.h() && s() > color.s() && v() > color.v() && a() > color.a(); }, { return h() >= color.h() && s() >= color.s() && v() >= color.v() && a() >= color.a(); });
 };

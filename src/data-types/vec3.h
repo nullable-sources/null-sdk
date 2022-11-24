@@ -30,6 +30,6 @@ public:
 	class_create_arithmetic_operators(vec, vec3_t, /, { return vec3_t(x / vec.x, y / vec.y, z / vec.z); });
 
 	bool operator==(const vec3_t&) const = default;
-	class_create_logic_operators(vec, vec3_t, <, { return x < vec.x && y < vec.y && z < vec.z; });
-	class_create_logic_operators(vec, vec3_t, >, { return x > vec.x && y > vec.y && z > vec.z; });
+	class_create_logic_operators(vec, vec3_t, <, { return x < vec.x && y < vec.y && z < vec.z; }, { return x <= vec.x && y <= vec.y && z <= vec.z; });
+	class_create_logic_operators(vec, vec3_t, >, { return x > vec.x && y > vec.y && z > vec.z; }, { return x >= vec.x && y >= vec.y && z >= vec.z; });
 };
