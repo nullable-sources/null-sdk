@@ -30,6 +30,10 @@ namespace math {
 	static vec3_t rint(const vec3_t& a) { return { std::rint(a.x), std::rint(a.y), std::rint(a.z) }; }
 	static rect_t rint(const rect_t& a) { return { rint(a.min), rint(a.max) }; }
 
+	static vec2_t clamp(const vec2_t& a, const vec2_t& min, const vec2_t& max) { return { std::clamp(a.x, min.x, max.x), std::clamp(a.y, min.y, max.y) }; }
+	static vec3_t clamp(const vec3_t& a, const vec3_t& min, const vec3_t& max) { return { std::clamp(a.x, min.x, max.x), std::clamp(a.y, min.y, max.y), std::clamp(a.z, min.z, max.z) }; }
+	static rect_t clamp(const rect_t& a, const rect_t& min, const rect_t& max) { return { clamp(a.min, min.min, max.min), clamp(a.max, min.max, max.max) }; }
+
 	//@note: if you want a vec2_t without changing the values use std::min/std::max
 	static vec2_t min(const vec2_t& a, const vec2_t& b) { return { std::min(a.x, b.x), std::min(a.y, b.y) }; }
 	static vec2_t max(const vec2_t& a, const vec2_t& b) { return { std::max(a.x, b.x), std::max(a.y, b.y) }; }
