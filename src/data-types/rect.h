@@ -20,11 +20,11 @@ public:
 
 public:
 	template <typename t>
-		requires std::is_aggregate_v<t>
+		requires std::is_arithmetic_v<t> || std::is_same_v<std::remove_cv_t<t>, vec2_t>
 	rect_t& from_min(t size) { max = min + size; return *this; }
 	
 	template <typename t>
-		requires std::is_aggregate_v<t>
+		requires std::is_arithmetic_v<t> || std::is_same_v<std::remove_cv_t<t>, vec2_t>
 	rect_t& from_max(t size) { min = max - size; return *this; }
 
 	bool contains(const vec2_t& point) const { return min <= point && max >= point; }
