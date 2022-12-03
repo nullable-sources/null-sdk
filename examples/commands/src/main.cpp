@@ -8,6 +8,8 @@ namespace commands {
                 std::cout << command->name() << " " << command->description() << std::endl;
             }
 
+            int i = 0;
+
             return true;
         }
 

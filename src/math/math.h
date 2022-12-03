@@ -6,6 +6,27 @@
 #include <data-types/matrix.h>
 
 namespace math {
+	//@note: it would be nice to shorten all of this via #define
+	static vec2_t abs(const vec2_t& a) { return { std::abs(a.x), std::abs(a.y) }; }
+	static vec3_t abs(const vec3_t& a) { return { std::abs(a.x), std::abs(a.y), std::abs(a.z) }; }
+	static rect_t abs(const rect_t& a) { return { abs(a.min), abs(a.max) }; }
+
+	static vec2_t mod(const vec2_t& a, const vec2_t& b) { return { std::fmod(a.x, b.x), std::fmod(a.y, b.y) }; }
+	static vec3_t mod(const vec3_t& a, const vec3_t& b) { return { std::fmod(a.x, b.x), std::fmod(a.y, b.y), std::fmod(a.z, b.z) }; }
+	static rect_t mod(const rect_t& a, const rect_t& b) { return { mod(a.min, b.min), mod(a.max, b.max) }; }
+
+	static vec2_t remainder(const vec2_t& a, const vec2_t& b) { return { std::remainder(a.x, b.x), std::remainder(a.y, b.y) }; }
+	static vec3_t remainder(const vec3_t& a, const vec3_t& b) { return { std::remainder(a.x, b.x), std::remainder(a.y, b.y), std::remainder(a.z, b.z) }; }
+	static rect_t remainder(const rect_t& a, const rect_t& b) { return { remainder(a.min, b.min), remainder(a.max, b.max) }; }
+
+	static vec2_t fma(const vec2_t& a, const vec2_t& b, const vec2_t& c) { return { std::fma(a.x, b.x, c.x), std::fma(a.y, b.y, c.y) }; }
+	static vec3_t fma(const vec3_t& a, const vec3_t& b, const vec3_t& c) { return { std::fma(a.x, b.x, c.x), std::fma(a.y, b.y, c.y), std::fma(a.z, b.z, c.z) }; }
+	static rect_t fma(const rect_t& a, const rect_t& b, const rect_t& c) { return { fma(a.min, b.min, c.min), fma(a.max, b.max, c.max) }; }
+
+	static vec2_t dim(const vec2_t& a, const vec2_t& b) { return { std::fdim(a.x, b.x), std::fdim(a.y, b.y) }; }
+	static vec3_t dim(const vec3_t& a, const vec3_t& b) { return { std::fdim(a.x, b.x), std::fdim(a.y, b.y), std::fdim(a.z, b.z) }; }
+	static rect_t dim(const rect_t& a, const rect_t& b) { return { dim(a.min, b.min), dim(a.max, b.max) }; }
+
 	static vec2_t ceil(const vec2_t& a) { return { std::ceil(a.x), std::ceil(a.y) }; }
 	static vec3_t ceil(const vec3_t& a) { return { std::ceil(a.x), std::ceil(a.y), std::ceil(a.z) }; }
 	static rect_t ceil(const rect_t& a) { return { ceil(a.min), ceil(a.max) }; }
@@ -34,15 +55,13 @@ namespace math {
 	static vec3_t clamp(const vec3_t& a, const vec3_t& min, const vec3_t& max) { return { std::clamp(a.x, min.x, max.x), std::clamp(a.y, min.y, max.y), std::clamp(a.z, min.z, max.z) }; }
 	static rect_t clamp(const rect_t& a, const rect_t& min, const rect_t& max) { return { clamp(a.min, min.min, max.min), clamp(a.max, min.max, max.max) }; }
 
-	//@note: if you want a vec2_t without changing the values use std::min/std::max
+	//@note: if you want a vec2_t/vec3_t/rect_t without changing the values use std::min/std::max
 	static vec2_t min(const vec2_t& a, const vec2_t& b) { return { std::min(a.x, b.x), std::min(a.y, b.y) }; }
-	static vec2_t max(const vec2_t& a, const vec2_t& b) { return { std::max(a.x, b.x), std::max(a.y, b.y) }; }
-
 	static vec3_t min(const vec3_t& a, const vec3_t& b) { return { std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z) }; }
-	static vec3_t max(const vec3_t& a, const vec3_t& b) { return { std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z) }; }
-
-	//@note: if you want a rect_t without changing the values use std::min/std::max
 	static rect_t min(const rect_t& a, const rect_t& b) { return { min(a.min, b.min), min(a.max, b.max) }; }
+	
+	static vec2_t max(const vec2_t& a, const vec2_t& b) { return { std::max(a.x, b.x), std::max(a.y, b.y) }; }
+	static vec3_t max(const vec3_t& a, const vec3_t& b) { return { std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z) }; }
 	static rect_t max(const rect_t& a, const rect_t& b) { return { max(a.min, b.min), max(a.max, b.max) }; }
 
 	//@note: std::lerp does not support non-arithmetic types
