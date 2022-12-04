@@ -22,10 +22,10 @@ namespace null::sdk {
 		i_color(const std::vector<channel_t>& _channels) { std::ranges::copy(_channels, channels.begin()); }
 
 	public:
-		channel_t& r() { return channels[0]; } const channel_t& r() const { return channels[0]; }
-		channel_t& g() { return channels[1]; } const channel_t& g() const { return channels[1]; }
-		channel_t& b() { return channels[2]; } const channel_t& b() const { return channels[2]; }
-		channel_t& a() { return channels[3]; } const channel_t& a() const { return channels[3]; }
+		template <typename self_t> auto& r(this self_t&& self) { return self.channels[0]; }
+		template <typename self_t> auto& g(this self_t&& self) { return self.channels[1]; }
+		template <typename self_t> auto& b(this self_t&& self) { return self.channels[2]; }
+		template <typename self_t> auto& a(this self_t&& self) { return self.channels[3]; }
 
 		template<typename cast_t>
 		i_color<cast_t> cast() const { return i_color<cast_t>{ channels | std::views::transform([](const channel_t& channel) { return (cast_t)channel; }) | std::ranges::to<std::vector>() }; }
@@ -135,10 +135,10 @@ public:
 	}
 
 public:
-	float& h() { return channels[0]; } const float& h() const { return channels[0]; }
-	float& s() { return channels[1]; } const float& s() const { return channels[1]; }
-	float& v() { return channels[2]; } const float& v() const { return channels[2]; }
-	float& a() { return channels[3]; } const float& a() const { return channels[3]; }
+	template <typename self_t> auto& h(this self_t&& self) { return self.channels[0]; }
+	template <typename self_t> auto& s(this self_t&& self) { return self.channels[1]; }
+	template <typename self_t> auto& v(this self_t&& self) { return self.channels[2]; }
+	template <typename self_t> auto& a(this self_t&& self) { return self.channels[3]; }
 
 public:
 	operator null::sdk::i_color<float>() const {
