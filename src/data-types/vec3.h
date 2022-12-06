@@ -21,6 +21,7 @@ public:
 	float dist_to(const vec3_t& vec) { return vec3_t{ *this - vec }.length(); }
 	vec3_t& normalize() { return *this = { std::isfinite(x) ? std::remainder(x, 360.f) : 0.f, std::isfinite(y) ? std::remainder(y, 360.f) : 0.f, 0.f }; }
 	float dot(const vec3_t& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
+	vec3_t cross(const vec3_t& vec) const { return { y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x }; }
 
 public:
 	class_create_operators(vec3_t, -, { return vec3_t(-x, -y, -z); }, ());

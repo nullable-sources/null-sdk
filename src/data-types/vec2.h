@@ -21,6 +21,7 @@ public:
 public:
 	float length() const { return std::hypot(x, y); }
 	float dot(const vec2_t& vec) const { return x * vec.x + y * vec.y; }
+	float cross(const vec2_t& vec) const { return x * vec.y - y * vec.x; }
 
 public:
 	class_create_operators(vec2_t, -, { return vec2_t(-x, -y); }, ());

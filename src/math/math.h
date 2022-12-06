@@ -1,6 +1,7 @@
 #pragma once
 #include <numbers>
 #include <cmath>
+#include <array>
 #include <data-types/vec3.h>
 #include <data-types/rect.h>
 #include <data-types/matrix.h>
@@ -75,5 +76,35 @@ namespace math {
 	static float radians_to_degrees(float radians) {
 		static constexpr float pi{ 180.f / std::numbers::pi_v<float> };
 		return radians * pi;
+	}
+
+	namespace triangles {
+		static std::array<vec2_t, 3> arbitrary(float a, float c) { return { vec2_t{ -std::cos(degrees_to_radians(a)), 0.f }, vec2_t{ 0.f, std::sin(degrees_to_radians(180.f - a - c)) }, vec2_t{ std::cos(degrees_to_radians(c)), 0.f } }; }
+		static std::array<vec2_t, 3> isosceles(float angle) { return arbitrary(angle, angle); }
+		inline const std::array<vec2_t, 3> equilateral{ isosceles(60.f) };
+	}
+
+	static void rotate_polygon(std::vector<vec2_t>& points, const vec2_t& origin, float angle) {
+		vec2_t sin_cos{ std::sin(math::degrees_to_radians(angle)), std::cos(math::degrees_to_radians(angle)) };
+		for(vec2_t& point : points) {
+			vec2_t delta{ point - origin };
+			point = origin + vec2_t{ delta.cross(sin_cos), delta.dot(sin_cos) };
+		}
+	}
+
+	static std::vector<vec2_t> rotate_polygon(const std::vector<vec2_t>& points, const vec2_t& origin, float angle) {
+		std::vector<vec2_t> result{ points };
+		rotate_polygon(result, origin, angle);
+		return result;
+	}
+
+	static void rotate_polygon(std::vector<vec2_t>& points, float angle) {
+		rotate_polygon(points, std::accumulate(points.begin(), points.end(), vec2_t{ }) / points.size(),angle);
+	}
+
+	static std::vector<vec2_t> rotate_polygon(const std::vector<vec2_t>& points, float angle) {
+		std::vector<vec2_t> result{ points };
+		rotate_polygon(result, angle);
+		return result;
 	}
 }
