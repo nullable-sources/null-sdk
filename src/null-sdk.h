@@ -10,7 +10,7 @@
 #include <utils/memory/module.h>
 #include <utils/memory/minhook-wrapper.h>
 
-#include <utils/encoding.h>
+#include <utils/encoding/encoding.h>
 
 #include <math/math.h>
 

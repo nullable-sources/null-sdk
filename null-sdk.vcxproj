@@ -27,7 +27,8 @@
     <ClInclude Include="src\data-types\vec3.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\null-sdk.h" />
-    <ClInclude Include="src\utils\encoding.h" />
+    <ClInclude Include="src\utils\encoding\base85.h" />
+    <ClInclude Include="src\utils\encoding\encoding.h" />
     <ClInclude Include="src\utils\fast_operators.h" />
     <ClInclude Include="src\utils\memory\address.h" />
     <ClInclude Include="src\utils\memory\minhook-wrapper.h" />
