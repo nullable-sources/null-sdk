@@ -1,11 +1,6 @@
 #pragma once
-#include <type_traits>
 #include <functional>
-#include <stdexcept>
-#include <algorithm>
 #include <vector>
-#include <map>
-#include <any>
 
 namespace utils {
     template <auto, typename>
@@ -58,10 +53,10 @@ namespace utils {
         operator bool() const { !empty(); }
     };
 
-    template <class ...order_callbacks_t>
+    template <class ...callback_t>
     struct callbacks_tuple_t {
     private:
-        std::tuple<order_callbacks_t...> callbacks{ };
+        std::tuple<callback_t...> callbacks{ };
 
     public:
         template<auto place_t>
