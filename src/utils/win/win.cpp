@@ -62,10 +62,10 @@ namespace utils {
 
 		LRESULT WINAPI c_window::wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) {
 			if(c_window * window{ (c_window*)GetWindowLongPtrA(_wnd_handle, 0) }) {
-				const std::vector<std::any>& results{ window->on_wnd_proc(_wnd_handle, msg, w_param, l_param) };
-				if(const auto& first_result{ std::ranges::find_if(results, [](const auto& result) { return result.has_value() && std::any_cast<int>(result) != -1; }) };
+				const std::vector<int>& results{ window->on_wnd_proc(_wnd_handle, msg, w_param, l_param) };
+				if(const auto& first_result{ std::ranges::find_if(results, [](const int& result) { return result != -1; }) };
 					first_result != results.end())
-					return std::any_cast<int>(*first_result);
+					return *first_result;
 			}
 
 			return DefWindowProcA(_wnd_handle, msg, w_param, l_param);

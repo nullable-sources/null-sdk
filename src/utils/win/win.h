@@ -91,10 +91,10 @@ namespace utils {
 				return clipboard;
 			}
 
-			virtual void on_create() { callbacks.call<void()>(e_window_callbacks::on_create); }
-			virtual void on_destroy() { callbacks.call<void()>(e_window_callbacks::on_destroy); }
-			virtual void on_main_loop() { callbacks.call<void()>(e_window_callbacks::on_main_loop); }
-			virtual std::vector<std::any> on_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return callbacks.call<int(HWND, UINT, WPARAM, LPARAM)>(e_window_callbacks::on_wnd_proc, _wnd_handle, msg, w_param, l_param); }
+			virtual void on_create() { callbacks.call(e_window_callbacks::on_create); }
+			virtual void on_destroy() { callbacks.call(e_window_callbacks::on_destroy); }
+			virtual void on_main_loop() { callbacks.call(e_window_callbacks::on_main_loop); }
+			virtual std::vector<int> on_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return callbacks.call<int>(e_window_callbacks::on_wnd_proc, _wnd_handle, msg, w_param, l_param); }
 
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param);
