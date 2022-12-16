@@ -16,6 +16,12 @@ namespace utils {
 			on_main_loop, //@note: void()
 			on_wnd_proc //@note: int(HWND, UINT, WPARAM, LPARAM). If callback returns != -1 then DefWindowProc call will be skipped.
 		};
+		using window_callbacks_t = callbacks_tuple_t<
+			callbacks_t<e_window_callbacks::on_create, void()>,
+			callbacks_t<e_window_callbacks::on_destroy, void()>,
+			callbacks_t<e_window_callbacks::on_main_loop, void()>,
+			callbacks_t<e_window_callbacks::on_wnd_proc, int(HWND, UINT, WPARAM, LPARAM)>
+		>;
 
 		class c_window {
 		public:
@@ -29,7 +35,7 @@ namespace utils {
 			} time_data{ };
 
 		public:
-			array_callbacks_t<e_window_callbacks> callbacks{ };
+			window_callbacks_t callbacks{ };
 
 			HWND wnd_handle{ nullptr };
 			HINSTANCE instance{ };
@@ -91,10 +97,10 @@ namespace utils {
 				return clipboard;
 			}
 
-			virtual void on_create() { callbacks.call(e_window_callbacks::on_create); }
-			virtual void on_destroy() { callbacks.call(e_window_callbacks::on_destroy); }
-			virtual void on_main_loop() { callbacks.call(e_window_callbacks::on_main_loop); }
-			virtual std::vector<int> on_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return callbacks.call<int>(e_window_callbacks::on_wnd_proc, _wnd_handle, msg, w_param, l_param); }
+			virtual void on_create() { callbacks.at<e_window_callbacks::on_create>().call(); }
+			virtual void on_destroy() { callbacks.at<e_window_callbacks::on_destroy>().call(); }
+			virtual void on_main_loop() { callbacks.at<e_window_callbacks::on_main_loop>().call(); }
+			virtual std::vector<int> on_wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param) { return callbacks.at<e_window_callbacks::on_wnd_proc>().call(_wnd_handle, msg, w_param, l_param); }
 
 		private:
 			static LRESULT WINAPI wnd_proc(HWND _wnd_handle, UINT msg, WPARAM w_param, LPARAM l_param);

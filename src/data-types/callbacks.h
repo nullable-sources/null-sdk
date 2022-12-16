@@ -7,81 +7,64 @@
 #include <map>
 #include <any>
 
-template <typename e_callbacks>
-struct array_callbacks_t {
-private:
-	using callbacks_array_t = std::vector<std::any>; //@note: cant use std::map::mapped_type :(
-	using callbacks_t = std::map<e_callbacks, callbacks_array_t>;
-	callbacks_t callbacks{ };
+namespace utils {
+    template <auto, typename>
+    struct callback_t { };
 
-public:
-	array_callbacks_t() { }
-	array_callbacks_t(const callbacks_t& _callbacks) : callbacks{ _callbacks } { }
+    template <auto place, typename result_t, typename ...args_t>
+    struct callback_t<place, result_t(args_t...)> {
+    private:
+        using function_t = std::function<result_t(args_t...)>;
+        function_t callback{ };
 
-public:
-	callbacks_array_t::iterator add(const e_callbacks& place, const auto& function) {
-		callbacks[place].push_back(std::function{ function });
-		return std::prev(callbacks[place].end());
-	}
+    public:
+        void set(const function_t& _callback_t) { callback = _callback_t; }
+        result_t call(args_t... args) { return callback(args...); }
 
-	void remove(const e_callbacks& place, const callbacks_array_t::iterator& callback) { callbacks[place].erase(callback); }
+        bool empty() const { return !callback; }
 
-	bool have_callbacks(const e_callbacks& place) {
-		if(callbacks.empty() || callbacks[place].empty()) return false;
-		return std::ranges::find_if(callbacks[place], [](const callbacks_array_t::value_type& callback) { return callback.has_value(); }) != callbacks[place].end();
-	}
+    public:
+        operator bool() const { !empty(); }
+    };
 
-	bool empty() {
-		if(callbacks.empty()) return true;
-		return std::ranges::find_if(callbacks, [=](const callbacks_t::value_type& callback) { return have_callbacks(callback.first); }) == callbacks.end();
-	}
+    template <auto, typename>
+    struct callbacks_t { };
 
-	template <typename ...args_t>
-	void call(const e_callbacks& place, args_t ...args) {
-		std::ranges::for_each(callbacks[place], [=](const std::any& callback) {
-			if(callback.has_value()) std::any_cast<std::function<void(args_t...)>>(callback)(args...);
-			});
-	}
+    template <auto place, typename result_t, typename ...args_t>
+    struct callbacks_t<place, result_t(args_t...)> {
+    private:
+        using function_t = std::function<result_t(args_t...)>;
+        std::vector<function_t> callbacks{ };
 
-	template <typename return_t, typename ...args_t>
-	std::vector<return_t> call(const e_callbacks& place, args_t ...args) {
-		std::vector<return_t> results{ };
-		std::ranges::for_each(callbacks[place], [&](const std::any& callback) {
-			if(callback.has_value()) results.push_back(std::any_cast<std::function<return_t(args_t...)>>(callback)(args...));
-			});
-		return results;
-	}
-};
+    public:
+        auto add(const function_t& _callback_t) { callbacks.push_back(_callback_t); return std::prev(callbacks.end()); }
+        void remove(const auto& iterator) { callbacks.erase(iterator); }
 
-template <typename e_callbacks>
-struct single_callbacks_t {
-private:
-	using callback_t = std::any;
-	using callbacks_t = std::map<e_callbacks, callback_t>;
-	callbacks_t callbacks{ };
+        template<typename result_t = result_t>
+        std::enable_if_t<!std::is_same_v<result_t, void>, std::vector<result_t>> call(args_t... args) {
+            std::vector<result_t> result{ };
+            std::ranges::for_each(callbacks, [&](const function_t& callback) { result.push_back(callback(args...)); });
+            return result;
+        }
 
-public:
-	single_callbacks_t() { }
-	single_callbacks_t(const callbacks_t& _callbacks) : callbacks{ _callbacks } { }
+        template<typename result_t = result_t>
+        std::enable_if_t<std::is_same_v<result_t, void>, void> call(args_t... args) {
+            std::ranges::for_each(callbacks, [&](const function_t& callback) { callback(args...); });
+        }
 
-public:
-	void set(const e_callbacks& place, const auto& function) { callbacks[place] = std::function{ function }; }
-	void remove(const e_callbacks& place) { callbacks[place] = nullptr; }
+        bool empty() const { return callbacks.empty(); }
 
-	bool have_callback(const e_callbacks& place) { return !callbacks.empty() && callbacks[place].has_value(); }
-	bool empty() {
-		if(callbacks.empty()) return true;
-		return std::ranges::find_if(callbacks, [](const callbacks_t::value_type& callback) { return callback.second.has_value(); }) == callbacks.end();
-	}
+    public:
+        operator bool() const { !empty(); }
+    };
 
-	template <typename ...args_t>
-	void call(const e_callbacks& place, args_t ...args) {
-		if(have_callback(place)) std::any_cast<std::function<void(args_t...)>>(callbacks[place])(args...);
-	}
+    template <class ...order_callbacks_t>
+    struct callbacks_tuple_t {
+    private:
+        std::tuple<order_callbacks_t...> callbacks{ };
 
-	template <typename return_t, typename ...args_t>
-	return_t call(const e_callbacks& place, args_t ...args) {
-		if(!have_callback(place)) return return_t{ };
-		return std::any_cast<std::function<return_t(args_t...)>>(callbacks[place])(args...);
-	}
-};
+    public:
+        template<auto place_t>
+        auto& at() { return std::get<(int)place_t>(callbacks); }
+    };
+}

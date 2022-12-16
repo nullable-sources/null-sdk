@@ -1,39 +1,47 @@
 ﻿#include <iostream>
 #include <null-sdk.h>
+#include <variant>
+#include <tuple>
 
 enum class e_calls {
     first,
-    second
+    second,
 };
 
 int main() {
     try {
         {
             std::cout << "single example" << std::endl;
-            single_callbacks_t<e_calls> callbacks{ };
-            callbacks.set(e_calls::first, [] { std::cout << "e_calls::first" << std::endl; });
-            callbacks.call(e_calls::first);
+            utils::callbacks_tuple_t<
+                utils::callback_t<e_calls::first, void()>,
+                utils::callback_t<e_calls::second, int()>
+            > callbacks{ };
+            callbacks.at<e_calls::first>().set([] { std::cout << "e_calls::first" << std::endl; });
+            callbacks.at<e_calls::first>().call();
 
-            callbacks.set(e_calls::second, [] { std::cout << "e_calls::second" << std::endl; return 1; });
-            std::cout << callbacks.call<int>(e_calls::second) << std::endl;
+            callbacks.at<e_calls::second>().set([] { std::cout << "e_calls::second" << std::endl; return 1; });
+            std::cout << callbacks.at<e_calls::second>().call() << std::endl;
         }
 
         std::cout << std::endl;
 
         {
             std::cout << "array example" << std::endl;
-            array_callbacks_t<e_calls> callbacks{ };
-            callbacks.add(e_calls::first, []() { std::cout << "e_calls::first" << std::endl; });
-            callbacks.call(e_calls::first);
+            utils::callbacks_tuple_t<
+                utils::callbacks_t<e_calls::first, void()>,
+                utils::callbacks_t<e_calls::second, int()>
+            > callbacks{ };
+            callbacks.at<e_calls::first>().add([] { std::cout << "e_calls::first" << std::endl; });
+            callbacks.at<e_calls::first>().call();
 
-            callbacks.add(e_calls::second, []() { std::cout << "e_calls::second" << std::endl; return 1; });
-            auto second{ callbacks.add(e_calls::second, []() { std::cout << "e_calls::second" << std::endl; return 2; }) };
-            for(const int& result : callbacks.call<int>(e_calls::second)) {
+            callbacks.at<e_calls::second>().add([] { std::cout << "e_calls::second" << std::endl; return 1; });
+            auto second{ callbacks.at<e_calls::second>().add([] { std::cout << "e_calls::second" << std::endl; return 2; }) };
+            for(const int& result : callbacks.at<e_calls::second>().call()) {
                 std::cout << result << " ";
             } std::cout << std::endl;
 
-            callbacks.remove(e_calls::second, second);
-            for(const int& result : callbacks.call<int>(e_calls::second)) {
+            callbacks.at<e_calls::second>().remove(second);
+            for(const int& result : callbacks.at<e_calls::second>().call()) {
                 std::cout << result << " ";
             } std::cout << std::endl;
         }

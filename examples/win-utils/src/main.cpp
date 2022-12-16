@@ -14,13 +14,13 @@ int wnd_proc_2(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
 int main(HINSTANCE instance) {
     utils::win::c_window window{ instance };
 
-    window.callbacks.add(utils::win::e_window_callbacks::on_create, []() { std::cout << "on_create" << std::endl; });
-    window.callbacks.add(utils::win::e_window_callbacks::on_destroy, []() { std::cout << "on_destroy" << std::endl; });
+    window.callbacks.at<utils::win::e_window_callbacks::on_create>().add([]() { std::cout << "on_create" << std::endl; });
+    window.callbacks.at<utils::win::e_window_callbacks::on_destroy>().add([]() { std::cout << "on_destroy" << std::endl; });
 
-    window.callbacks.add(utils::win::e_window_callbacks::on_main_loop, [&]() { std::cout << window.time_data.delta_time << std::endl; });
+    window.callbacks.at<utils::win::e_window_callbacks::on_main_loop>().add([&]() { std::cout << window.time_data.delta_time << std::endl; });
 
-    window.callbacks.add(utils::win::e_window_callbacks::on_wnd_proc, wnd_proc_1);
-    window.callbacks.add(utils::win::e_window_callbacks::on_wnd_proc, wnd_proc_2);
+    window.callbacks.at<utils::win::e_window_callbacks::on_wnd_proc>().add(wnd_proc_1);
+    window.callbacks.at<utils::win::e_window_callbacks::on_wnd_proc>().add(wnd_proc_2);
 
     try {
         window.create();
