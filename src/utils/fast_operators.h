@@ -1,24 +1,19 @@
 #pragma once
 #include <type_traits>
 
-#define impl_default_arithmetic_assignment_func(op, variable_name) { *this = *this op variable_name; return *this; }
-
+#define impl_default_arithmetic_assignment_func(op, variable_name) { self = self op variable_name; return self; }
 #define impl_class_create_operator(return_type, op, op_func, args, ...) __VA_ARGS__ return_type operator op##args op_func
 
-#define class_create_operators(return_type, op, op_func, args, ...)               \
-    impl_class_create_operator(return_type, op, const op_func, args, __VA_ARGS__) \
-    impl_class_create_operator(return_type, op, op_func, args, __VA_ARGS__)       \
+#define impl_class_create_arithmetic_operators(varialbe_name, class_t, op, op_func, op_assignment_func)                                             \
+    impl_class_create_operator(auto, op, op_func, (this self_t&& self, const class_t& varialbe_name), template <typename self_t>)                 \
+    impl_class_create_operator(auto&&, op##=, op_assignment_func, (this self_t&& self, const class_t& varialbe_name), template <typename self_t>)   \
 
-#define impl_class_create_arithmetic_operators(varialbe_name, ret_t, class_t, op, op_func, op_assignment_func, ...)                     \
-    class_create_operators(ret_t, op, op_func, (const class_t& varialbe_name), __VA_ARGS__)                                             \
-    impl_class_create_operator(ret_t&, op##=, op_assignment_func, (const class_t& varialbe_name), __VA_ARGS__)                          \
+#define class_create_arithmetic_operators(variable_name, class_t, op, op_func)                                                              \
+    impl_class_create_arithmetic_operators(variable_name, class_t, op, op_func, impl_default_arithmetic_assignment_func(op, variable_name)) \
 
-#define class_create_arithmetic_operators(variable_name, class_t, op, op_func)                                                                          \
-    impl_class_create_arithmetic_operators(variable_name, class_t, class_t, op, op_func, impl_default_arithmetic_assignment_func(op, variable_name))    \
-
-#define class_create_logic_operators(variable_name, class_t, op, op_func, op_arithmetic_func)	\
-    class_create_operators(bool, op, op_func, (const class_t& variable_name))                   \
-	class_create_operators(bool, op##=, op_arithmetic_func, (const class_t& variable_name))     \
+#define class_create_logic_operators(variable_name, class_t, op, op_func, op_arithmetic_func)                                                   \
+    impl_class_create_operator(bool, op, op_func, (this self_t&& self, const class_t& variable_name), template <typename self_t>)               \
+	impl_class_create_operator(bool, op##=, op_arithmetic_func, (this self_t&& self, const class_t& variable_name), template <typename self_t>) \
 
 
 //@credits: thx lagcomp/csgo_sdk for this superior code

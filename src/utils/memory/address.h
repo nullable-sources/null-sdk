@@ -9,12 +9,12 @@ namespace memory {
 
     public:
         address_t() { }
-        address_t(auto value) : address{ (std::uintptr_t)value } { }
+        address_t(const auto& value) : address{ (std::uintptr_t)value } { }
 
     public:
         template <typename cast_t> cast_t cast() const { return (cast_t)address; }
 
-        address_t& deref(int steps = 1) { address = *cast<std::uintptr_t*>(); if(steps > 1) deref(); return *this; }
+        address_t& deref(const int& steps = 1) { address = *cast<std::uintptr_t*>(); if(steps > 1) deref(steps - 1); return *this; }
 
         address_t& offset(const std::intptr_t& offset) { address += offset; return *this; }
         address_t& offset(const std::vector<std::intptr_t>& offsets) { std::ranges::for_each(offsets, [&](const std::intptr_t& _offset) { address += _offset; }); return *this; }
@@ -32,10 +32,10 @@ namespace memory {
     struct vtable_t : private address_t {
     public:
         std::uintptr_t* get() { return *cast<std::uintptr_t**>(); }
-        std::uintptr_t operator[](int idx) { return get()[idx]; }
+        std::uintptr_t operator[](const int& idx) { return get()[idx]; }
 
         template <typename funtion_t>
-        funtion_t function(int index) {
+        funtion_t function(const int& index) {
             return (funtion_t)(get()[index]);
         }
     };

@@ -10,8 +10,8 @@ namespace memory {
         std::vector<std::int32_t> bytes{ };
 
     public:
-        signature_t(const c_module& module, std::string_view _signature) : signature_t{ module.pe_image, _signature } { }
-        signature_t(const pe_image_t& _pe_image, std::string_view _signature) : pe_image{ _pe_image }, signature{ _signature } {
+        signature_t(const c_module& module, const std::string_view& _signature) : signature_t{ module.pe_image, _signature } { }
+        signature_t(const pe_image_t& _pe_image, const std::string_view& _signature) : pe_image{ _pe_image }, signature{ _signature } {
             if(signature.empty()) throw std::runtime_error{ "signature empty" };
             to_bytes();
         }
@@ -19,7 +19,7 @@ namespace memory {
     public:
         std::vector<std::int32_t> to_bytes() {
             if(!bytes.empty()) return bytes;
-            for(std::string_view byte : signature | std::views::split(' ') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
+            for(const std::string_view& byte : signature | std::views::split(' ') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
                 bytes.push_back(byte.contains("?") ? -1 : strtoul(byte.data(), nullptr, 16));
             }
             return bytes;

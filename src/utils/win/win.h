@@ -72,7 +72,7 @@ namespace utils {
 			vec2_t get_window_size() const;
 
 			template<typename char_t>
-			void write_clipboard(std::basic_string_view<char_t> str) const {
+			void write_clipboard(const std::basic_string_view<char_t>& str) const {
 				if(!OpenClipboard(wnd_handle)) throw std::runtime_error{ "cant open clipboard" };
 
 				EmptyClipboard();
@@ -114,7 +114,7 @@ namespace utils {
 		void detach();
 
 		template <typename... args_t>
-		static void print(std::string_view text, args_t&&... args) {
+		static void print(const std::string_view& text, args_t&&... args) {
 			std::cout << std::vformat(text, std::make_format_args(args...));
 		}
 
@@ -122,7 +122,7 @@ namespace utils {
 		public:
 			static inline std::vector<i_command*> registered_commands{ };
 
-			static bool handle(std::string_view str);
+			static bool handle(const std::string_view& str);
 
 		public:
 			i_command() { registered_commands.push_back(this); }

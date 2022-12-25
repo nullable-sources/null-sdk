@@ -6,7 +6,7 @@ namespace utils::encoding {
         std::vector<std::uint8_t> output{ }, input{ };
 
     public:
-        base85_t(std::string_view _input) : input{ _input.begin(), _input.end() } { }
+        base85_t(const std::string_view& _input) : input{ _input.begin(), _input.end() } { }
         base85_t(const std::vector<std::uint8_t>& _input) : input{ _input } { }
 
     public:

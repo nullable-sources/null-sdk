@@ -19,7 +19,7 @@ namespace commands {
     public:
         bool execute(const std::vector<std::string_view>& args) override {
             std::cout << "args: ";
-            for(std::string_view arg : args) std::cout << "[" << arg << "] ";
+            for(const std::string_view& arg : args) std::cout << "[" << arg << "] ";
             std::cout << std::endl;
 
             return true;

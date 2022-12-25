@@ -6,7 +6,7 @@ namespace memory {
     public:
         static inline std::vector<c_module*> stored_modules{ };
 
-        static c_module* find_stored_module(std::string_view name) {
+        static c_module* find_stored_module(const std::string_view& name) {
             if(auto finded{ std::ranges::find_if(stored_modules, [&](c_module* module) { return module->name == name; }) }; finded != stored_modules.end()) return *finded;
             return nullptr;
         }
@@ -20,7 +20,7 @@ namespace memory {
         public:
             i_export() { }
             i_export(const address_t& _address) : address_t{ _address } { }
-            i_export(std::string_view _module_name, std::string_view _name) : name{ _name } {
+            i_export(const std::string_view& _module_name, const std::string_view& _name) : name{ _name } {
                 if(module = find_stored_module(_module_name)) {
                     if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
                     else {
@@ -31,7 +31,7 @@ namespace memory {
                     address = c_module{ _module_name, false }.get_export(name);
                 }
             }
-            i_export(c_module* _module, std::string_view _name) : module{ _module }, name{ _name }, address_t{ _module->get_export(_name) } {
+            i_export(c_module* _module, const std::string_view& _name) : module{ _module }, name{ _name }, address_t{ _module->get_export(_name) } {
                 if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
                 else module->stored_exports.push_back(this);
             }
@@ -60,7 +60,7 @@ namespace memory {
         std::vector<i_export*> stored_exports{ };
 
     public:
-        c_module(std::string_view _name, bool store = true) : name{ _name } {
+        c_module(const std::string_view& _name, const bool& store = true) : name{ _name } {
             if(c_module* finded{ find_stored_module(_name) }) {
                 *this = *finded;
             } else {
@@ -71,16 +71,16 @@ namespace memory {
         }
 
     public:
-        virtual i_export* find_stored_export(std::string_view _name) {
+        virtual i_export* find_stored_export(const std::string_view& _name) {
             if(auto finded{ std::ranges::find_if(stored_exports, [&](i_export* _export) { return _export->name == _name; }) }; finded != stored_exports.end()) return (*finded);
             return nullptr;
         }
 
-        virtual address_t get_export(std::string_view _name) {
+        virtual address_t get_export(const std::string_view& _name) {
             if(i_export* finded{ find_stored_export(_name) }) return (address_t)(*finded);
             return load_export(name);
         }
 
-        virtual address_t load_export(std::string_view _name) { return address_t{ (std::uintptr_t)GetProcAddress(pe_image.base_address.cast<HMODULE>(), _name.data()) }; }
+        virtual address_t load_export(const std::string_view& _name) { return address_t{ (std::uintptr_t)GetProcAddress(pe_image.base_address.cast<HMODULE>(), _name.data()) }; }
     };
 }
