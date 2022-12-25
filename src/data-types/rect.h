@@ -87,6 +87,8 @@ namespace null::sdk {
         class_create_arithmetic_operators(rect, i_rect, %, { return i_rect(self.min % rect.min, self.max % rect.max); });
 
         template <typename another_x_t, typename another_y_t> bool operator ==(const i_rect<another_x_t, another_y_t>& rect) const { return min == rect.min && max == rect.max; };
+        template <typename another_x_t, typename another_y_t> bool operator ==(const i_vec2<another_x_t, another_y_t>& vec) const { return min == vec && max == vec; };
+        template <typename another_t> requires vec2_concept<another_t, another_t> bool operator ==(const another_t& value) const { return min == value && max == value; };
         class_create_logic_operators(rect, i_rect, <, { return self.min < rect.min && self.max < rect.max; }, { return self.min <= rect.min && self.max <= rect.max; });
         class_create_logic_operators(rect, i_rect, >, { return self.min > rect.min && self.max > rect.max; }, { return self.min >= rect.min && self.max >= rect.max; });
     };

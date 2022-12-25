@@ -66,7 +66,7 @@ void callbacks() {
 void vec2() {
     null::sdk::i_vec2<int, double> a{ 11, 23 };
     null::sdk::i_vec2<float, int> b{ 4, 14 };
-    
+
     std::cout << "vec2 examples {" << std::endl;
     
     print_type("\ta<int, double> ->", a);

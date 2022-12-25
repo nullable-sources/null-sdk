@@ -46,6 +46,7 @@ namespace null::sdk {
         class_create_arithmetic_operators(vec, i_vec2, %, { return i_vec2(self.x % vec.x, self.y % vec.y); });
 
         template <typename another_x_t, typename another_y_t> bool operator ==(const i_vec2<another_x_t, another_y_t>& vec) const { return x == vec.x && y == vec.y; };
+        template <typename another_t> requires vec2_concept<another_t, another_t> bool operator ==(const another_t& value) const { return x == value && y == value; };
         class_create_logic_operators(vec, i_vec2, <, { return self.x < vec.x && self.y < vec.y; }, { return self.x <= vec.x && self.y <= vec.y; });
         class_create_logic_operators(vec, i_vec2, >, { return self.x > vec.x && self.y > vec.y; }, { return self.x >= vec.x && self.y >= vec.y; });
     };
