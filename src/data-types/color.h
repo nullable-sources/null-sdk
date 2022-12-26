@@ -106,7 +106,7 @@ private:
 	color_t<float>& round() { std::ranges::transform(channels, channels.begin(), [](const float& channel) { return std::round(channel); }); return *this; }
 
 public:
-	operator i_color<int>() const { return color_t<float>{ *this * color_t<int>{ 255 } }.round().cast<int>(); }
+	operator i_color<int>() const { return color_t<float>{ *this * color_t<float>{ 255.f } }.round().cast<int>(); }
 };
 
 struct hsv_color_t {
