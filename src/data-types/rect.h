@@ -39,8 +39,14 @@ namespace null::sdk {
         template <typename t> requires std::is_arithmetic_v<t>
         i_rect(const t& _min, const t& _max) : min{ _min }, max{ _max } { }
 
+        template <typename t, typename origin_t> requires std::is_arithmetic_v<t> && (std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>)
+        i_rect(const t& a, const t& size, const origin_t& _origin) : min{ a } { origin(_origin, size); }
+
         template <typename another_x_t, typename another_y_t>
         i_rect(const i_vec2<another_x_t, another_y_t>& _min, const i_vec2<another_x_t, another_y_t>& _max) : min{ _min }, max{ _max } { }
+
+        template <typename another_x_t, typename another_y_t, typename origin_t> requires std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>
+        i_rect(const i_vec2<another_x_t, another_y_t>& a, const i_vec2<another_x_t, another_y_t>& size, const origin_t& _origin) : min{ a } { origin(_origin, size); }
 
         template <typename t> requires std::is_arithmetic_v<t>
         i_rect(const t& min_x, const t& min_y, const t& max_x, const t& max_y) : min{ min_x, min_y }, max{ max_x, max_y } { }

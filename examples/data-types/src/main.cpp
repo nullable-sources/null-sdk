@@ -177,7 +177,7 @@ void rect() {
     {
         static const auto print{ [](const std::string_view& str, const auto& origin, const vec2_t& vec) {
             print_type("\t\torigin ->", vec);
-            print_type(std::string{ "\t\t" }.append(str), rect_t{ vec }.origin(origin, 100));
+            print_type(std::string{ "\t\t" }.append(str), rect_t{ vec, vec2_t{ 100 }, origin });
             std::cout << std::endl;
         } };
 
