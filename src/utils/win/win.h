@@ -63,10 +63,10 @@ namespace utils {
 			c_window(const HWND& _wnd_handle) : wnd_handle{ _wnd_handle } { }
 
 		public:
-			bool create();
-			void destroy();
+			virtual bool create();
+			virtual void destroy();
 
-			void main_loop();
+			virtual void main_loop();
 
 			//@note: use for get size from wnd_handle
 			vec2_t get_window_size() const;
