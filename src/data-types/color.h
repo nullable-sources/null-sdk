@@ -32,11 +32,11 @@ namespace null::sdk {
 
 	public:	
 		template <typename self_t> auto operator -(this self_t&& self) { return i_color{ -self.r(), -self.g(), -self.b(), -self.a() }; }
-		class_create_arithmetic_operators(color, i_color, -, { return i_color(self.r() - color.r(), self.g() - color.g(), self.b() - color.b(), self.a() - color.a()); });
-		class_create_arithmetic_operators(color, i_color, +, { return i_color(self.r() + color.r(), self.g() + color.g(), self.b() + color.b(), self.a() + color.a()); });
-		class_create_arithmetic_operators(color, i_color, *, { return i_color(self.r() * color.r(), self.g() * color.g(), self.b() * color.b(), self.a() * color.a()); });
-		class_create_arithmetic_operators(color, i_color, /, { return i_color(self.r() / color.r(), self.g() / color.g(), self.b() / color.b(), self.a() / color.a()); });
-		class_create_arithmetic_operators(color, i_color, %, { return i_color(self.r() % color.r(), self.g() % color.g(), self.b() % color.b(), self.a() % color.a()); });
+		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, -, { return i_color<channel_t>(self.r() - color.r(), self.g() - color.g(), self.b() - color.b(), self.a() - color.a()); }, impl_default_arithmetic_assignment_func(-, color), template <typename self_t, typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, +, { return i_color<channel_t>(self.r() + color.r(), self.g() + color.g(), self.b() + color.b(), self.a() + color.a()); }, impl_default_arithmetic_assignment_func(+, color), template <typename self_t, typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, *, { return i_color<channel_t>(self.r() * color.r(), self.g() * color.g(), self.b() * color.b(), self.a() * color.a()); }, impl_default_arithmetic_assignment_func(*, color), template <typename self_t, typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, /, { return i_color<channel_t>(self.r() / color.r(), self.g() / color.g(), self.b() / color.b(), self.a() / color.a()); }, impl_default_arithmetic_assignment_func(/, color), template <typename self_t, typename other_channel_t>);
+		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, %, { return i_color<channel_t>(self.r() % color.r(), self.g() % color.g(), self.b() % color.b(), self.a() % color.a()); }, impl_default_arithmetic_assignment_func(%, color), template <typename self_t, typename other_channel_t>);
 
 		template <typename another_channel_t> bool operator==(const i_color<another_channel_t>& color) const { return channels == color.channels; };
 		class_create_logic_operators(color, i_color, <, { return self.r() < color.r() && self.g() < color.g() && self.b() < color.b() && self.a() < color.a(); }, { return self.r() <= color.r() && self.g() <= color.g() && self.b() <= color.b() && self.a() <= color.a(); });
@@ -106,7 +106,7 @@ private:
 	color_t<float>& round() { std::ranges::transform(channels, channels.begin(), [](const float& channel) { return std::round(channel); }); return *this; }
 
 public:
-	operator i_color<int>() const { return color_t<float>{ *this * color_t<float>{ 255.f } }.round().cast<int>(); }
+	operator i_color<int>() const { return color_t<float>{ *this * color_t<int>{ 255 } }.round().cast<int>(); }
 };
 
 struct hsv_color_t {
