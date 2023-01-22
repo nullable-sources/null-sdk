@@ -15,12 +15,13 @@ namespace null::sdk {
 
             vertival_mask = top | bottom,
             horizontal_mask = left | right
-        };
+        }; using origin_t = std::uint8_t;
 
-        static i_vec2<float> scale_from_origin(const e_origin& origin) {
-            i_vec2<float> scale{ origin & center ? 0.5f : 0.f };
-            if(origin & vertival_mask) scale.y = (origin & vertival_mask) >> 1;
-            if(origin & horizontal_mask) scale.x = (origin & horizontal_mask) >> 3;
+        template <float min = 0.f, float max = 1.f, float midpoint = std::midpoint(min, max)>
+        static i_vec2<float> scale_from_origin(const origin_t& origin) {
+            i_vec2<float> scale{ origin & center ? midpoint : min };
+            if(origin & vertival_mask) scale.y = (origin & vertival_mask) >> 1 ? max : min;
+            if(origin & horizontal_mask) scale.x = (origin & horizontal_mask) >> 3 ? max : min;
             return scale;
         }
 
@@ -39,13 +40,13 @@ namespace null::sdk {
         template <typename t> requires std::is_arithmetic_v<t>
         i_rect(const t& _min, const t& _max) : min{ _min }, max{ _max } { }
 
-        template <typename t, typename origin_t> requires std::is_arithmetic_v<t> && (std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>)
+        template <typename t> requires std::is_arithmetic_v<t>
         i_rect(const t& a, const t& size, const origin_t& _origin) : min{ a } { origin(_origin, size); }
 
         template <typename another_x_t, typename another_y_t>
         i_rect(const i_vec2<another_x_t, another_y_t>& _min, const i_vec2<another_x_t, another_y_t>& _max) : min{ _min }, max{ _max } { }
 
-        template <typename another_x_t, typename another_y_t, typename origin_t> requires std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>
+        template <typename another_x_t, typename another_y_t>
         i_rect(const i_vec2<another_x_t, another_y_t>& a, const i_vec2<another_x_t, another_y_t>& size, const origin_t& _origin) : min{ a } { origin(_origin, size); }
 
         template <typename t> requires std::is_arithmetic_v<t>
@@ -63,15 +64,12 @@ namespace null::sdk {
         i_vec2<x_t, y_t> size() const { return max - min; }
 
         i_rect& scale(const i_vec2<float>& _origin, const i_vec2<float>& scale) { return origin(-_origin, size() * scale); }
-        template <typename origin_t> requires std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>
-        i_rect& scale(const origin_t& _origin, const i_vec2<float>& _scale) { return scale(scale_from_origin((e_origin)_origin), _scale); }
+        i_rect& scale(const origin_t& _origin, const i_vec2<float>& _scale) { return scale(scale_from_origin(_origin), _scale); }
 
         i_vec2<x_t, y_t> origin(const i_vec2<float>& scale) const { return min + size() * scale; }
         i_rect& origin(const i_vec2<float>& scale, const i_vec2<x_t, y_t>& size) { min -= size * scale; max = min + size; return *this; }
-        template <typename origin_t> requires std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>
-        i_vec2<x_t, y_t> origin(const origin_t& _origin) const { return origin(scale_from_origin((e_origin)_origin)); }
-        template <typename origin_t> requires std::is_arithmetic_v<origin_t> || std::is_same_v<origin_t, e_origin>
-        i_rect& origin(const origin_t& _origin, const i_vec2<x_t, y_t>& size) { return origin(scale_from_origin((e_origin)_origin), size); }
+        i_vec2<x_t, y_t> origin(const origin_t& _origin) const { return origin(scale_from_origin(_origin)); }
+        i_rect& origin(const origin_t& _origin, const i_vec2<x_t, y_t>& size) { return origin(scale_from_origin(_origin), size); }
 
         template <typename another_x_t, typename another_y_t>
         i_rect<another_x_t, another_y_t> cast() const { return i_rect<another_x_t, another_y_t>{ min, max }; }
@@ -101,3 +99,6 @@ namespace null::sdk {
 }
 
 using rect_t = null::sdk::i_rect<float>;
+
+enum_create_bit_operators(rect_t::e_origin, true);
+enum_create_cast_operator(rect_t::e_origin, -);
