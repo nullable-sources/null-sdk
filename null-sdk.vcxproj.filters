@@ -22,6 +22,9 @@
     <Filter Include="src\utils\encoding">
       <UniqueIdentifier>{3cbee940-2e07-4029-808d-225de8d6e740}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\resource">
+      <UniqueIdentifier>{98311d6f-3826-423c-8797-8793e895b718}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -75,10 +78,16 @@
     <ClInclude Include="src\utils\encoding\encoding.h">
       <Filter>src\utils\encoding</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\resource\resource.h">
+      <Filter>src\utils\resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">
       <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\resource\resource.cpp">
+      <Filter>src\utils\resource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

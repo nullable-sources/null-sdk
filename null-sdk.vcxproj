@@ -35,9 +35,11 @@
     <ClInclude Include="src\utils\memory\module.h" />
     <ClInclude Include="src\utils\memory\pe_image.h" />
     <ClInclude Include="src\utils\memory\signature.h" />
+    <ClInclude Include="src\utils\resource\resource.h" />
     <ClInclude Include="src\utils\win\win.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\utils\resource\resource.cpp" />
     <ClCompile Include="src\utils\win\win.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

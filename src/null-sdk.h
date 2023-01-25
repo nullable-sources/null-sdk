@@ -12,6 +12,8 @@
 
 #include <utils/encoding/encoding.h>
 
+#include <utils/resource/resource.h>
+
 #include <math/math.h>
 
 #include <data-types/color.h>
