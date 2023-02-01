@@ -14,6 +14,8 @@
 
 #include <utils/resource/resource.h>
 
+#include <utils/time-measurement/time-measurement.h>
+
 #include <math/math.h>
 
 #include <data-types/color.h>

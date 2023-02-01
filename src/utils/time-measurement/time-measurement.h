@@ -3,31 +3,51 @@
 #include <deque>
 
 namespace utils {
-	class c_time_measurement {
+	class c_immediate_time_measurement {
 	protected:
-		std::chrono::steady_clock::time_point measurement_start{ }, last_update{ };
+		std::chrono::steady_clock::time_point measurement_start{ };
+
+	public:
+		c_immediate_time_measurement() { }
+
+	public:
+		virtual std::chrono::nanoseconds representation() const { return std::chrono::steady_clock::now() - measurement_start; }
+		
+		virtual void begin() { measurement_start = std::chrono::steady_clock::now(); }
+	};
+
+	class c_retained_time_measurement : public c_immediate_time_measurement {
+	protected:
+		std::chrono::steady_clock::time_point last_update{ };
+
+	public:
+		c_retained_time_measurement() { }
+
+	public:
+		virtual std::chrono::nanoseconds representation() const override { return last_update - measurement_start; }
+
+		virtual void begin() override { last_update = measurement_start = std::chrono::steady_clock::now(); }
+		virtual void update() { last_update = std::chrono::steady_clock::now(); }
+	};
+
+	class c_segment_time_measurement : public c_retained_time_measurement {
+	protected:
 		std::chrono::nanoseconds delta{ };
 
 	public:
-		c_time_measurement() { }
+		c_segment_time_measurement() { }
 
 	public:
-		template <typename representation_t, typename ratio_t>
-		representation_t representation() const { return std::chrono::duration<representation_t, ratio_t>{ delta }.count(); }
+		virtual std::chrono::nanoseconds representation() const override { return delta; }
 
-		template <typename duration_t>
-		duration_t::rep representation() const { return representation<duration_t::rep, duration_t::period>(); }
-
-	public:
-		virtual void begin() { last_update = measurement_start = std::chrono::steady_clock::now(); }
-		virtual void update() {
+		virtual void update() override {
 			std::chrono::steady_clock::time_point now{ std::chrono::steady_clock::now() };
 			delta = now - last_update;
 			last_update = now;
 		}
 	};
 
-	class c_cumulative_time_measurement : public c_time_measurement {
+	class c_cumulative_time_measurement : public c_segment_time_measurement {
 	protected:
 		int max_size{ };
 		std::deque<std::chrono::nanoseconds> measurements{ };
@@ -36,13 +56,8 @@ namespace utils {
 		c_cumulative_time_measurement(const int& _max_size) : max_size{ _max_size } { }
 
 	public:
-		template <typename representation_t, class ratio_t>
-		representation_t representation() const { return std::chrono::duration<representation_t, ratio_t>{ delta / measurements.size() }.count(); }
+		virtual std::chrono::nanoseconds representation() const override { return delta / measurements.size(); }
 
-		template <typename duration_t>
-		duration_t::rep representation() const { return representation<duration_t::rep, duration_t::period>(); }
-
-	public:
 		virtual void update() override {
 			std::chrono::steady_clock::time_point now{ std::chrono::steady_clock::now() };
 
