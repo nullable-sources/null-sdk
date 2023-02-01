@@ -2,23 +2,12 @@
 
 namespace utils {
 	namespace win {
-		void c_window::time_data_t::initialize() {
-			last_frame = std::chrono::steady_clock::now();
-		}
-
-		void c_window::time_data_t::begin_frame() {
-			std::chrono::steady_clock::time_point current_time{ std::chrono::steady_clock::now() };
-			delta_time = std::chrono::duration_cast<std::chrono::duration<float>>(current_time - last_frame).count();
-			last_frame = current_time;
-		}
-
 		bool c_window::create() {
 			if(!RegisterClassA(&wnd_class)) throw std::runtime_error{ "register class error" };
 
 			wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, instance, nullptr);
 			if(wnd_handle) {
 				SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
-				time_data.initialize();
 				on_create();
 			}
 

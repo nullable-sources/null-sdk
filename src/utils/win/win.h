@@ -25,16 +25,6 @@ namespace utils {
 
 		class c_window {
 		public:
-			struct time_data_t {
-				std::chrono::steady_clock::time_point last_frame{ };
-				float delta_time{ };
-				
-			public:
-				void initialize();
-				void begin_frame();
-			} time_data{ };
-
-		public:
 			window_callbacks_t callbacks{ };
 
 			HWND wnd_handle{ nullptr };

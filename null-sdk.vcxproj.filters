@@ -25,6 +25,9 @@
     <Filter Include="src\utils\resource">
       <UniqueIdentifier>{98311d6f-3826-423c-8797-8793e895b718}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\time-measurement">
+      <UniqueIdentifier>{5684e11e-5fba-44f6-9a9f-c2bf16781176}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -80,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\resource\resource.h">
       <Filter>src\utils\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\time-measurement\time-measurement.h">
+      <Filter>src\utils\time-measurement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
