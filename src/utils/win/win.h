@@ -43,7 +43,7 @@ namespace utils {
 			};
 
 			std::string name{ "null" };
-			vec2_t pos{ 100, 100 }, size{ 800, 600 };
+			vec2_t<int> pos{ 100, 100 }, size{ 800, 600 };
 
 			std::uint32_t styles{ WS_OVERLAPPEDWINDOW };
 
@@ -59,7 +59,7 @@ namespace utils {
 			virtual void main_loop();
 
 			//@note: use for get size from wnd_handle
-			vec2_t get_window_size() const;
+			vec2_t<int> get_window_size() const;
 
 			template<typename char_t>
 			void write_clipboard(const std::basic_string_view<char_t>& str) const {

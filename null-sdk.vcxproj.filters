@@ -87,6 +87,9 @@
     <ClInclude Include="src\utils\time-measurement\time-measurement.h">
       <Filter>src\utils\time-measurement</Filter>
     </ClInclude>
+    <ClInclude Include="src\data-types\vec4.h">
+      <Filter>src\data-types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">
