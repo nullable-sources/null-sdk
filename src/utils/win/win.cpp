@@ -38,7 +38,6 @@ namespace utils {
 					continue;
 				}
 
-				time_data.begin_frame();
 				on_main_loop();
 			}
 		}
