@@ -19,39 +19,39 @@
 
 #define impl_math_type_get_define(_1, _2, _3, _4, name, ...) name
 #define impl_math_type_make_args(type_name, ...) impl_math_arg(impl_math_type_get_define(__VA_ARGS__, impl_math_make_##type_name##_arg_4, impl_math_make_##type_name##_arg_3, impl_math_make_##type_name##_arg_2, impl_math_make_##type_name##_arg_1, impl_math_make_arg)(__VA_ARGS__))
-#define impl_math_make_vec2_arg_1(_arg)				const vec2_t<x_t, y_t>& _arg
+#define impl_math_make_vec2_arg_1(_arg)				const vec2_t<coordinates_t>& _arg
 #define impl_math_make_vec2_arg_2(_1, _2)			impl_math_make_vec2_arg_1(_1),			impl_math_make_vec2_arg_1(_2)
 #define impl_math_make_vec2_arg_3(_1, _2, _3)		impl_math_make_vec2_arg_2(_1, _2),		impl_math_make_vec2_arg_1(_3)
 
-#define impl_math_make_vec3_arg_1(_arg)				const vec3_t<x_t, y_t, z_t>& _arg
+#define impl_math_make_vec3_arg_1(_arg)				const vec3_t<coordinates_t>& _arg
 #define impl_math_make_vec3_arg_2(_1, _2)			impl_math_make_vec3_arg_1(_1),			impl_math_make_vec3_arg_1(_2)
 #define impl_math_make_vec3_arg_3(_1, _2, _3)		impl_math_make_vec3_arg_2(_1, _2),		impl_math_make_vec3_arg_1(_3)
 
-#define impl_math_make_vec4_arg_1(_arg)				const vec4_t<x_t, y_t, z_t, w_t>& _arg
+#define impl_math_make_vec4_arg_1(_arg)				const vec4_t<coordinates_t>& _arg
 #define impl_math_make_vec4_arg_2(_1, _2)			impl_math_make_vec4_arg_1(_1),			impl_math_make_vec4_arg_1(_2)
 #define impl_math_make_vec4_arg_3(_1, _2, _3)		impl_math_make_vec4_arg_2(_1, _2),		impl_math_make_vec4_arg_1(_3)
 #define impl_math_make_vec4_arg_4(_1, _2, _3, _4)	impl_math_make_vec4_arg_3(_1, _2, _3),	impl_math_make_vec4_arg_1(_4)
 
-#define impl_math_make_rect_arg_1(_arg)				const rect_t<x_t, y_t>& _arg
+#define impl_math_make_rect_arg_1(_arg)				const rect_t<corners_t>& _arg
 #define impl_math_make_rect_arg_2(_1, _2)			impl_math_make_rect_arg_1(_1),			impl_math_make_rect_arg_1(_2)
 #define impl_math_make_rect_arg_3(_1, _2, _3)		impl_math_make_rect_arg_2(_1, _2),		impl_math_make_rect_arg_1(_3)
 
 #define math_make_templates(data_name, ...) template <impl_math_arg(impl_math_make_args(typename, __VA_ARGS__)), typename data_t = data_name##<__VA_ARGS__>>
 #define math_make_vec2_function(name, function, ...)													\
-	math_make_templates(vec2_t, x_t, y_t)																\
-	static vec2_t<x_t, y_t> name##(impl_math_arg(impl_math_type_make_args(vec2, __VA_ARGS__))) function	\
+	math_make_templates(vec2_t, coordinates_t)																\
+	static vec2_t<coordinates_t> name##(impl_math_arg(impl_math_type_make_args(vec2, __VA_ARGS__))) function	\
 
 #define math_make_vec3_function(name, function, ...)															\
-	math_make_templates(vec3_t, x_t, y_t, z_t)																	\
-	static vec3_t<x_t, y_t, z_t> name##(impl_math_arg(impl_math_type_make_args(vec3, __VA_ARGS__))) function	\
+	math_make_templates(vec3_t, coordinates_t)																	\
+	static vec3_t<coordinates_t> name##(impl_math_arg(impl_math_type_make_args(vec3, __VA_ARGS__))) function	\
 
 #define math_make_vec4_function(name, function, ...)																\
-	math_make_templates(vec4_t, x_t, y_t, z_t, w_t)																	\
-	static vec4_t<x_t, y_t, z_t, w_t> name##(impl_math_arg(impl_math_type_make_args(vec4, __VA_ARGS__))) function	\
+	math_make_templates(vec4_t, coordinates_t)																	\
+	static vec4_t<coordinates_t> name##(impl_math_arg(impl_math_type_make_args(vec4, __VA_ARGS__))) function	\
 
 #define math_make_rect_function(name, function, ...)													\
-	math_make_templates(rect_t, x_t, y_t)																\
-	static rect_t<x_t, y_t> name##(impl_math_arg(impl_math_type_make_args(rect, __VA_ARGS__))) function	\
+	math_make_templates(rect_t, corners_t)																\
+	static rect_t<corners_t> name##(impl_math_arg(impl_math_type_make_args(rect, __VA_ARGS__))) function	\
 
 #define math_make_functions(name, vec2_function, vec3_function, vec4_function, rect_functiom, ...)	\
 	math_make_vec2_function(name, vec2_function, __VA_ARGS__)										\
@@ -179,7 +179,7 @@ namespace math {
 		inline const std::array<vec2_t<float>, 3> equilateral{ isosceles(60.f) };
 	}
 
-	math_make_templates(vec2_t, x_t, y_t)
+	math_make_templates(vec2_t, coordinates_t)
 	static void rotate_polygon(std::vector<data_t>& points, const data_t& origin, const float& angle) {
 		data_t sin_cos{ std::sin(math::degrees_to_radians(angle)), std::cos(math::degrees_to_radians(angle)) };
 		for(data_t& point : points) {
@@ -188,19 +188,19 @@ namespace math {
 		}
 	}
 
-	math_make_templates(vec2_t, x_t, y_t)
+	math_make_templates(vec2_t, coordinates_t)
 	static std::vector<data_t> rotate_polygon(const std::vector<data_t>& points, const data_t& origin, const float& angle) {
 		std::vector<data_t> result{ points };
 		rotate_polygon(result, origin, angle);
 		return result;
 	}
 
-	math_make_templates(vec2_t, x_t, y_t)
+	math_make_templates(vec2_t, coordinates_t)
 	static void rotate_polygon(std::vector<data_t>& points, const float& angle) {
 		rotate_polygon(points, std::accumulate(points.begin(), points.end(), data_t{ }) / points.size(),angle);
 	}
 
-	math_make_templates(vec2_t, x_t, y_t)
+	math_make_templates(vec2_t, coordinates_t)
 	static std::vector<data_t> rotate_polygon(const std::vector<data_t>& points, const float& angle) {
 		std::vector<data_t> result{ points };
 		rotate_polygon(result, angle);

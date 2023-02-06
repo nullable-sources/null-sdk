@@ -1,14 +1,14 @@
 ﻿#include <iostream>
 #include <null-sdk.h>
 
-math_make_templates(vec2_t, x_t, y_t)
-void print_type(const std::string_view& str, const vec2_t<x_t, y_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}]", vec.x, vec.y) << " }" << std::endl; }
+math_make_templates(vec2_t, coordinates_t)
+void print_type(const std::string_view& str, const vec2_t<coordinates_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}]", vec.x, vec.y) << " }" << std::endl; }
 
-math_make_templates(vec3_t, x_t, y_t, z_t)
-void print_type(const std::string_view& str, const vec3_t<x_t, y_t, z_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}; {}]", vec.x, vec.y, vec.z) << " }" << std::endl; }
+math_make_templates(vec3_t, coordinates_t)
+void print_type(const std::string_view& str, const vec3_t<coordinates_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}; {}]", vec.x, vec.y, vec.z) << " }" << std::endl; }
 
-math_make_templates(rect_t, x_t, y_t)
-void print_type(const std::string_view& str, const rect_t<x_t, y_t>& rect) { std::cout << str << "{ " << std::format("min: [{}; {}]; max: [{}; {}]", rect.min.x, rect.min.y, rect.max.x, rect.max.y) << " }" << std::endl; }
+math_make_templates(rect_t, coordinates_t)
+void print_type(const std::string_view& str, const rect_t<coordinates_t>& rect) { std::cout << str << "{ " << std::format("min: [{}; {}]; max: [{}; {}]", rect.min.x, rect.min.y, rect.max.x, rect.max.y) << " }" << std::endl; }
 
 void callbacks() {
     enum class e_calls {
@@ -64,13 +64,13 @@ void callbacks() {
 }
 
 void vec2() {
-    vec2_t<int, double> a{ 11, 23 };
-    vec2_t<float, int> b{ 4, 14 };
+    vec2_t<int> a{ 11, 23 };
+    vec2_t<float> b{ 4, 14 };
 
     std::cout << "vec2 examples {" << std::endl;
     
-    print_type("\ta<int, double> ->", a);
-    print_type("\tb<float, int> ->", b);
+    print_type("\ta<int> ->", a);
+    print_type("\tb<float> ->", b);
     
     std::cout << std::endl;
 
@@ -107,13 +107,13 @@ void vec2() {
 }
 
 void vec3() {
-    vec3_t<int, double, float> a{ 11, 23, 3 };
-    vec3_t<float, int, double> b{ 4, 14, 12 };
+    vec3_t<int> a{ 11, 23, 3 };
+    vec3_t<float> b{ 4, 14, 12 };
 
     std::cout << "vec3 examples {" << std::endl;
     
-    print_type("\ta<int, double, float> ->", a);
-    print_type("\tb<float, int, double> ->", b);
+    print_type("\ta<int> ->", a);
+    print_type("\tb<float> ->", b);
     
     std::cout << std::endl;
 
