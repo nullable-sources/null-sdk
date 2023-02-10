@@ -55,7 +55,7 @@ public:
 		matrix_t result{ };
 		for(const int& row : std::views::iota(size_t{ }, rows_size)) {
 			for(const int& column : std::views::iota(size_t{ }, columns_size)) {
-				result.array[row][column] = self.get_row(row).dot(matrix.get_column(column));
+				result.array[row][column] = self.get_column(column).dot(matrix.get_row(row));
 			}
 		}
 		return result;
