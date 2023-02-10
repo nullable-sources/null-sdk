@@ -25,7 +25,7 @@ public:
     vec2_t(const another_x_t& _x, const another_y_t& _y) : x{ (coordinates_t)_x }, y{ (coordinates_t)_y } { }
 
     vec2_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
-    vec2_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates); }
+    vec2_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
 
 public:
     float length() const { return std::hypot(x, y); }

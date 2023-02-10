@@ -51,7 +51,15 @@ public:
 	template <typename self_t> auto operator -(this self_t&& self) { return matrix_t{ -self.data }; }
 	class_create_arithmetic_operators(matrix, matrix_t, -, { return self.data - matrix.data; });
 	class_create_arithmetic_operators(matrix, matrix_t, +, { return self.data + matrix.data; });
-	class_create_arithmetic_operators(matrix, matrix_t, *, { return self.data * matrix.data; });
+	class_create_arithmetic_operators(matrix, matrix_t, *, {
+		matrix_t result{ };
+		for(const int& row : std::views::iota(size_t{ }, rows_size)) {
+			for(const int& column : std::views::iota(size_t{ }, columns_size)) {
+				result.array[row][column] = self.get_row(row).dot(matrix.get_column(column));
+			}
+		}
+		return result;
+		});
 	class_create_arithmetic_operators(matrix, matrix_t, /, { return self.data / matrix.data; });
 	class_create_arithmetic_operators(matrix, matrix_t, %, { return self.data % matrix.data; });
 
@@ -75,19 +83,19 @@ public: using matrix_t<float, vec4_t, vec4_t>::matrix_t;
 
 	static matrix4x4_t project_ortho(const float& l, const float& r, const float& b, const float& t, const float& n, const float& f) {
 		return matrix4x4_t{ {
-			{ 2.f / (r - l),	0.f,			0.f,			-(r + l) / (r - l)	},
-			{ 0.f,				2.f / (t - b),	0.f,			-(t + b) / (t - b)	},
-			{ 0.f,				0.f,			2 / (f - n),	-(f + n) / (f - n)	},
-			{ 0.f,				0.f,			0.f,			1.f					}
+			{ 2.f / (r - l),		0.f,				0.f,				0.f	},
+			{ 0.f,					2.f / (t - b),		0.f,				0.f },
+			{ 0.f,					0.f,				2 / (f - n),		0.f },
+			{ -(r + l) / (r - l),	-(t + b) / (t - b),	-(f + n) / (f - n),	1.f }
 			} };
 	}
 
 	static matrix4x4_t project_perspective(const float& l, const float& r, const float& b, const float& t, const float& n, const float& f) {
 		return matrix4x4_t{ {
-			{ 2.f * n / (r - l),	0.f,				(r + l) / (r - l),	0.f						},
-			{ 0.f,					2.f * n / (t - b),	(t + b) / (t - b),	0.f						},
-			{ 0.f,					0.f,				-(f + n) / (f - n), -(2 * f * n) / (f - n)	},
-			{ 0.f,					0.f,				-1.f,				0.f						}
+			{ 2.f * n / (r - l),	0.f,				0.f,					0.f	},
+			{ 0.f,					2.f * n / (t - b),	0.f,					0.f	},
+			{ (r + l) / (r - l),	(t + b) / (t - b),	-(f + n) / (f - n),		-1.f },
+			{ 0.f,					0.f,				-(2 * f * n) / (f - n),	0.f	}
 			} };
 	}
 

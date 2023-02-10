@@ -23,7 +23,7 @@ public:
 	vec3_t(const x_t& _x, const y_t& _y, const z_t& _z) : x{ (coordinates_t)_x }, y{ (coordinates_t)_y }, z{ (coordinates_t)_z } { }
 
 	vec3_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
-	vec3_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates); }
+	vec3_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
 
 public:
 	float length() const { return std::hypot(x, y, z); }
