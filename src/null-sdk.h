@@ -7,12 +7,12 @@
 #include <utils/memory/address.h>
 #include <utils/memory/signature.h>
 #include <utils/memory/pe_image.h>
-#include <utils/memory/module.h>
+#include <utils/memory/module/module.h>
 #include <utils/memory/minhook-wrapper.h>
+#include <utils/memory/resource/resource.h>
 
 #include <utils/encoding/encoding.h>
 
-#include <utils/resource/resource.h>
 
 #include <utils/time-measurement/time-measurement.h>
 

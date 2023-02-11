@@ -1,5 +1,5 @@
 #pragma once
-#include <utils/memory/module.h>
+#include <utils/memory/module/module.h>
 
 namespace memory {
     struct signature_t : address_t {
@@ -17,12 +17,11 @@ namespace memory {
         }
 
     public:
-        std::vector<std::int32_t> to_bytes() {
-            if(!bytes.empty()) return bytes;
-            for(const std::string_view& byte : signature | std::views::split(' ') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
-                bytes.push_back(byte.contains("?") ? -1 : strtoul(byte.data(), nullptr, 16));
-            }
-            return bytes;
+        template <typename self_t>
+        auto&& to_bytes(this self_t&& self) {
+            if(!self.bytes.empty()) return self.bytes;
+            self.bytes = self.signature | std::views::split(' ') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }.contains("?") ? -1 : (int)strtoul(splitted.data(), nullptr, 16); }) | std::ranges::to<std::vector>();
+            return self.bytes;
         }
 
         address_t& find() {

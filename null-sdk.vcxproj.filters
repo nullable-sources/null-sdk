@@ -22,11 +22,14 @@
     <Filter Include="src\utils\encoding">
       <UniqueIdentifier>{3cbee940-2e07-4029-808d-225de8d6e740}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\utils\resource">
-      <UniqueIdentifier>{98311d6f-3826-423c-8797-8793e895b718}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\utils\time-measurement">
       <UniqueIdentifier>{5684e11e-5fba-44f6-9a9f-c2bf16781176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\memory\module">
+      <UniqueIdentifier>{34cbcc81-ae5d-4e16-a36e-5a835d13c8b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\memory\resource">
+      <UniqueIdentifier>{c1dfc66d-1a83-42e6-bc52-2ed903831702}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +66,6 @@
     <ClInclude Include="src\utils\memory\pe_image.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\memory\module.h">
-      <Filter>src\utils\memory</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\memory\minhook-wrapper.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
@@ -81,22 +81,33 @@
     <ClInclude Include="src\utils\encoding\encoding.h">
       <Filter>src\utils\encoding</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\resource\resource.h">
-      <Filter>src\utils\resource</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\time-measurement\time-measurement.h">
       <Filter>src\utils\time-measurement</Filter>
     </ClInclude>
     <ClInclude Include="src\data-types\vec4.h">
       <Filter>src\data-types</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\memory\module\module.h">
+      <Filter>src\utils\memory\module</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\memory\resource\resource.h">
+      <Filter>src\utils\memory\resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">
       <Filter>src\utils\win</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\resource\resource.cpp">
-      <Filter>src\utils\resource</Filter>
+    <ClCompile Include="src\utils\memory\module\module.cpp">
+      <Filter>src\utils\memory\module</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\utils\memory\module\module.inl">
+      <Filter>src\utils\memory\module</Filter>
+    </None>
+    <None Include="src\utils\memory\resource\resource.inl">
+      <Filter>src\utils\memory\resource</Filter>
+    </None>
   </ItemGroup>
 </Project>

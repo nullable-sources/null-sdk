@@ -60,8 +60,6 @@
 	math_make_rect_function(name, rect_functiom, __VA_ARGS__)										\
 
 namespace math {
-	using namespace null::sdk;
-
 	math_make_functions(abs,
 		{ return data_t(std::abs(a.x), std::abs(a.y)); },
 		{ return data_t(std::abs(a.x), std::abs(a.y), std::abs(a.z)); },

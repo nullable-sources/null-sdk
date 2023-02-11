@@ -14,13 +14,14 @@ namespace memory {
     public:
         template <typename cast_t> cast_t cast() const { return (cast_t)address; }
 
-        address_t& deref(const int& steps = 1) { address = *cast<std::uintptr_t*>(); if(steps > 1) deref(steps - 1); return *this; }
+        template <typename self_t> auto&& deref(this self_t&& self, int steps = 1) { for(; steps >= 1; steps--) self.address = *self.cast<std::uintptr_t*>(); return self; }
 
-        address_t& offset(const std::intptr_t& offset) { address += offset; return *this; }
-        address_t& offset(const std::vector<std::intptr_t>& offsets) { std::ranges::for_each(offsets, [&](const std::intptr_t& _offset) { address += _offset; }); return *this; }
+        template <typename self_t> auto&& offset(this self_t&& self, const std::intptr_t& offset) { self.address += offset; return self; }
+        template <typename self_t> auto&& offset(this self_t&& self, const std::vector<std::intptr_t>& offsets) { std::ranges::for_each(offsets, [&](const std::intptr_t& _offset) { self.address += _offset; }); return self; }
 
-        address_t& jump(const std::intptr_t& _offset) {
-            address_t return_address{ address_t{ *this }.offset(_offset) };
+        template <typename self_t>
+        address_t& jump(this self_t&& self, const std::intptr_t& _offset) {
+            address_t return_address{ address_t{ self }.offset(_offset) };
             return return_address.offset({ address_t{ return_address }.deref().cast<std::int32_t>(), sizeof(std::uint32_t) });
         }
 
