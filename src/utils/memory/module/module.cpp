@@ -17,8 +17,8 @@ namespace memory {
     }
 
     address_t c_dll::get_export(const std::string_view& _name) {
-        if(i_export * finded{ find_stored_export(_name) }) return (address_t)(*finded);
-        return load_export(name);
+        if(i_export* finded{ find_stored_export(_name) }) return (address_t)(*finded);
+        return load_export(_name);
     }
 
     address_t c_dll::load_export(const std::string_view& _name) {
