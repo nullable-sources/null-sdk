@@ -56,6 +56,7 @@ namespace utils {
 					return *first_result;
 			}
 
+			if(msg == WM_CLOSE) PostQuitMessage(0);
 			return DefWindowProcA(_wnd_handle, msg, w_param, l_param);
 		}
 	}
