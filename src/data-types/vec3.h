@@ -16,11 +16,8 @@ public:
 public:
 	vec3_t() { }
 
-	template <typename t> requires std::is_same_v<t, coordinates_t> || std::is_convertible_v<t, coordinates_t>
-	vec3_t(const t& value) : vec3_t{ value, value, value } { }
-
-	template <typename x_t, typename y_t, typename z_t>
-	vec3_t(const x_t& _x, const y_t& _y, const z_t& _z) : x{ (coordinates_t)_x }, y{ (coordinates_t)_y }, z{ (coordinates_t)_z } { }
+	vec3_t(const coordinates_t& value) : vec3_t{ value, value, value } { }
+	vec3_t(const coordinates_t& _x, const coordinates_t& _y, const coordinates_t& _z) : x{ _x }, y{ _y }, z{ _z } { }
 
 	vec3_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
 	vec3_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
@@ -30,11 +27,11 @@ public:
 
 public:
 	float length() const { return std::hypot(x, y, z); }
-	float dist_to(const vec3_t& vec) const { return vec3_t{ *this - vec }.length(); }
-	vec3_t normalized() const { return { std::isfinite((double)x) ? std::remainder(x, 360.f) : 0.f, std::isfinite((double)y) ? std::remainder(y, 360.f) : 0.f, 0.f }; }
-	vec3_t& normalize() { return *this = normalized(); }
-	float dot(const vec3_t& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
-	vec3_t cross(const vec3_t& vec) const { return { y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x }; }
+	float dist_to(const vec3_t<coordinates_t>& vec) const { return vec3_t{ *this - vec }.length(); }
+	vec3_t<coordinates_t> normalized() const { return *this; }
+	template <typename self_t> auto&& normalize(this self_t&& self) { return self = self.normalized(); }
+	float dot(const vec3_t<coordinates_t>& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
+	vec3_t<coordinates_t> cross(const vec3_t<coordinates_t>& vec) const { return { y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x }; }
 
 public:
 	template <typename another_coordinates_t>
@@ -62,3 +59,8 @@ public:
 	class_create_logic_operators(vec, vec3_t, <, { return self.x < vec.x && self.y < vec.y && self.z < vec.z; }, { return self.x <= vec.x && self.y <= vec.y && self.z <= vec.z; });
 	class_create_logic_operators(vec, vec3_t, >, { return self.x > vec.x && self.y > vec.y && self.z > vec.z; }, { return self.x >= vec.x && self.y >= vec.y && self.z >= vec.z; });
 };
+
+template <>
+inline vec3_t<float> vec3_t<float>::normalized() const {
+	return { std::isfinite((double)x) ? std::remainder(x, 360.f) : 0.f, std::isfinite((double)y) ? std::remainder(y, 360.f) : 0.f, 0.f };
+}

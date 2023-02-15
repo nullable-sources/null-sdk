@@ -20,6 +20,8 @@ public:
 public:
     vec2_t() { }
     
+    //@note:    In general, you can leave the old constructors, but vs does not work well with requires, which causes errors (which do not affect compilation),
+    //          so as soon as vs improves on requires, it will be possible to return the old constructors
     vec2_t(const coordinates_t& value) : vec2_t{ value, value } { }
     vec2_t(const coordinates_t& _x, const coordinates_t& _y) : x{ _x }, y{ _y } { }
 
