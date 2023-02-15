@@ -21,6 +21,9 @@ namespace null::sdk {
 		i_color(const i_color<channel_t>& color, const channel_t& _a) : i_color{ color.r(), color.g(), color.b(), _a } { }
 		i_color(const std::vector<channel_t>& _channels) { std::ranges::move(_channels, channels.begin()); }
 
+		template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<type_t, i_color<channel_t>>
+		i_color(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, i_color<channel_t>>::convert(value); }
+
 	public:
 		template <typename self_t> auto&& r(this self_t&& self) { return self.channels[0]; }
 		template <typename self_t> auto&& g(this self_t&& self) { return self.channels[1]; }
@@ -30,7 +33,11 @@ namespace null::sdk {
 		template<typename cast_t>
 		i_color<cast_t> cast() const { return i_color<cast_t>{ channels | std::views::transform([](const channel_t& channel) { return (cast_t)channel; }) | std::ranges::to<std::vector>() }; }
 
-	public:	
+	public:
+		template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<i_color<channel_t>, type_t>
+		operator type_t() const { return null::compatibility::data_type_converter_t<i_color<channel_t>, type_t>::convert(*this); }
+
+		//@todo: after vs 17.5 release use std::views::zip
 		template <typename self_t> auto operator -(this self_t&& self) { return i_color{ -self.r(), -self.g(), -self.b(), -self.a() }; }
 		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, -, { return i_color<channel_t>(self.r() - color.r(), self.g() - color.g(), self.b() - color.b(), self.a() - color.a()); }, impl_default_arithmetic_assignment_func(-, color), template <typename self_t, typename other_channel_t>);
 		impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, +, { return i_color<channel_t>(self.r() + color.r(), self.g() + color.g(), self.b() + color.b(), self.a() + color.a()); }, impl_default_arithmetic_assignment_func(+, color), template <typename self_t, typename other_channel_t>);

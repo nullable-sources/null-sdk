@@ -31,6 +31,9 @@
     <Filter Include="src\utils\memory\resource">
       <UniqueIdentifier>{c1dfc66d-1a83-42e6-bc52-2ed903831702}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\compatibility">
+      <UniqueIdentifier>{6895c6c2-1362-4382-b11d-c70941930a88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -92,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\memory\resource\resource.h">
       <Filter>src\utils\memory\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\compatibility\data-type-converter.h">
+      <Filter>src\utils\compatibility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

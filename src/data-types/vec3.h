@@ -25,6 +25,9 @@ public:
 	vec3_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
 	vec3_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
 
+	template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<type_t, vec3_t<coordinates_t>>
+	vec3_t(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, vec3_t<coordinates_t>>::convert(value); }
+
 public:
 	float length() const { return std::hypot(x, y, z); }
 	float dist_to(const vec3_t& vec) const { return vec3_t{ *this - vec }.length(); }
@@ -33,12 +36,12 @@ public:
 	float dot(const vec3_t& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
 	vec3_t cross(const vec3_t& vec) const { return { y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x }; }
 
-	template <typename another_coordinates_t>
-	vec3_t<another_coordinates_t> cast() const { return vec3_t<another_coordinates_t>{ x, y, z }; }
-
 public:
 	template <typename another_coordinates_t>
-	operator vec3_t<another_coordinates_t>() const { return cast<another_coordinates_t>(); }
+	operator vec3_t<another_coordinates_t>() const { return vec3_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y, (another_coordinates_t)z }; }
+
+	template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<vec3_t<coordinates_t>, type_t>
+	operator type_t() const { return null::compatibility::data_type_converter_t<vec3_t<coordinates_t>, type_t>::convert(*this); }
 
 	template <typename self_t> auto&& operator [](this self_t&& self, const int& i) { return self.coordinates[i]; }
 

@@ -24,6 +24,9 @@ public:
 	matrix_t(const std::vector<std::vector<data_t>>& matrix) { for(const auto& row : std::views::iota(matrix.begin(), std::next(matrix.begin(), rows_size))) set_row(row - matrix.begin(), *row); }
 	matrix_t(const std::vector<data_t>& matrix) { std::move(matrix.begin(), std::next(matrix.begin(), linear_size), linear_array.begin()); }
 
+	template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<type_t, matrix_t<data_t, rows_t, columns_t>>
+	matrix_t(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, matrix_t<data_t, rows_t, columns_t>>::convert(value); }
+
 public:
 	template <typename self_t> auto&& fill(this self_t&& self, const data_t& value) { self.data = value; return self; }
 	template <typename self_t> auto&& fill_rows(this self_t&& self, const rows_t<data_t>& row) {
@@ -43,6 +46,9 @@ public:
 	columns_t<data_t> get_column(const int& column_n) const { return linear_array | std::views::drop(column_n) | std::views::stride(rows_size) | std::ranges::to<std::vector>(); }
 
 public:
+	template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<matrix_t<data_t, rows_t, columns_t>, type_t>
+	operator type_t() const { return null::compatibility::data_type_converter_t<matrix_t<data_t, rows_t, columns_t>, type_t>::convert(*this); }
+
 	template <typename self_t> auto&& operator ++(this self_t&& self) { ++self.data; return self; }
 	template <typename self_t> auto operator ++(this self_t&& self, int) { return matrix_t{ self.data++ }; }
 	template <typename self_t> auto&& operator --(this self_t&& self) { --self.data; return self; }
@@ -72,35 +78,35 @@ public:
 struct matrix4x4_t : public matrix_t<float, vec4_t, vec4_t> {
 public: using matrix_t<float, vec4_t, vec4_t>::matrix_t;
 	static matrix4x4_t identity() {
-		static const matrix4x4_t matrix{ {
+		static const matrix4x4_t matrix{
 			{ 1.f, 0.f, 0.f, 0.f },
 			{ 0.f, 1.f, 0.f, 0.f },
 			{ 0.f, 0.f, 1.f, 0.f },
 			{ 0.f, 0.f, 0.f, 1.f }
-			} };
+			};
 		return matrix;
 	}
 
 	static matrix4x4_t project_ortho(const float& l, const float& r, const float& b, const float& t, const float& n, const float& f) {
-		return matrix4x4_t{ {
+		return {
 			{ 2.f / (r - l),		0.f,				0.f,				0.f	},
 			{ 0.f,					2.f / (t - b),		0.f,				0.f },
 			{ 0.f,					0.f,				2 / (f - n),		0.f },
 			{ -(r + l) / (r - l),	-(t + b) / (t - b),	-(f + n) / (f - n),	1.f }
-			} };
+			};
 	}
 
 	static matrix4x4_t project_perspective(const float& l, const float& r, const float& b, const float& t, const float& n, const float& f) {
-		return matrix4x4_t{ {
+		return {
 			{ 2.f * n / (r - l),	0.f,				0.f,					0.f	},
 			{ 0.f,					2.f * n / (t - b),	0.f,					0.f	},
 			{ (r + l) / (r - l),	(t + b) / (t - b),	-(f + n) / (f - n),		-1.f },
 			{ 0.f,					0.f,				-(2 * f * n) / (f - n),	0.f	}
-			} };
+			};
 	}
 
 public:
 	matrix4x4_t() { }
 
-	matrix4x4_t(const matrix_t<float, vec4_t, vec4_t>& matrix) : matrix_t{ matrix.data } { }
+	matrix4x4_t(const vec4_t<float>& row1, const vec4_t<float>& row2, const vec4_t<float>& row3, const vec4_t<float>& row4) { }
 };

@@ -65,7 +65,7 @@ void callbacks() {
 
 void vec2() {
     vec2_t<int> a{ 11, 23 };
-    vec2_t<float> b{ 4, 14 };
+    vec2_t<float> b{ 4.f, 14.f };
 
     std::cout << "vec2 examples {" << std::endl;
     
@@ -176,7 +176,7 @@ void rect() {
     {
         static const auto print{ [](const std::string_view& str, const auto& origin, const vec2_t<float>& vec) {
             print_type("\t\torigin ->", vec);
-            print_type(std::string{ "\t\t" }.append(str), rect_t{ vec, vec2_t{ 100 }, origin });
+            print_type(std::string{ "\t\t" }.append(str), rect_t{ vec, vec2_t{ 100.f }, origin });
             std::cout << std::endl;
         } };
 
@@ -220,12 +220,33 @@ void rect() {
     std::cout << "}" << std::endl << std::endl;
 }
 
+struct user_vec2_t { float x{ }, y{ }; };
+
+template<typename coordinates_t>
+struct null::compatibility::data_type_converter_t<vec2_t<coordinates_t>, user_vec2_t> {
+    static user_vec2_t convert(const vec2_t<coordinates_t>& vec) {  return { vec.x, vec.y }; }
+};
+
+template<typename coordinates_t>
+struct null::compatibility::data_type_converter_t<user_vec2_t, vec2_t<coordinates_t>> {
+    static vec2_t<coordinates_t> convert(const user_vec2_t& vec) { return { vec.x, vec.y }; }
+};
+
+void conv() {
+    std::cout << "vec2_t convert" << std::endl; {
+        print_type("\tvec2_t<float> from user_vec2_t ->", vec2_t<float>{ user_vec2_t{ 1.f, 2.f } });
+        print_type("\tuser_vec2_t from vec2_t<float> ->", vec2_t<float>{ user_vec2_t{ (user_vec2_t)vec2_t{ 1.f, 2.f } } });
+    }
+}
+
 int main() {
     try {
         callbacks();
         vec2();
         vec3();
         rect();
+
+        conv();
     } catch(const std::exception& exception) {
         std::cout << exception.what() << std::endl;
     }

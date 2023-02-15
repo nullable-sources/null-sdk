@@ -50,29 +50,22 @@ public:
 public:
     rect_t() { }
 
-    template <typename t> requires std::is_same_v<t, corners_t> || std::is_convertible_v<t, corners_t>
-    rect_t(const t& _value) : rect_t{ _value, _value } { }
+    rect_t(const corners_t& _value) : rect_t{ _value, _value } { }
+    rect_t(const vec2_t<corners_t>& _vec) : rect_t{ _vec, _vec } { }
 
-    template <typename another_corners_t>
-    rect_t(const vec2_t<another_corners_t>& _vec) : rect_t{ _vec, _vec } { }
+    rect_t(const corners_t & _min, const corners_t & _max) : min{ _min }, max{ _max } { }
+    rect_t(const vec2_t<corners_t>& _min, const vec2_t<corners_t>& _max) : min{ _min }, max{ _max } { }
 
-    template <typename t> requires std::is_same_v<t, corners_t> || std::is_convertible_v<t, corners_t>
-    rect_t(const t& _min, const t& _max) : min{ _min }, max{ _max } { }
+    rect_t(const corners_t& a, const corners_t& size, const null::e_rect_origin& _origin) : min{ a } { origin(_origin, size); }
+    rect_t(const vec2_t<corners_t>& a, const vec2_t<corners_t>& size, const null::e_rect_origin& _origin) : min{ a } { origin(_origin, size); }
 
-    template <typename t> requires std::is_same_v<t, corners_t> || std::is_convertible_v<t, corners_t>
-    rect_t(const t& a, const t& size, const null::e_rect_origin& _origin) : min{ a } { origin(_origin, size); }
-
-    template <typename another_corners_t>
-    rect_t(const vec2_t<another_corners_t>& _min, const vec2_t<another_corners_t>& _max) : min{ _min }, max{ _max } { }
-
-    template <typename another_corners_t>
-    rect_t(const vec2_t<another_corners_t>& a, const vec2_t<another_corners_t>& size, const null::e_rect_origin& _origin) : min{ a } { origin(_origin, size); }
-
-    template <typename t> requires std::is_same_v<t, corners_t> || std::is_convertible_v<t, corners_t>
-    rect_t(const t& min_x, const t& min_y, const t& max_x, const t& max_y) : min{ min_x, min_y }, max{ max_x, max_y } { }
+    rect_t(const corners_t & min_x, const corners_t & min_y, const corners_t & max_x, const corners_t& max_y) : min{ min_x, min_y }, max{ max_x, max_y } { }
 
     rect_t(const std::array<vec2_t<corners_t>, array_size>& _corners) : corners{ _corners } { }
     rect_t(const std::array<corners_t, array_linear_size>& _corners) : linear_corners{ _corners } { }
+
+    template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<type_t, rect_t<corners_t>>
+    rect_t(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, rect_t<corners_t>>::convert(value); }
 
 public:
     bool contains(const vec2_t<corners_t>& point) const { return min <= point && max >= point; }
@@ -93,13 +86,12 @@ public:
     vec2_t<corners_t> origin(const null::e_rect_origin& _origin) const { return origin(scale_from_origin(_origin)); }
     rect_t& origin(const null::e_rect_origin& _origin, const vec2_t<corners_t>& size) { return origin(scale_from_origin(_origin), size); }
 
-    template <typename another_corners_t>
-    rect_t<another_corners_t> cast() const { return rect_t<another_corners_t>{ min, max }; }
-
 public:
     template <typename another_corners_t>
-    operator rect_t<another_corners_t>() const { return cast<another_corners_t>(); }
-    operator std::span<vec2_t<corners_t>, array_size>() { return corners; }
+    operator rect_t<another_corners_t>() const { return rect_t<another_corners_t>{ (vec2_t<another_corners_t>)min, (vec2_t<another_corners_t>)max }; }
+
+    template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<rect_t<corners_t>, type_t>
+    operator type_t() const { return null::compatibility::data_type_converter_t<rect_t<corners_t>, type_t>::convert(*this); }
 
     template <typename self_t> auto&& operator [](this self_t&& self, const int& i) { return self.corners[i]; }
 

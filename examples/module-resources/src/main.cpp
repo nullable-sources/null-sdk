@@ -3,10 +3,9 @@
 
 int main() {
     try {
-        memory::c_module self{ };
-        self.load_resources();
+        memory::c_module::self().load_resources();
         
-        if(memory::resource_t* test_document{ self.find_resource("test-document") })
+        if(memory::resource_t* test_document{ memory::c_module::self().find_resource("test-document") })
             std::cout << "first finded test-document from module - '" << memory::resource_cast_t<std::string>::cast(test_document->load()) << "'" << std::endl;
         
         std::cout << "test-document from 'second-resource' -'" << memory::resource_cast_t<std::string>::cast(memory::resource_t{ "test-document", "second-resource" }.load()) << "'" << std::endl;
