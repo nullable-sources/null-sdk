@@ -108,5 +108,5 @@ public: using matrix_t<float, vec4_t, vec4_t>::matrix_t;
 public:
 	matrix4x4_t() { }
 
-	matrix4x4_t(const vec4_t<float>& row1, const vec4_t<float>& row2, const vec4_t<float>& row3, const vec4_t<float>& row4) { }
+	matrix4x4_t(const vec4_t<float>& row1, const vec4_t<float>& row2, const vec4_t<float>& row3, const vec4_t<float>& row4) : matrix_t{ { row1, row2, row3, row4 } } { }
 };
