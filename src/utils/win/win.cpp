@@ -5,7 +5,7 @@ namespace utils {
 		bool c_window::create() {
 			if(!RegisterClassA(&wnd_class)) throw std::runtime_error{ "register class error" };
 
-			wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, instance, nullptr);
+			wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, wnd_class.hInstance, nullptr);
 			if(wnd_handle) {
 				SetWindowLongPtrA(wnd_handle, 0, (LONG_PTR)this);
 				on_create();
@@ -18,10 +18,10 @@ namespace utils {
 			on_destroy();
 
 			if(!wnd_handle) throw std::runtime_error{ "window handle is nullptr" };
-			if(!instance) throw std::runtime_error{ "instance is nullptr" };
+			if(!wnd_class.hInstance) throw std::runtime_error{ "instance is nullptr" };
 
 			DestroyWindow(wnd_handle);
-			UnregisterClassA(name.c_str(), instance);
+			UnregisterClassA(name.c_str(), wnd_class.hInstance);
 		}
 
 		void c_window::main_loop() {

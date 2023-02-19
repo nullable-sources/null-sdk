@@ -28,7 +28,7 @@ namespace utils {
 			window_callbacks_t callbacks{ };
 
 			HWND wnd_handle{ nullptr };
-			HINSTANCE instance{ };
+			HINSTANCE instance{ GetModuleHandle(nullptr) };
 			WNDCLASSA wnd_class{
 				CS_CLASSDC,
 				&c_window::wnd_proc,
