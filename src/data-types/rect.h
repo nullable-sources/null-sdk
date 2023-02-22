@@ -101,15 +101,12 @@ public:
     template <typename self_t> auto operator --(this self_t&& self, int) { return rect_t{ self.min--, self.max-- }; }
 
     template <typename self_t> auto operator -(this self_t&& self) { return rect_t{ -self.min, -self.max }; }
-    class_create_arithmetic_operators(rect, rect_t, -, { return rect_t(self.min - rect.min, self.max - rect.max); });
-    class_create_arithmetic_operators(rect, rect_t, +, { return rect_t(self.min + rect.min, self.max + rect.max); });
-    class_create_arithmetic_operators(rect, rect_t, *, { return rect_t(self.min * rect.min, self.max * rect.max); });
-    class_create_arithmetic_operators(rect, rect_t, /, { return rect_t(self.min / rect.min, self.max / rect.max); });
-    class_create_arithmetic_operators(rect, rect_t, %, { return rect_t(self.min % rect.min, self.max % rect.max); });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators(rect, rect_t, op, { return rect_t(self.min op rect.min, self.max op rect.max); });
+    fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
     template <typename another_corners_t> bool operator ==(const rect_t<another_corners_t>& rect) const { return min == rect.min && max == rect.max; };
     template <typename another_corners_t> bool operator ==(const vec2_t<another_corners_t>& vec) const { return min == vec && max == vec; };
     template <typename another_t> bool operator ==(const another_t& value) const { return min == value && max == value; };
-    class_create_logic_operators(rect, rect_t, <, { return self.min < rect.min && self.max < rect.max; }, { return self.min <= rect.min && self.max <= rect.max; });
-    class_create_logic_operators(rect, rect_t, >, { return self.min > rect.min && self.max > rect.max; }, { return self.min >= rect.min && self.max >= rect.max; });
+#define fast_logic_operators(op) class_create_logic_operators(rect, rect_t, op, { return self.min op rect.min && self.max op rect.max; }, { return self.min op##= rect.min && self.max op##= rect.max; });
+    fast_logic_operators(<); fast_logic_operators(>);
 };

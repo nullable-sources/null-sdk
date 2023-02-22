@@ -47,14 +47,11 @@ public:
 	template <typename self_t> auto operator --(this self_t&& self, int) { return vec4_t{ self.x--, self.y--, self.z--, self.w-- }; }
 
 	template <typename self_t> auto operator -(this self_t&& self) { return vec4_t{ -self.x, -self.y, -self.z, -self.w }; }
-	class_create_arithmetic_operators(vec, vec4_t, -, { return vec4_t(self.x - vec.x, self.y - vec.y, self.z - vec.z, self.w - vec.w); });
-	class_create_arithmetic_operators(vec, vec4_t, +, { return vec4_t(self.x + vec.x, self.y + vec.y, self.z + vec.z, self.w + vec.w); });
-	class_create_arithmetic_operators(vec, vec4_t, *, { return vec4_t(self.x * vec.x, self.y * vec.y, self.z * vec.z, self.w * vec.w); });
-	class_create_arithmetic_operators(vec, vec4_t, /, { return vec4_t(self.x / vec.x, self.y / vec.y, self.z / vec.z, self.w / vec.w); });
-	class_create_arithmetic_operators(vec, vec4_t, %, { return vec4_t(self.x % vec.x, self.y % vec.y, self.z % vec.z, self.w % vec.w); });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators(vec, vec4_t, op, { return vec4_t(self.x op vec.x, self.y op vec.y, self.z op vec.z, self.w op vec.w); });
+	fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
 	template <typename another_coordinates_t> bool operator ==(const vec4_t<another_coordinates_t>& vec) const { return x == vec.x && y == vec.y && z == vec.z && w == vec.w; };
 	template <typename t> bool operator ==(const t& value) const { return x == value && y == value && z == value && w == value; };
-	class_create_logic_operators(vec, vec4_t, <, { return self.x < vec.x && self.y < vec.y && self.z < vec.z && self.w < vec.w; }, { return self.x <= vec.x && self.y <= vec.y && self.z <= vec.z && self.w <= vec.w; });
-	class_create_logic_operators(vec, vec4_t, >, { return self.x > vec.x && self.y > vec.y && self.z > vec.z && self.w > vec.w; }, { return self.x >= vec.x && self.y >= vec.y && self.z >= vec.z && self.w >= vec.w; });
+#define fast_logic_operators(op) class_create_logic_operators(vec, vec4_t, op, { return self.x op vec.x && self.y op vec.y && self.z op vec.z && self.w op vec.w; }, { return self.x op##= vec.x && self.y op##= vec.y && self.z op##= vec.z && self.w op##= vec.w; });
+	fast_logic_operators(<); fast_logic_operators(>);
 };

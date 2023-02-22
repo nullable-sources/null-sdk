@@ -51,14 +51,11 @@ public:
     template <typename self_t> auto operator --(this self_t&& self, int) { return vec2_t{ self.x--, self.y-- }; }
 
     template <typename self_t> auto operator -(this self_t&& self) { return vec2_t{ -self.x, -self.y }; }
-    class_create_arithmetic_operators(vec, vec2_t, -, { return vec2_t(self.x - vec.x, self.y - vec.y); });
-    class_create_arithmetic_operators(vec, vec2_t, +, { return vec2_t(self.x + vec.x, self.y + vec.y); });
-    class_create_arithmetic_operators(vec, vec2_t, *, { return vec2_t(self.x * vec.x, self.y * vec.y); });
-    class_create_arithmetic_operators(vec, vec2_t, /, { return vec2_t(self.x / vec.x, self.y / vec.y); });
-    class_create_arithmetic_operators(vec, vec2_t, %, { return vec2_t(self.x % vec.x, self.y % vec.y); });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators(vec, vec2_t, op, { return vec2_t(self.x op vec.x, self.y op vec.y); });
+    fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
     template <typename another_coordinates_t> bool operator ==(const vec2_t<another_coordinates_t>& vec) const { return x == vec.x && y == vec.y; };
     template <typename another_t> requires std::is_arithmetic_v<another_t> bool operator ==(const another_t& value) const { return x == value && y == value; };
-    class_create_logic_operators(vec, vec2_t, <, { return self.x < vec.x && self.y < vec.y; }, { return self.x <= vec.x && self.y <= vec.y; });
-    class_create_logic_operators(vec, vec2_t, >, { return self.x > vec.x && self.y > vec.y; }, { return self.x >= vec.x && self.y >= vec.y; });
+#define fast_logic_operators(op) class_create_logic_operators(vec, vec2_t, op, { return self.x op vec.x && self.y op vec.y; }, { return self.x op##= vec.x && self.y op##= vec.y; });
+    fast_logic_operators(<); fast_logic_operators(>);
 };

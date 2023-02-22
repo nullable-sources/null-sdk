@@ -48,16 +48,13 @@ public:
 	template <typename self_t> auto operator --(this self_t&& self, int) { return vec3_t{ self.x--, self.y--, self.z-- }; }
 
 	template <typename self_t> auto operator -(this self_t&& self) { return vec3_t{ -self.x, -self.y, -self.z }; }
-	class_create_arithmetic_operators(vec, vec3_t, -, { return vec3_t(self.x - vec.x, self.y - vec.y, self.z - vec.z); });
-	class_create_arithmetic_operators(vec, vec3_t, +, { return vec3_t(self.x + vec.x, self.y + vec.y, self.z + vec.z); });
-	class_create_arithmetic_operators(vec, vec3_t, *, { return vec3_t(self.x * vec.x, self.y * vec.y, self.z * vec.z); });
-	class_create_arithmetic_operators(vec, vec3_t, /, { return vec3_t(self.x / vec.x, self.y / vec.y, self.z / vec.z); });
-	class_create_arithmetic_operators(vec, vec3_t, %, { return vec3_t(self.x % vec.x, self.y % vec.y, self.z % vec.z); });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators(vec, vec3_t, op, { return vec3_t(self.x op vec.x, self.y op vec.y, self.z op vec.z); });
+	fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
 	template <typename another_coordinates_t> bool operator ==(const vec3_t<another_coordinates_t>& vec) const { return x == vec.x && y == vec.y && z == vec.z; };
 	template <typename another_t> requires std::is_arithmetic_v<another_t> bool operator ==(const another_t& value) const { return x == value && y == value && z == value; };
-	class_create_logic_operators(vec, vec3_t, <, { return self.x < vec.x && self.y < vec.y && self.z < vec.z; }, { return self.x <= vec.x && self.y <= vec.y && self.z <= vec.z; });
-	class_create_logic_operators(vec, vec3_t, >, { return self.x > vec.x && self.y > vec.y && self.z > vec.z; }, { return self.x >= vec.x && self.y >= vec.y && self.z >= vec.z; });
+#define fast_logic_operators(op) class_create_logic_operators(vec, vec3_t, op, { return self.x op vec.x && self.y op vec.y && self.z op vec.z; }, { return self.x op##= vec.x && self.y op##= vec.y && self.z op##= vec.z; });
+	fast_logic_operators(<); fast_logic_operators(>);
 };
 
 template <>

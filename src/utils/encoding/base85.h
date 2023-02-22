@@ -1,4 +1,6 @@
 #pragma once
+#include <ranges>
+#include <algorithm>
 
 namespace utils::encoding {
     struct base85_t {

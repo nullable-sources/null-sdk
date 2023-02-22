@@ -55,8 +55,8 @@ public:
 	template <typename self_t> auto operator --(this self_t&& self, int) { return matrix_t{ self.data-- }; }
 
 	template <typename self_t> auto operator -(this self_t&& self) { return matrix_t{ -self.data }; }
-	class_create_arithmetic_operators(matrix, matrix_t, -, { return self.data - matrix.data; });
-	class_create_arithmetic_operators(matrix, matrix_t, +, { return self.data + matrix.data; });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators(matrix, matrix_t, op, { return self.data op matrix.data; });
+	fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 	class_create_arithmetic_operators(matrix, matrix_t, *, {
 		matrix_t result{ };
 		for(const int& row : std::views::iota(size_t{ }, rows_size)) {
@@ -66,13 +66,11 @@ public:
 		}
 		return result;
 		});
-	class_create_arithmetic_operators(matrix, matrix_t, /, { return self.data / matrix.data; });
-	class_create_arithmetic_operators(matrix, matrix_t, %, { return self.data % matrix.data; });
 
 	template <typename another_data_t> bool operator ==(const matrix_t<another_data_t, rows_t, columns_t>& matrix) const { return data == matrix.data; };
 	template <typename another_t> bool operator ==(const another_t& value) const { return data == value; };
-	class_create_logic_operators(matrix, matrix_t, <, { return self.data < matrix.data; }, { return self.data <= matrix.data; });
-	class_create_logic_operators(matrix, matrix_t, >, { return self.data > matrix.data; }, { return self.data >= matrix.data; });
+#define fast_logic_operators(op) class_create_logic_operators(matrix, matrix_t, op, { return self.data op matrix.data; }, { return self.data op##= matrix.data; });
+	fast_logic_operators(<); fast_logic_operators(>);
 };
 
 struct matrix4x4_t : public matrix_t<float, vec4_t, vec4_t> {
