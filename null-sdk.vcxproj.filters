@@ -34,6 +34,12 @@
     <Filter Include="src\utils\compatibility">
       <UniqueIdentifier>{6895c6c2-1362-4382-b11d-c70941930a88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\events">
+      <UniqueIdentifier>{0ec6be5a-9fbf-44fc-8190-46cf44cef629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\logger">
+      <UniqueIdentifier>{3e038205-be47-4c76-b212-f11b6a452fd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -98,6 +104,12 @@
     </ClInclude>
     <ClInclude Include="src\utils\compatibility\data-type-converter.h">
       <Filter>src\utils\compatibility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\events\events.h">
+      <Filter>src\utils\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\logger\logger.h">
+      <Filter>src\utils\logger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

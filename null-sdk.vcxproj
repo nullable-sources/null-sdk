@@ -31,7 +31,9 @@
     <ClInclude Include="src\utils\compatibility\data-type-converter.h" />
     <ClInclude Include="src\utils\encoding\base85.h" />
     <ClInclude Include="src\utils\encoding\encoding.h" />
+    <ClInclude Include="src\utils\events\events.h" />
     <ClInclude Include="src\utils\fast_operators.h" />
+    <ClInclude Include="src\utils\logger\logger.h" />
     <ClInclude Include="src\utils\memory\address.h" />
     <ClInclude Include="src\utils\memory\minhook-wrapper.h" />
     <ClInclude Include="src\utils\memory\module\module.h" />

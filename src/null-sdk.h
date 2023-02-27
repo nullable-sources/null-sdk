@@ -11,8 +11,9 @@
 #include <utils/memory/minhook-wrapper.h>
 #include <utils/memory/resource/resource.h>
 
-#include <utils/encoding/encoding.h>
+#include <utils/logger/logger.h>
 
+#include <utils/encoding/encoding.h>
 
 #include <utils/time-measurement/time-measurement.h>
 
