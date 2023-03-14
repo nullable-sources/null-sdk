@@ -1,4 +1,3 @@
-#include <utils/logger/logger.h>
 #include <utils/win/win.h>
 
 namespace utils {
