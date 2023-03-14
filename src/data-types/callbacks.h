@@ -36,14 +36,14 @@ namespace utils {
         auto add(const function_t& _callback_t) { callbacks.push_back(_callback_t); return std::prev(callbacks.end()); }
         void remove(const auto& iterator) { callbacks.erase(iterator); }
 
-        template<typename result_t = result_t>
+        template <typename result_t = result_t>
         std::enable_if_t<!std::is_same_v<result_t, void>, std::vector<result_t>> call(args_t... args) {
             std::vector<result_t> result{ };
             std::ranges::for_each(callbacks, [&](const function_t& callback) { result.push_back(callback(args...)); });
             return result;
         }
 
-        template<typename result_t = result_t>
+        template <typename result_t = result_t>
         std::enable_if_t<std::is_same_v<result_t, void>, void> call(args_t... args) {
             std::ranges::for_each(callbacks, [&](const function_t& callback) { callback(args...); });
         }
@@ -60,7 +60,7 @@ namespace utils {
         std::tuple<callback_t...> callbacks{ };
 
     public:
-        template<auto place_t>
+        template <auto place_t>
         auto& at() { return std::get<(int)place_t>(callbacks); }
     };
 }

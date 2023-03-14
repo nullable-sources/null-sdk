@@ -1,7 +1,7 @@
 #pragma once
 #include <data-types/vec4.h>
 
-template <typename data_t, template<typename> class rows_t, template<typename> class columns_t>
+template <typename data_t, template <typename> class rows_t, template <typename> class columns_t>
 struct matrix_t {
 public:
 	static constexpr size_t rows_size{ rows_t<data_t>::array_size }, columns_size{ columns_t<data_t>::array_size }, linear_size{ rows_size * columns_size };

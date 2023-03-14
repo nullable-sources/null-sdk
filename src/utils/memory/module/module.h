@@ -26,7 +26,7 @@ namespace memory {
                 *this = *finded;
             } else {
                 pe_image = pe_image_t{ (std::uintptr_t)GetModuleHandleA(name.data()) };
-                if(!pe_image.base_address) throw std::runtime_error{ std::format("cant get '{}' module", name) };
+                if(!pe_image.base_address) utils::logger.log(utils::e_log_type::warning, "cant get '{}' module.", name);
                 if(store) stored_modules.push_back(this);
             }
         }
@@ -63,7 +63,7 @@ namespace memory {
             }
         };
 
-        template<typename>
+        template <typename>
         class c_export;
 
         template <typename return_t, typename ...args_t>
@@ -74,7 +74,7 @@ namespace memory {
         public:
             return_t operator()(args_t... args) {
                 if(module && !address) { address = module->load_export(name); }
-                if(!address) throw std::runtime_error{ std::format("'{}' export address == nullptr", name.empty() ? "unknown" : name) };
+                if(!address) utils::logger.log(utils::e_log_type::warning, "'{}' export address == nullptr", name.empty() ? "unknown" : name);
                 return ((prototype_t)address)(args...);
             }
         };

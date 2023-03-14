@@ -222,12 +222,12 @@ void rect() {
 
 struct user_vec2_t { float x{ }, y{ }; };
 
-template<typename coordinates_t>
+template <typename coordinates_t>
 struct null::compatibility::data_type_converter_t<vec2_t<coordinates_t>, user_vec2_t> {
     static user_vec2_t convert(const vec2_t<coordinates_t>& vec) {  return { vec.x, vec.y }; }
 };
 
-template<typename coordinates_t>
+template <typename coordinates_t>
 struct null::compatibility::data_type_converter_t<user_vec2_t, vec2_t<coordinates_t>> {
     static vec2_t<coordinates_t> convert(const user_vec2_t& vec) { return { vec.x, vec.y }; }
 };

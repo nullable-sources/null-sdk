@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <utils/fast_operators.h>
+#include <data-types/vec4.h>
 
 namespace null::sdk {
 	template <typename channel_t>
@@ -27,7 +28,7 @@ namespace null::sdk {
 		template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<type_t, i_color<channel_t>>
 		i_color(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, i_color<channel_t>>::convert(value); }
 
-		template<typename cast_t>
+		template <typename cast_t>
 		i_color<cast_t> cast() const { return i_color<cast_t>{ channels | std::views::transform([](const channel_t& channel) { return (cast_t)channel; }) | std::ranges::to<std::vector>() }; }
 
 	public:
@@ -165,3 +166,15 @@ public:
 #define fast_logic_operators(op) class_create_logic_operators(color, hsv_color_t, op, { return self.h op color.h && self.s op color.s && self.v op color.v && self.a op color.a; }, { return self.h op##= color.h && self.s op##= color.s && self.v op##= color.v && self.a op##= color.a; });
 	fast_logic_operators(<); fast_logic_operators(>);
 };
+
+namespace null::compatibility {
+	template <typename channel_t>
+	struct null::compatibility::data_type_converter_t<vec4_t<channel_t>, sdk::i_color<channel_t>> {
+		static sdk::i_color<channel_t> convert(const vec4_t<channel_t>& vec) { return { vec.x, vec.y, vec.z, vec.w }; }
+	};
+
+	template <typename channel_t>
+	struct null::compatibility::data_type_converter_t<sdk::i_color<channel_t>, vec4_t<channel_t>> {
+		static vec4_t<channel_t> convert(const sdk::i_color<channel_t>& color) { return { color.r, color.g, color.b, color.a }; }
+	};
+}

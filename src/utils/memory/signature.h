@@ -12,7 +12,7 @@ namespace memory {
     public:
         signature_t(const c_module& module, const std::string_view& _signature) : signature_t{ module.pe_image, _signature } { }
         signature_t(const pe_image_t& _pe_image, const std::string_view& _signature) : pe_image{ _pe_image }, signature{ _signature } {
-            if(signature.empty()) throw std::runtime_error{ "signature empty" };
+            if(signature.empty()) utils::logger.log(utils::e_log_type::warning, "'{}' signature empty", _signature);
             to_bytes();
         }
 
@@ -33,7 +33,7 @@ namespace memory {
                     ) };
 
                 if(!finded.empty()) address = finded.front();
-                else throw std::runtime_error{ std::format("cant find '{}' signature", signature) };
+                else utils::logger.log(utils::e_log_type::warning, std::format("cant find '{}' signature", signature));
             }
             return *this;
         }
