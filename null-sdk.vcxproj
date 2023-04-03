@@ -44,6 +44,7 @@
     <ClInclude Include="src\utils\win\win.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\utils\logger\logger.cpp" />
     <ClCompile Include="src\utils\memory\module\module.cpp" />
     <ClCompile Include="src\utils\win\win.cpp" />
   </ItemGroup>

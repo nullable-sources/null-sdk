@@ -119,6 +119,9 @@
     <ClCompile Include="src\utils\memory\module\module.cpp">
       <Filter>src\utils\memory\module</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\logger\logger.cpp">
+      <Filter>src\utils\logger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\memory\module\module.inl">

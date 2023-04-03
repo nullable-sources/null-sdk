@@ -125,4 +125,22 @@ namespace utils {
 			virtual std::string description() = 0;
 		};
 	}
+
+	enum class e_dye {
+		red = FOREGROUND_RED,
+		blue = FOREGROUND_BLUE,
+		green = FOREGROUND_GREEN,
+		intensity = FOREGROUND_INTENSITY,
+
+		on_background = 0x4,
+
+		white = red | green | blue,
+		cyan = blue | green | intensity,
+		magenta = red | blue | intensity,
+		yellow = red | green,
+
+		restore = white,
+	}; enum_create_bit_operators(e_dye, false);
+	enum_create_cast_operator(e_dye, -);
+	static std::ostream& operator<<(std::ostream& os, const e_dye& dye) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), -dye); return os; }
 }
