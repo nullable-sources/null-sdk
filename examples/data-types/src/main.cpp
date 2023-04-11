@@ -246,8 +246,6 @@ int main() {
         vec3();
         rect();
 
-        
-
         conv();
     } catch(const std::exception& exception) {
         std::cout << exception.what() << std::endl;
