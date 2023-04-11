@@ -28,10 +28,11 @@ public:
 public:
 	float length() const { return std::hypot(x, y, z); }
 	float dist_to(const vec3_t<coordinates_t>& vec) const { return vec3_t{ *this - vec }.length(); }
-	vec3_t<coordinates_t> normalized() const { return *this; }
-	template <typename self_t> auto&& normalize(this self_t&& self) { return self = self.normalized(); }
 	float dot(const vec3_t<coordinates_t>& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
 	vec3_t<coordinates_t> cross(const vec3_t<coordinates_t>& vec) const { return { y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x }; }
+
+	template <typename self_t> vec3_t<coordinates_t> normalized(this self_t&& self) { return self / self.length(); }
+	template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
 
 public:
 	template <typename another_coordinates_t>
@@ -56,8 +57,3 @@ public:
 #define fast_logic_operators(op) class_create_logic_operators(vec, vec3_t, op, { return self.x op vec.x && self.y op vec.y && self.z op vec.z; }, { return self.x op##= vec.x && self.y op##= vec.y && self.z op##= vec.z; });
 	fast_logic_operators(<); fast_logic_operators(>);
 };
-
-template <>
-inline vec3_t<float> vec3_t<float>::normalized() const {
-	return { std::isfinite((double)x) ? std::remainder(x, 360.f) : 0.f, std::isfinite((double)y) ? std::remainder(y, 360.f) : 0.f, 0.f };
-}

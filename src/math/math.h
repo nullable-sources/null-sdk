@@ -204,4 +204,20 @@ namespace math {
 		rotate_polygon(result, angle);
 		return result;
 	}
+
+	enum class e_rotation {
+		ccw, //@not: counter-clockwise
+		cw //@note: clockwise
+	};
+
+	math_make_templates(vec2_t, coordinates_t)
+	static data_t rotate_90_degrees(const data_t& point, const e_rotation& direction) {
+		data_t result{ point };
+		std::swap(result.x, result.y);
+
+		if(direction == e_rotation::ccw) result.y *= -1;
+		else result.x *= -1;
+		
+		return result;
+	}
 }

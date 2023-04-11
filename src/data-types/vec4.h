@@ -32,6 +32,9 @@ public:
 	float dist_to(const vec4_t& vec) const { return vec4_t{ *this - vec }.length(); }
 	float dot(const vec4_t& vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
 
+	template <typename self_t> vec4_t<coordinates_t> normalized(this self_t&& self) { return self / self.length(); }
+	template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
+
 public:
 	template <typename another_coordinates_t>
 	operator vec4_t<another_coordinates_t>() const { return vec4_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y, (another_coordinates_t)z, (another_coordinates_t)w }; }

@@ -36,6 +36,9 @@ public:
     float dot(const vec2_t<coordinates_t>& vec) const { return x * vec.x + y * vec.y; }
     float cross(const vec2_t<coordinates_t>& vec) const { return x * vec.y - y * vec.x; }
 
+    template <typename self_t> vec2_t<coordinates_t> normalized(this self_t&& self) { return self / self.length(); }
+    template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
+
 public:
     template <typename another_coordinates_t>
     operator vec2_t<another_coordinates_t>() const { return vec2_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y }; }
