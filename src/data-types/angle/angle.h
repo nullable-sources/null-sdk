@@ -29,6 +29,7 @@ public:
     static constexpr double pi{ 180. / std::numbers::pi };
 
 public:
+    angle_t() { }
     angle_t(const radians_t& radians) : i_angle{ radians } { }
     angle_t(const degrees_t& degrees);
     angle_t(const angle_t<degrees_t>& degrees);
@@ -47,6 +48,7 @@ public:
     static constexpr double pi{ std::numbers::pi / 180.f };
 
 public:
+    angle_t() { }
     angle_t(const degrees_t& degrees) : i_angle{ degrees } { }
     angle_t(const radians_t& radians);
     angle_t(const angle_t<radians_t>& radians_t);
