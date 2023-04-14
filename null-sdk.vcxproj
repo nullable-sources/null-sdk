@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\data-types\angle\angle.h" />
     <ClInclude Include="src\data-types\callbacks.h" />
     <ClInclude Include="src\data-types\color.h" />
     <ClInclude Include="src\data-types\matrix.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="src\utils\win\win.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\data-types\angle\angle.cpp" />
     <ClCompile Include="src\utils\logger\logger.cpp" />
     <ClCompile Include="src\utils\memory\module\module.cpp" />
     <ClCompile Include="src\utils\win\win.cpp" />

@@ -2,6 +2,7 @@
 #include <numbers>
 #include <cmath>
 #include <array>
+#include <data-types/angle/angle.h>
 #include <data-types/vec3.h>
 #include <data-types/vec4.h>
 #include <data-types/rect.h>
@@ -222,7 +223,7 @@ namespace math {
 	}
 
 	math_make_templates(vec2_t, coordinates_t)
-	static double angle_between(const data_t& point1, const data_t& point2) {
+	static radians_t angle_between(const data_t& point1, const data_t& point2) {
 		return std::atan2(point2.y, point2.x) - std::atan2(point1.y, point1.x);
 	}
 }

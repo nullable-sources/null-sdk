@@ -40,6 +40,9 @@
     <Filter Include="src\utils\logger">
       <UniqueIdentifier>{3e038205-be47-4c76-b212-f11b6a452fd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\data-types\angle">
+      <UniqueIdentifier>{3d271ab7-5dbe-4370-8ea7-90149f45c32c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -111,6 +114,9 @@
     <ClInclude Include="src\utils\logger\logger.h">
       <Filter>src\utils\logger</Filter>
     </ClInclude>
+    <ClInclude Include="src\data-types\angle\angle.h">
+      <Filter>src\data-types\angle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">
@@ -121,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\logger\logger.cpp">
       <Filter>src\utils\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data-types\angle\angle.cpp">
+      <Filter>src\data-types\angle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
