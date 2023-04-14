@@ -1,6 +1,7 @@
 #pragma once
 #include <numbers>
 #include <cmath>
+#include <complex>
 #include <utils/fast_operators.h>
 
 using radians_t = double;
@@ -52,7 +53,9 @@ public:
     angle_t(const angle_t<degrees_t>& degrees);
 
 public:
-    template <typename self_t> auto&& normalize(this self_t&& self) { self.value = std::numbers::pi - std::remainder(std::abs(self.value), std::numbers::pi); return self; }
+    //@credits: https://stackoverflow.com/questions/2320986/easy-way-to-keeping-angles-between-179-and-180-degrees#comment52945562_2321125
+    template <typename self_t> radians_t normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value })).imag(); }
+    template <typename self_t> auto&& normalize(this self_t&& self) { self.value = self.normalized(); return self; }
 
     degrees_t cast() const;
     operator degrees_t() const;
@@ -71,7 +74,8 @@ public:
     angle_t(const angle_t<radians_t>& radians_t);
 
 public:
-    template <typename self_t> auto&& normalize(this self_t&& self) { self.value = 180.f - std::remainder(std::abs(self.value), 180.f); return self; }
+    template <typename self_t> degrees_t normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value * pi })).imag() * angle_t<radians_t>::pi; }
+    template <typename self_t> auto&& normalize(this self_t&& self) { self.value = self.normalized(); return self; }
 
     radians_t cast() const;
     operator radians_t() const;
