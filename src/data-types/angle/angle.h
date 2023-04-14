@@ -1,6 +1,7 @@
 #pragma once
 #include <numbers>
 #include <cmath>
+#include <utils/fast_operators.h>
 
 using radians_t = double;
 using degrees_t = float;
@@ -17,6 +18,22 @@ namespace null::sdk::impl {
 
     public:
         template <typename self_t> operator value_t(this self_t&& self) { return self.value; }
+
+#define fast_arithmetic_operators(op)                                                                                                                                               \
+    impl_class_create_operator(auto, op, { return i_angle<value_t>(self.value op angle.value); }, (this self_t&& self, const i_angle<value_t>& angle), template <typename self_t>)  \
+    impl_class_create_operator(value_t, op, { return self.value op angle; }, (this self_t&& self, const value_t& angle), template <typename self_t>)                                \
+    impl_class_create_operator(auto&&, op##=, impl_default_arithmetic_assignment_func(op, angle), (this self_t&& self, const i_angle<value_t>& angle), template <typename self_t>)  \
+    impl_class_create_operator(auto&&, op##=, impl_default_arithmetic_assignment_func(op, angle), (this self_t&& self, const value_t& angle), template <typename self_t>)           \
+
+        fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/ ); fast_arithmetic_operators(%);
+
+#define fast_logic_operators(op)                                                                                                                \
+    class_create_logic_operators(angle, i_angle<value_t>, op, { return self.value op angle.value; }, { return self.value op##= angle.value; }); \
+    class_create_logic_operators(angle, value_t, op, { return self.value op angle; }, { return self.value op##= angle; });                      \
+
+        fast_logic_operators(< ); fast_logic_operators(> );
+
+        bool operator ==(const value_t& angle) const { return value == angle; };
     };
 }
 
