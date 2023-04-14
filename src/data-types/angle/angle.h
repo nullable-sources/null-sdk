@@ -54,8 +54,8 @@ public:
 
 public:
     //@credits: https://stackoverflow.com/questions/2320986/easy-way-to-keeping-angles-between-179-and-180-degrees#comment52945562_2321125
-    template <typename self_t> radians_t normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value })).imag(); }
-    template <typename self_t> auto&& normalize(this self_t&& self) { self.value = self.normalized(); return self; }
+    template <typename self_t> angle_t<radians_t> normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value })).imag(); }
+    template <typename self_t> auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
 
     degrees_t cast() const;
     operator degrees_t() const;
@@ -74,8 +74,8 @@ public:
     angle_t(const angle_t<radians_t>& radians_t);
 
 public:
-    template <typename self_t> degrees_t normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value * pi })).imag() * angle_t<radians_t>::pi; }
-    template <typename self_t> auto&& normalize(this self_t&& self) { self.value = self.normalized(); return self; }
+    template <typename self_t> angle_t<degrees_t> normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value * pi })).imag() * angle_t<radians_t>::pi; }
+    template <typename self_t> auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
 
     radians_t cast() const;
     operator radians_t() const;
