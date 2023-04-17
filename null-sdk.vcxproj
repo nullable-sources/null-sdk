@@ -48,6 +48,7 @@
     <ClCompile Include="src\data-types\angle\angle.cpp" />
     <ClCompile Include="src\utils\logger\logger.cpp" />
     <ClCompile Include="src\utils\memory\module\module.cpp" />
+    <ClCompile Include="src\utils\memory\resource\resource.cpp" />
     <ClCompile Include="src\utils\win\win.cpp" />
   </ItemGroup>
   <ItemGroup>

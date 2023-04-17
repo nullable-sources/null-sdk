@@ -8,10 +8,7 @@ namespace memory {
         static c_module* find_stored_module(const std::string_view& name);
 
         //@note: i don't fucking want to rewrite it all
-        static c_module& self() {
-            static c_module self{ { GetModuleHandleA(nullptr) } };
-            return self;
-        }
+        static c_module& self();
 
     public:
         std::string name{ };

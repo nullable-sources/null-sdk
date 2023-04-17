@@ -131,6 +131,9 @@
     <ClCompile Include="src\data-types\angle\angle.cpp">
       <Filter>src\data-types\angle</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\memory\resource\resource.cpp">
+      <Filter>src\utils\memory\resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\memory\module\module.inl">

@@ -1,6 +1,12 @@
 #include <null-sdk.h>
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 namespace memory {
+    c_module& c_module::self() {
+        static c_module self{ { (HMODULE)&__ImageBase } };
+        return self;
+    }
+
     c_module* c_module::find_stored_module(const std::string_view& name) {
         if(auto finded{ std::ranges::find_if(stored_modules, [&](c_module* module) { return module->name == name; }) }; finded != stored_modules.end()) return *finded;
         return nullptr;

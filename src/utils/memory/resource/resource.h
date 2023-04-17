@@ -16,7 +16,8 @@ namespace memory {
 
 	public:
 		resource_t() { }
-		resource_t(const std::string_view& _name, const std::string_view& _type, const pe_image_t& _parent_module = { GetModuleHandleA(nullptr) }) : parent_module{ _parent_module }, name{ _name }, type{ _type } { }
+		resource_t(const std::string_view& _name, const std::string_view& _type);
+		resource_t(const std::string_view& _name, const std::string_view& _type, const pe_image_t& _parent_module) : parent_module{ _parent_module }, name{ _name }, type{ _type } { }
 
 	public:
 		bool empty() const { return !resource_handle || !resource_data || !locked_data; }
