@@ -44,6 +44,6 @@ namespace math {
 	template <typename coordinates_t>
 	static vec2_t<coordinates_t> vectors_bisector(const vec2_t<coordinates_t>& point1, const vec2_t<coordinates_t>& point2, const e_rotation& rotation = e_rotation::ccw) {
 		static const angle_t<radians_t> angle{ 90.f };
-		return vec2_t{ rotate_vector(point1, angle, rotation) - rotate_vector(point2, angle, rotation) }.normalized();
+		return vec2_t{ rotate_vector(point1, angle, rotation) + rotate_vector(point2, angle, rotation) }.normalized();
 	}
 }
