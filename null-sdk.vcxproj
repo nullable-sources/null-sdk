@@ -27,6 +27,7 @@
     <ClInclude Include="src\data-types\vec2.h" />
     <ClInclude Include="src\data-types\vec3.h" />
     <ClInclude Include="src\data-types\vec4.h" />
+    <ClInclude Include="src\math\geometry.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\null-sdk.h" />
     <ClInclude Include="src\utils\compatibility\data-type-converter.h" />

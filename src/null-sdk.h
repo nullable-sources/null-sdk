@@ -18,6 +18,7 @@
 #include <utils/time-measurement/time-measurement.h>
 
 #include <math/math.h>
+#include <math/geometry.h>
 
 #include <data-types/color.h>
 #include <data-types/callbacks.h>

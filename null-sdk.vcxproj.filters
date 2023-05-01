@@ -117,6 +117,9 @@
     <ClInclude Include="src\data-types\angle\angle.h">
       <Filter>src\data-types\angle</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\geometry.h">
+      <Filter>src\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">

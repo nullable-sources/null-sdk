@@ -2,11 +2,9 @@
 #include <numbers>
 #include <cmath>
 #include <array>
-#include <data-types/angle/angle.h>
 #include <data-types/vec3.h>
 #include <data-types/vec4.h>
 #include <data-types/rect.h>
-#include <data-types/matrix.h>
 
 //@note: Yes, thrash code, yes shit, but what can I do? I'm fucked up trying to put i_vec2<x_t, y_t>/i_vec3<x_t, y_t, z_t>/i_vec4<x_t, y_t, z_t, w_t>/i_rect<x_t, y_t> in one argument to use only one impl_math_make_arg implementation.
 #define impl_math_arg(arg) arg
@@ -161,69 +159,4 @@ namespace math {
 
 	//@note: std::lerp does not support non-arithmetic types
 	static auto lerp(auto a, auto b, auto t) { return a + t * (b - a); }
-
-	static float degrees_to_radians(const float& degrees) {
-		static constexpr float pi{ std::numbers::pi_v<float> / 180.f };
-		return degrees * pi;
-	}
-
-	static float radians_to_degrees(const float& radians) {
-		static constexpr float pi{ 180.f / std::numbers::pi_v<float> };
-		return radians * pi;
-	}
-
-	namespace triangles {
-		static std::array<vec2_t<float>, 3> arbitrary(const float& a, const float& c) { return { vec2_t{ -std::cos(degrees_to_radians(a)), 0.f }, vec2_t{ 0.f, std::sin(degrees_to_radians(180.f - a - c)) }, vec2_t{ std::cos(degrees_to_radians(c)), 0.f } }; }
-		static std::array<vec2_t<float>, 3> isosceles(const float& angle) { return arbitrary(angle, angle); }
-		inline const std::array<vec2_t<float>, 3> equilateral{ isosceles(60.f) };
-	}
-
-	math_make_templates(vec2_t, coordinates_t)
-	static void rotate_polygon(std::vector<data_t>& points, const data_t& origin, const float& angle) {
-		data_t sin_cos{ std::sin(math::degrees_to_radians(angle)), std::cos(math::degrees_to_radians(angle)) };
-		for(data_t& point : points) {
-			data_t delta{ point - origin };
-			point = origin + data_t{ delta.cross(sin_cos), delta.dot(sin_cos) };
-		}
-	}
-
-	math_make_templates(vec2_t, coordinates_t)
-	static std::vector<data_t> rotate_polygon(const std::vector<data_t>& points, const data_t& origin, const float& angle) {
-		std::vector<data_t> result{ points };
-		rotate_polygon(result, origin, angle);
-		return result;
-	}
-
-	math_make_templates(vec2_t, coordinates_t)
-	static void rotate_polygon(std::vector<data_t>& points, const float& angle) {
-		rotate_polygon(points, std::accumulate(points.begin(), points.end(), data_t{ }) / points.size(),angle);
-	}
-
-	math_make_templates(vec2_t, coordinates_t)
-	static std::vector<data_t> rotate_polygon(const std::vector<data_t>& points, const float& angle) {
-		std::vector<data_t> result{ points };
-		rotate_polygon(result, angle);
-		return result;
-	}
-
-	enum class e_rotation {
-		ccw, //@not: counter-clockwise
-		cw //@note: clockwise
-	};
-
-	math_make_templates(vec2_t, coordinates_t)
-	static data_t rotate_90_degrees(const data_t& point, const e_rotation& direction) {
-		data_t result{ point };
-		std::swap(result.x, result.y);
-
-		if(direction == e_rotation::ccw) result.y *= -1;
-		else result.x *= -1;
-		
-		return result;
-	}
-
-	math_make_templates(vec2_t, coordinates_t)
-	static radians_t angle_between(const data_t& point1, const data_t& point2) {
-		return std::atan2(point2.y, point2.x) - std::atan2(point1.y, point1.x);
-	}
 }
