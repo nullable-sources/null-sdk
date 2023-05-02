@@ -24,6 +24,7 @@ public:
     //          so as soon as vs improves on requires, it will be possible to return the old constructors
     vec2_t(const coordinates_t& value) : vec2_t{ value, value } { }
     vec2_t(const coordinates_t& _x, const coordinates_t& _y) : x{ _x }, y{ _y } { }
+    vec2_t(const std::tuple<coordinates_t, coordinates_t>& tuple) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) } { }
 
     vec2_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
     vec2_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
@@ -42,8 +43,10 @@ public:
     template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
 
 public:
-    template <typename another_coordinates_t>
-    operator vec2_t<another_coordinates_t>() const { return vec2_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y }; }
+    make_tuple_cast(x, y);
+
+public:
+    template <typename another_coordinates_t> operator vec2_t<another_coordinates_t>() const { return vec2_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y }; }
 
     template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<vec2_t<coordinates_t>, type_t>
     operator type_t() const { return null::compatibility::data_type_converter_t<vec2_t<coordinates_t>, type_t>::convert(*this); }

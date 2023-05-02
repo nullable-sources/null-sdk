@@ -41,15 +41,26 @@ namespace null::sdk::impl {
 template <typename value_t>
 struct angle_t { };
 
+#define angle_impl_make_functions(return_t, name)   \
+    return_t name() const;                          \
+    return_t a##name() const;                       \
+    return_t name##h() const;                       \
+    return_t a##name##h() const;                    \
+
 template <>
 struct angle_t<radians_t> : public null::sdk::impl::i_angle<radians_t> {
 public:
     static constexpr double pi{ 180. / std::numbers::pi };
 
 public:
+    static angle_t<radians_t> atan2(const auto& y, const auto& x) { return angle_t<radians_t>{ (radians_t)std::atan2(y, x) }; }
+
+public:
     angle_t() { }
     angle_t(const radians_t& radians) : i_angle{ radians } { }
     angle_t(const degrees_t& degrees);
+    angle_t(const i_angle<radians_t>& angle) : i_angle{ angle } { }
+    angle_t(const i_angle<degrees_t>& degrees);
     angle_t(const angle_t<degrees_t>& degrees);
 
 public:
@@ -60,6 +71,11 @@ public:
     degrees_t cast() const;
     operator degrees_t() const;
     operator angle_t<degrees_t>() const;
+
+public:
+    angle_impl_make_functions(radians_t, sin);
+    angle_impl_make_functions(radians_t, cos);
+    angle_impl_make_functions(radians_t, tan);
 };
 
 template <>
@@ -68,10 +84,15 @@ public:
     static constexpr double pi{ std::numbers::pi / 180.f };
 
 public:
+    static angle_t<degrees_t> atan2(const auto& y, const auto& x) { return angle_t<degrees_t>{ (radians_t)std::atan2(y, x) }; }
+
+public:
     angle_t() { }
     angle_t(const degrees_t& degrees) : i_angle{ degrees } { }
     angle_t(const radians_t& radians);
-    angle_t(const angle_t<radians_t>& radians_t);
+    angle_t(const i_angle<degrees_t>& angle) : i_angle{ angle } { }
+    angle_t(const i_angle<radians_t>& radians);
+    angle_t(const angle_t<radians_t>& radians);
 
 public:
     template <typename self_t> angle_t<degrees_t> normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value * pi })).imag() * angle_t<radians_t>::pi; }
@@ -80,4 +101,9 @@ public:
     radians_t cast() const;
     operator radians_t() const;
     operator angle_t<radians_t>() const;
+
+public:
+    angle_impl_make_functions(degrees_t, sin);
+    angle_impl_make_functions(degrees_t, cos);
+    angle_impl_make_functions(degrees_t, tan);
 };

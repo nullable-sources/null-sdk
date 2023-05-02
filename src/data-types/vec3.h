@@ -18,6 +18,7 @@ public:
 
 	vec3_t(const coordinates_t& value) : vec3_t{ value, value, value } { }
 	vec3_t(const coordinates_t& _x, const coordinates_t& _y, const coordinates_t& _z) : x{ _x }, y{ _y }, z{ _z } { }
+	vec3_t(const std::tuple<coordinates_t, coordinates_t, coordinates_t>& tuple) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ std::get<2>(tuple) } { }
 
 	vec3_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
 	vec3_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
@@ -33,6 +34,9 @@ public:
 
 	template <typename self_t> vec3_t<coordinates_t> normalized(this self_t&& self) { return self / self.length(); }
 	template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
+
+public:
+	make_tuple_cast(x, y, z); make_tuple_cast(x, y);
 
 public:
 	template <typename another_coordinates_t>
