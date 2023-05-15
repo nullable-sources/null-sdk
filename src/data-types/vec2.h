@@ -43,10 +43,8 @@ public:
     template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
 
 public:
-    make_tuple_cast(x, y);
-
-public:
     template <typename another_coordinates_t> operator vec2_t<another_coordinates_t>() const { return vec2_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y }; }
+    operator std::tuple<coordinates_t, coordinates_t>() const { return std::make_tuple(x, y); }
 
     template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<vec2_t<coordinates_t>, type_t>
     operator type_t() const { return null::compatibility::data_type_converter_t<vec2_t<coordinates_t>, type_t>::convert(*this); }

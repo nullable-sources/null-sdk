@@ -1,7 +1,6 @@
 #pragma once
 #include <cmath>
-#include <span>
-#include <data-types/vec2.h>
+#include <data-types/vec3.h>
 #include <utils/fast_operators.h>
 
 template <typename coordinates_t = float>
@@ -20,7 +19,12 @@ public:
 
 	vec4_t(const coordinates_t& value) : vec4_t{ value, value, value, value } { }
 	vec4_t(const coordinates_t& _x, const coordinates_t& _y, const coordinates_t& _z, const coordinates_t& _w) : x{ _x }, y{ _y }, z{ _z }, w{ _w } { }
+	
 	vec4_t(const std::tuple<coordinates_t, coordinates_t, coordinates_t, coordinates_t>& tuple) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ std::get<2>(tuple) }, w{ std::get<3>(tuple) } { }
+	vec4_t(const std::tuple<coordinates_t, coordinates_t, coordinates_t>& tuple, const coordinates_t& _w = { }) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ std::get<2>(tuple) }, w{ _w } { }
+	vec4_t(const std::tuple<coordinates_t, coordinates_t>& tuple, const coordinates_t& _z = { }, const coordinates_t& _w = { }) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ _z }, w{ _w } { }
+	vec4_t(const vec3_t<coordinates_t>& vec, const coordinates_t& _w = { }) : x{ vec.x }, y{ vec.y }, z{ vec.z }, w{ _w } { }
+	vec4_t(const vec2_t<coordinates_t>& vec, const coordinates_t& _z = { }, const coordinates_t& _w = { }) : x{ vec.x }, y{ vec.y }, z{ _z }, w{ _w } { }
 
 	vec4_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
 	vec4_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
@@ -37,11 +41,13 @@ public:
 	template <typename self_t> void normalize(this self_t&& self) { self /= self.length(); }
 
 public:
-	make_tuple_cast(x, y, z, w); make_tuple_cast(x, y, z); make_tuple_cast(x, y);
+	template <typename self_t> auto xy(this self_t&& self) { return vec2_t<coordinates_t>{ self.x, self.y }; }
+	template <typename self_t> auto xyz(this self_t&& self) { return vec3_t<coordinates_t>{ self.x, self.y, self.z }; }
 
 public:
 	template <typename another_coordinates_t>
 	operator vec4_t<another_coordinates_t>() const { return vec4_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y, (another_coordinates_t)z, (another_coordinates_t)w }; }
+	operator std::tuple<coordinates_t, coordinates_t, coordinates_t, coordinates_t>() const { return std::make_tuple(x, y, z, w); }
 
 	template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<vec4_t<coordinates_t>, type_t>
 	operator type_t() const { return null::compatibility::data_type_converter_t<vec4_t<coordinates_t>, type_t>::convert(*this); }
