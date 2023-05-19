@@ -1,0 +1,16 @@
+#pragma once
+#include <data-types/matrix/matrix.h>
+#include <math/geometry.h>
+
+template <template <typename, typename, typename, size_t, size_t> class major_type_t>
+class c_matrix2x2 : public null::sdk::i_matrix<major_type_t, float, 2, 2> {
+public: using null::sdk::i_matrix<major_type_t, float, 2, 2>::i_matrix;
+	  static c_matrix2x2 rotation(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw ) {
+		  const float cos{ std::cos(angle) }, sin{ std::sin(angle) };
+		  return { {
+			  { cos,												direction == math::e_rotation::ccw ? -sin : sin },
+			  { direction == math::e_rotation::ccw ? sin : -sin,	cos },
+		  } };
+	  }
+};
+using matrix2x2_t = c_matrix2x2<null::sdk::column_major_t>;

@@ -43,6 +43,9 @@
     <Filter Include="src\data-types\angle">
       <UniqueIdentifier>{3d271ab7-5dbe-4370-8ea7-90149f45c32c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\data-types\matrix">
+      <UniqueIdentifier>{340c9657-ce0d-4006-be08-05b54a57ae35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -84,9 +87,6 @@
     <ClInclude Include="src\data-types\vec3.h">
       <Filter>src\data-types</Filter>
     </ClInclude>
-    <ClInclude Include="src\data-types\matrix.h">
-      <Filter>src\data-types</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\encoding\base85.h">
       <Filter>src\utils\encoding</Filter>
     </ClInclude>
@@ -119,6 +119,18 @@
     </ClInclude>
     <ClInclude Include="src\math\geometry.h">
       <Filter>src\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data-types\matrix\matrix2x2.h">
+      <Filter>src\data-types\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data-types\matrix\matrix4x4.h">
+      <Filter>src\data-types\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data-types\matrix\matrix.h">
+      <Filter>src\data-types\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\data-types\matrix\matrix3x3.h">
+      <Filter>src\data-types\matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
