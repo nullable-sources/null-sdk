@@ -39,6 +39,9 @@ namespace null::sdk {
 
 		using vec_representation_t = vec_type_selector_t<rows_num, typename row_header_t>::vec_t;
 		using array_representation_t = std::array<std::array<data_t, columns_num>, rows_num>;
+
+	public:
+		static auto&& get_by_index(auto&& matrix, const size_t& row, const size_t& column) { return matrix.data[row][column]; }
 	};
 
 	template <typename data_t, typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num>
@@ -51,6 +54,9 @@ namespace null::sdk {
 
 		using vec_representation_t = vec_type_selector_t<columns_num, typename column_header_t>::vec_t;
 		using array_representation_t = std::array<std::array<data_t, rows_num>, columns_num>;
+
+	public:
+		static auto&& get_by_index(auto&& matrix, const size_t& row, const size_t& column) { return matrix.data[column][row]; }
 	};
 
 	template <template <typename, typename, typename, size_t, size_t> class major_type_t, typename data_t, size_t rows_num, size_t columns_num>
@@ -102,6 +108,7 @@ namespace null::sdk {
 		i_matrix(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>::convert(value); }
 
 	public:
+		template <typename self_t> auto&& get_by_index(this self_t&& self, const size_t& row, const size_t& column) { return major_t::get_by_index(self, row, column); }
 		template <typename self_t> auto&& fill_rows(this self_t&& self, const row_header_t& row) { for(const int& i : std::views::iota(0u, rows_num)) self.set_row(i, row); return self; }
 		template <typename self_t> auto&& fill_columns(this self_t&& self, const column_header_t& column) { for(const int& i : std::views::iota(0u, columns_num)) self.set_column(i, column); return self; }
 
@@ -152,10 +159,10 @@ namespace null::sdk {
 		template <typename self_t, typename another_data_t, size_t another_rows_num, size_t another_columns_num>
 		auto operator*(this self_t&& self, const i_matrix<major_type_t, another_data_t, another_rows_num, another_columns_num>& matrix) {
 			constexpr size_t rows{ std::min(rows_num, another_rows_num) }, columns{ std::min(columns_num, another_columns_num) };
-			i_matrix<major_type_t, another_data_t, rows, columns> result{ };
+			i_matrix<major_type_t, another_data_t, rows, another_columns_num> result{ };
 			for(const int& row : std::views::iota(0u, rows))
-				for(const int& column : std::views::iota(0u, columns))
-					result[row][column] = self.get_column(column).dot(matrix.get_row(row));
+				for(const int& column : std::views::iota(0u, another_columns_num))
+					result.get_by_index(row, column) = self.get_row(row).dot(matrix.get_column(column));
 			return result;
 		}
 		
@@ -164,11 +171,11 @@ namespace null::sdk {
 			column_header_t result{ };
 			for(const int& row : std::views::iota(0u, rows_num))
 				for(const int& column : std::views::iota(0u, columns_num))
-					result[column] = self.get_column(column).dot(column);
+					result[column] = self.get_row(row).dot(column);
 			return result;
 		}
 		
-		template <typename self_t, typename another_data_t, size_t another_rows_num, size_t another_columns_num> auto operator*=(this self_t&& self, const i_matrix<major_type_t, another_data_t, another_rows_num, another_columns_num>& matrix) { self = self * matrix; return self; }
+		template <typename self_t, typename another_data_t> auto operator*=(this self_t&& self, const i_matrix<major_type_t, another_data_t, rows_num, columns_num>& matrix) { self = self * matrix; return self; }
 		template <typename self_t> auto operator*=(this self_t&& self, const column_header_t& column) { self = self * column; return self; }
 		
 		template <typename another_data_t> bool operator ==(const i_matrix<major_type_t, another_data_t, rows_num, columns_num>& matrix) const { return data == matrix.data; };
@@ -178,10 +185,13 @@ namespace null::sdk {
 	};
 }
 
-#define make_matrix_definition(rows_num, columns_num) \
-	template <template <typename, typename, typename, size_t, size_t> class major_type_t> \
-	class c_matrix##rows_num##x##columns_num : public null::sdk::i_matrix<major_type_t, float, rows_num, columns_num> { public: using null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>::i_matrix; }; \
-	using matrix##rows_num##x##columns_num##_t = c_matrix##rows_num##x##columns_num##<null::sdk::column_major_t>; \
+#define make_matrix_definition(rows_num, columns_num)																																							\
+	template <template <typename, typename, typename, size_t, size_t> class major_type_t>																														\
+	class c_matrix##rows_num##x##columns_num : public null::sdk::i_matrix<major_type_t, float, rows_num, columns_num> {																							\
+	public: using null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>::i_matrix;																													\
+		  c_matrix##rows_num##x##columns_num##(const null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>& matrix) : null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>{ matrix } { }	\
+	};																																																			\
+	using matrix##rows_num##x##columns_num##_t = c_matrix##rows_num##x##columns_num##<null::sdk::column_major_t>;																								\
 
 make_matrix_definition(2, 3);
 make_matrix_definition(2, 4);

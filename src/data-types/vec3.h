@@ -43,8 +43,8 @@ public:
 	template <typename self_t> auto xy(this self_t&& self) { return vec2_t<coordinates_t>{ self.x, self.y }; }
 
 public:
-	template <typename another_coordinates_t>
-	operator vec3_t<another_coordinates_t>() const { return vec3_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y, (another_coordinates_t)z }; }
+	template <typename another_coordinates_t> operator vec3_t<another_coordinates_t>() const { return vec3_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y, (another_coordinates_t)z }; }
+	template <typename another_coordinates_t> operator vec2_t<another_coordinates_t>() const { return vec2_t<another_coordinates_t>{ (another_coordinates_t)x, (another_coordinates_t)y }; }
 	operator std::tuple<coordinates_t, coordinates_t, coordinates_t>() const { return std::make_tuple(x, y, z); }
 
 	template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<vec3_t<coordinates_t>, type_t>

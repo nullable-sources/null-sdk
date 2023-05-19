@@ -21,5 +21,8 @@ public: using null::sdk::i_matrix<major_type_t, float, 4, 4>::i_matrix;
 			  { 0.f,								0.f,								-1.f,													0.f															}
 		  } };
 	  }
+
+public:
+	c_matrix4x4(const null::sdk::i_matrix<major_type_t, float, 4, 4>& matrix) : null::sdk::i_matrix<major_type_t, float, 4, 4>{ matrix } { }
 };
 using matrix4x4_t = c_matrix4x4<null::sdk::column_major_t>;

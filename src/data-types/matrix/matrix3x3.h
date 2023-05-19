@@ -31,5 +31,8 @@ public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 			  { 0.f,												0.f,												1.f	}
 		  } };
 	  }
+
+public:
+	c_matrix3x3(const null::sdk::i_matrix<major_type_t, float, 3, 3>& matrix) : null::sdk::i_matrix<major_type_t, float, 3, 3>{ matrix } { }
 };
 using matrix3x3_t = c_matrix3x3<null::sdk::column_major_t>;

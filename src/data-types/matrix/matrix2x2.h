@@ -12,5 +12,8 @@ public: using null::sdk::i_matrix<major_type_t, float, 2, 2>::i_matrix;
 			  { direction == math::e_rotation::ccw ? sin : -sin,	cos },
 		  } };
 	  }
+
+public:
+	c_matrix2x2(const null::sdk::i_matrix<major_type_t, float, 2, 2>& matrix) : null::sdk::i_matrix<major_type_t, float, 2, 2>{ matrix } { }
 };
 using matrix2x2_t = c_matrix2x2<null::sdk::column_major_t>;
