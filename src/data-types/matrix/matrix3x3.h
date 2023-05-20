@@ -6,7 +6,7 @@ template <template <typename, typename, typename, size_t, size_t> class major_ty
 class c_matrix3x3 : public null::sdk::i_matrix<major_type_t, float, 3, 3> {
 public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 	  static c_matrix3x3 rotation_x(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw) {
-		  const float cos{ std::cos(angle) }, sin{ std::sin(angle) };
+		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  return { {
 			  { 1.f, 0.f,												0.f,											},
 			  { 0.f, cos,												direction == math::e_rotation::ccw ? -sin : sin },
@@ -15,7 +15,7 @@ public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 	  }
 
 	  static c_matrix3x3 rotation_y(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw) {
-		  const float cos{ std::cos(angle) }, sin{ std::sin(angle) };
+		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  return { {
 			  { cos,												0.f, direction == math::e_rotation::ccw ? sin : -sin	},
 			  { 0.f,												1.f, 0.f												},
@@ -24,11 +24,21 @@ public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 	  }
 
 	  static c_matrix3x3 rotation_z(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw) {
-		  const float cos{ std::cos(angle) }, sin{ std::sin(angle) };
+		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  return { {
 			  { cos,												direction == math::e_rotation::ccw ? -sin : sin,	0.f },
 			  { direction == math::e_rotation::ccw ? sin : -sin,	cos,												0.f },
 			  { 0.f,												0.f,												1.f	}
+		  } };
+	  }
+
+	  static c_matrix3x3 rotation_around_axis(const vec3_t<float>& axis, const radians_t& angle) {
+		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
+		  const vec3_t<float> normalized{ axis.normalized() };
+		  return { {
+			  { std::pow(normalized.x, 2) * (1.f - cos) + cos,					normalized.x * normalized.y * (1.f - cos) - normalized.z * sin, normalized.x * normalized.z * (1.f - cos) + normalized.y * sin	},
+			  { normalized.y * normalized.x * (1.f - cos) + normalized.z * sin,	std::pow(normalized.y, 2) * (1.f - cos) + cos,					normalized.y * normalized.z * (1.f - cos) - normalized.x * sin	},
+			  { normalized.z * normalized.x * (1.f - cos) - normalized.y * sin,	normalized.z * normalized.y * (1.f - cos) + normalized.x * sin,	std::pow(normalized.z, 2) * (1.f - cos) + cos					}
 		  } };
 	  }
 

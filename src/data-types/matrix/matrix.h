@@ -170,8 +170,7 @@ namespace null::sdk {
 		auto operator*(this self_t&& self, const column_header_t& column) {
 			column_header_t result{ };
 			for(const int& row : std::views::iota(0u, rows_num))
-				for(const int& column : std::views::iota(0u, columns_num))
-					result[column] = self.get_row(row).dot(column);
+				result[row] = self.get_row(row).dot(column);
 			return result;
 		}
 		
