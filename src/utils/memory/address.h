@@ -20,9 +20,10 @@ namespace memory {
         template <typename self_t> auto&& offset(this self_t&& self, const std::vector<std::intptr_t>& offsets) { std::ranges::for_each(offsets, [&](const std::intptr_t& _offset) { self.address += _offset; }); return self; }
 
         template <typename self_t>
-        address_t& jump(this self_t&& self, const std::intptr_t& _offset) {
+        auto&& jump(this self_t&& self, const std::intptr_t& _offset) {
             address_t return_address{ address_t{ self }.offset(_offset) };
-            return return_address.offset({ address_t{ return_address }.deref().cast<std::int32_t>(), sizeof(std::uint32_t) });
+            self.address = return_address.offset({ address_t{ return_address }.deref().cast<std::int32_t>(), sizeof(std::uint32_t) });
+            return self;
         }
 
     public:
