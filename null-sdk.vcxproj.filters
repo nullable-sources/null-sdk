@@ -4,42 +4,123 @@
     <Filter Include="src">
       <UniqueIdentifier>{d11addc5-089b-4237-a3dd-c21f8f81dcf1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\data-types">
-      <UniqueIdentifier>{a7589b3c-f521-4b77-bc14-802f226fa1d6}</UniqueIdentifier>
+    <Filter Include="src\math">
+      <UniqueIdentifier>{cc618937-7f35-4829-ba5f-ff27272b56cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\utils">
-      <UniqueIdentifier>{0a888b4a-4f43-4ec7-abfb-ca3b83e71caf}</UniqueIdentifier>
+      <UniqueIdentifier>{0954509b-f1d0-4993-acd1-dbe2fd3a77ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\math\matrix">
+      <UniqueIdentifier>{d2b56fa6-5020-4ac7-bb86-a19cba482b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\math\vec">
+      <UniqueIdentifier>{03de9616-6fca-4cd7-aa45-33ed95fd7485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\win">
+      <UniqueIdentifier>{2720edd5-708a-44da-b1f0-4213c24573c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\encoding">
+      <UniqueIdentifier>{709a122a-1578-4143-8dd8-96c93be5a36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\memory">
+      <UniqueIdentifier>{c89ec092-fa96-45fd-b8dc-9c7a572a6657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\memory\module">
+      <UniqueIdentifier>{c0e73a98-a45a-4c8e-bfb8-93eeda424ce0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\fast_operators.h">
-      <Filter>src</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\data-types\color.ixx">
-      <Filter>src\data-types</Filter>
-    </ClCompile>
-    <ClCompile Include="src\data-types\rect.ixx">
-      <Filter>src\data-types</Filter>
-    </ClCompile>
-    <ClCompile Include="src\data-types\vec2.ixx">
-      <Filter>src\data-types</Filter>
-    </ClCompile>
     <ClCompile Include="src\null-sdk.ixx">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\win.ixx">
+    <ClCompile Include="src\utils\logger.ixx">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\data-types\callbacks.ixx">
-      <Filter>src\data-types</Filter>
+    <ClCompile Include="src\utils\win\console.ixx">
+      <Filter>src\utils\win</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\enum_reflection.ixx">
+    <ClCompile Include="src\utils\win\win.ixx">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\events.ixx">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\math.ixx">
-      <Filter>src</Filter>
+    <ClCompile Include="src\utils\compatibility-type-converter.ixx">
+      <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\math\geometry.ixx">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\math.ixx">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\rect.ixx">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\angle.ixx">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\vec\vec2.ixx">
+      <Filter>src\math\vec</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\vec\vec3.ixx">
+      <Filter>src\math\vec</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\vec\vec4.ixx">
+      <Filter>src\math\vec</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\matrix\matrix.ixx">
+      <Filter>src\math\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\matrix\matrix2x2.ixx">
+      <Filter>src\math\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\matrix\matrix3x3.ixx">
+      <Filter>src\math\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\matrix\matrix4x4.ixx">
+      <Filter>src\math\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\encoding\encoding.ixx">
+      <Filter>src\utils\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\encoding\base85.ixx">
+      <Filter>src\utils\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\time-measurement.ixx">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\callbacks.ixx">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\pe-image.ixx">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\resource.ixx">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\signature.ixx">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\address.ixx">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\minhook-wrapper.ixx">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\module\dll.ixx">
+      <Filter>src\memory\module</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\module\module.ixx">
+      <Filter>src\memory\module</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\color.ixx">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\utils\fast_operators.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,13 +1,40 @@
+module;
+#include <xstring> //@note: DO NOT TOUCH THIS, otherwise overridden methods inside which std::map / unordered_map is used will not be compiled
 export module null.sdk;
 
-//importing parts
-export import <fast_operators.h>; //ghetto fix for export defines
-export import :data_types.vec2;
-export import :data_types.rect;
-export import :data_types.color;
-export import :data_types.callbacks;
+export import <utils/fast_operators.h>;
 
+export import :math.matrix;
+export import :math.matrix2x2;
+export import :math.matrix3x3;
+export import :math.matrix4x4;
+
+export import :math.vec2;
+export import :math.vec3;
+export import :math.vec4;
+
+export import :math.angle;
+export import :math.rect;
+
+export import :math.geometry;
 export import :math;
 
+export import :utils.color;
+export import :utils.compatibility_type_converter;
+export import :utils.time_measurement;
+export import :utils.callbacks;
+export import :utils.win.console;
 export import :utils.win;
-export import :utils.enum_reflection;
+export import :utils.events;
+export import :utils.logger;
+
+export import :utils.encoding;
+export import :utils.encoding.base85;
+
+export import :memory.address;
+export import :memory.minhook_wrapper;
+export import :memory.module.dll;
+export import :memory.module;
+export import :memory.pe_image;
+export import :memory.resource;
+export import :memory.signature;

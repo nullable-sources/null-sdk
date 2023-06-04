@@ -1,0 +1,2 @@
+test-document resource "test-document.txt"
+test-document second-resource "test-document2.txt"
