@@ -2,7 +2,7 @@ module;
 #include <xstring> //@note: DO NOT TOUCH THIS, otherwise overridden methods inside which std::map / unordered_map is used will not be compiled
 export module null.sdk;
 
-export import <utils/fast_operators.h>;
+//@note: to use fast_operators you need to include it separately
 
 export import :math.matrix;
 export import :math.matrix2x2;

@@ -53,16 +53,16 @@ export namespace null::sdk {
 
 export template <typename channels_t = int>
 struct color_t : null::sdk::i_color<int> {
-public: using i_color::i_color;
-	  struct palette_t {
-		  static inline const i_color<int> white	{ 255, 255, 255, 255 };
-		  static inline const i_color<int> black	{ 0, 0, 0, 255 };
-		  static inline const i_color<int> red		{ 255, 0, 0, 255 };
-		  static inline const i_color<int> green	{ 0, 255, 0, 255 };
-		  static inline const i_color<int> blue		{ 0, 0, 255, 255 };
-	  };
-
 public:
+	struct palette_t {
+		static inline const i_color<int> white	{ 255, 255, 255, 255 };
+		static inline const i_color<int> black	{ 0, 0, 0, 255 };
+		static inline const i_color<int> red		{ 255, 0, 0, 255 };
+		static inline const i_color<int> green	{ 0, 255, 0, 255 };
+		static inline const i_color<int> blue		{ 0, 0, 255, 255 };
+	};
+
+public: using i_color::i_color;
 	color_t() : i_color{ 255 } { }
 
 	color_t(const float& _rgba) : i_color{ _rgba * 255 } { }
@@ -84,16 +84,16 @@ public:
 
 export template <>
 struct color_t<float> : null::sdk::i_color<float> {
-public: using i_color::i_color;
-	  struct palette_t {
-		  static inline const i_color<float> white{ 1.f, 1.f, 1.f, 1.f };
-		  static inline const i_color<float> black{ 0.f, 0.f, 0.f, 1.f };
-		  static inline const i_color<float> red	{ 1.f, 0.f, 0.f, 1.f };
-		  static inline const i_color<float> green{ 0.f, 1.f, 0.f, 1.f };
-		  static inline const i_color<float> blue	{ 0.f, 0.f, 1.f, 1.f };
-	  };
-
 public:
+	struct palette_t {
+		static inline const i_color<float> white{ 1.f, 1.f, 1.f, 1.f };
+		static inline const i_color<float> black{ 0.f, 0.f, 0.f, 1.f };
+		static inline const i_color<float> red	{ 1.f, 0.f, 0.f, 1.f };
+		static inline const i_color<float> green{ 0.f, 1.f, 0.f, 1.f };
+		static inline const i_color<float> blue	{ 0.f, 0.f, 1.f, 1.f };
+	};
+
+public: using i_color::i_color;
 	color_t() : i_color{ 1.f } { }
 
 	color_t(const int& _rgba) : i_color{ _rgba / 255.f } { }

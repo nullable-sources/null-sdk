@@ -198,7 +198,7 @@ export namespace null::sdk {
 	export template <template <typename, typename, typename, size_t, size_t> class major_type_t>																														\
 	class c_matrix##rows_num##x##columns_num : public null::sdk::i_matrix<major_type_t, float, rows_num, columns_num> {																							\
 	public: using null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>::i_matrix;																													\
-		  c_matrix##rows_num##x##columns_num##(const null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>& matrix) : null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>{ matrix } { }	\
+		 c_matrix##rows_num##x##columns_num##(const null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>& matrix) : null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>{ matrix } { }	\
 	};																																																			\
 	export using matrix##rows_num##x##columns_num##_t = c_matrix##rows_num##x##columns_num##<null::sdk::column_major_t>;																								\
 
