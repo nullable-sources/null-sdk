@@ -11,7 +11,7 @@ export module null.sdk:utils.win.console;
 
 export namespace utils {
 	namespace console {
-		inline FILE* old_out{ }, * old_in{ };
+		FILE* old_out{ }, *old_in{ };
 
 		void attach() {
 			if(!AllocConsole()) assert(!"cant alloc console.");

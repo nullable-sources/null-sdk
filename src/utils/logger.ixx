@@ -22,7 +22,7 @@ namespace utils {
             	case e_log_type::assert: { throw std::runtime_error{ std::any_cast<std::string>(parameters.at("text")) }; } break;
             }
         }
-    } inline log_listener{ };
+    } log_listener{ };
 
     export class c_log_dispatcher : public c_event_dispatcher<e_log_type> {
     public:
@@ -43,5 +43,5 @@ namespace utils {
     public:
         template <typename... args_t>
         void log(const e_log_type& id, const std::string_view& str, args_t&&... args) { dispatch_event(id, { { "text", std::vformat(str, std::make_format_args(args...)) } }); }
-    } inline logger{ };
+    } logger{ };
 }
