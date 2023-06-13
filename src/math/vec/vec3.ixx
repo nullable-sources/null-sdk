@@ -65,12 +65,18 @@ public:
 	auto operator --(int) const { return vec3_t<coordinates_t>{ x--, y--, z-- }; }
 	auto operator -() const { return vec3_t<coordinates_t>{ -x, -y, -z }; }
 
-#define fast_arithmetic_operators(op) class_create_arithmetic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return vec3_t<another_coordinates_t>(x op vec.x, y op vec.y, z op vec.z); }, typename another_coordinates_t);
+#define fast_arithmetic_operators(op)																																									\
+	class_create_arithmetic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return vec3_t<another_coordinates_t>(x op vec.x, y op vec.y, z op vec.z); }, typename another_coordinates_t);	\
+	class_create_arithmetic_operators_template(value, another_coordinates_t, op, { return vec3_t<coordinates_t>(x op value, y op value, z op value); }, typename another_coordinates_t);				\
+
 	fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/ ); fast_arithmetic_operators(%);
 
 	template <typename another_coordinates_t> bool operator ==(const vec3_t<another_coordinates_t>& vec) const { return x == vec.x && y == vec.y && z == vec.z; };
 	template <typename another_t> requires std::is_arithmetic_v<another_t> bool operator ==(const another_t& value) const { return x == value && y == value && z == value; };
 
-#define fast_logic_operators(op) class_create_logic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return x op vec.x && y op vec.y && z op vec.z; }, { return x op##= vec.x && y op##= vec.y && z op##= vec.z; }, typename another_coordinates_t);
+#define fast_logic_operators(op)																																																	\
+	class_create_logic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return x op vec.x && y op vec.y && z op vec.z; }, { return x op##= vec.x && y op##= vec.y && z op##= vec.z; }, typename another_coordinates_t);	\
+	class_create_logic_operators_template(value, another_coordinates_t, op, { return x op value && y op value && z op value; }, { return x op## = value && y op## = value && z op## = value; }, typename another_coordinates_t);	\
+
 	fast_logic_operators(< ); fast_logic_operators(> );
 };

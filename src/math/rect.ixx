@@ -108,12 +108,20 @@ public:
     auto operator --(int) const { return rect_t{ min--, max-- }; }
     auto operator -() const { return rect_t{ -min, -max }; }
 
-#define fast_arithmetic_operators(op) class_create_arithmetic_operators_template(rect, rect_t<another_corners_t>, op, { return rect_t<another_corners_t>(min op rect.min, max op rect.max); }, typename another_corners_t);
+#define fast_arithmetic_operators(op)                                                                                                                                                       \
+	class_create_arithmetic_operators_template(rect, rect_t<another_corners_t>, op, { return rect_t<another_corners_t>(min op rect.min, max op rect.max); }, typename another_corners_t);   \
+    class_create_arithmetic_operators_template(vec, vec2_t<another_corners_t>, op, { return rect_t<another_corners_t>(min op vec, max op vec); }, typename another_corners_t);              \
+    class_create_arithmetic_operators_template(value, another_corners_t, op, { return rect_t<another_corners_t>(min op value, max op value); }, typename another_corners_t);                \
+
     fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/ ); fast_arithmetic_operators(%);
 
     template <typename another_corners_t> bool operator ==(const rect_t<another_corners_t>& rect) const { return min == rect.min && max == rect.max; };
     template <typename another_corners_t> bool operator ==(const vec2_t<another_corners_t>& vec) const { return min == vec && max == vec; };
     template <typename another_t> bool operator ==(const another_t& value) const { return min == value && max == value; };
-#define fast_logic_operators(op) class_create_logic_operators_template(rect, rect_t<another_corners_t>, op, { return min op rect.min && max op rect.max; }, { return min op##= rect.min && max op##= rect.max; }, typename another_corners_t);
+#define fast_logic_operators(op)                                                                                                                                                                                    \
+	class_create_logic_operators_template(rect, rect_t<another_corners_t>, op, { return min op rect.min && max op rect.max; }, { return min op##= rect.min && max op##= rect.max; }, typename another_corners_t);   \
+    class_create_logic_operators_template(vec, vec2_t<another_corners_t>, op, { return min op vec && max op vec; }, { return min op## = vec && max op## = vec; }, typename another_corners_t);                      \
+    class_create_logic_operators_template(value, another_corners_t, op, { return min op value && max op value; }, { return min op## = value && max op## = value; }, typename another_corners_t);                    \
+    
     fast_logic_operators(< ); fast_logic_operators(> );
 };
