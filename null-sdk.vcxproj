@@ -31,9 +31,12 @@
     <ClCompile Include="src\math\vec\vec3.ixx" />
     <ClCompile Include="src\math\vec\vec4.ixx" />
     <ClCompile Include="src\memory\address.ixx" />
+    <ClCompile Include="src\memory\calling-convention.ixx" />
+    <ClCompile Include="src\memory\export\dll-export-view.ixx" />
+    <ClCompile Include="src\memory\export\dll-export.ixx" />
     <ClCompile Include="src\memory\minhook-wrapper.ixx" />
     <ClCompile Include="src\memory\module\dll.ixx" />
-    <ClCompile Include="src\memory\module\module.ixx" />
+    <ClCompile Include="src\memory\module\win-module.ixx" />
     <ClCompile Include="src\memory\pe-image.ixx" />
     <ClCompile Include="src\memory\resource.ixx" />
     <ClCompile Include="src\memory\signature.ixx" />

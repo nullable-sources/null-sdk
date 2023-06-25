@@ -9,7 +9,7 @@ export module null.sdk:memory.signature;
 import :utils.logger;
 import :memory.address;
 import :memory.pe_image;
-import :memory.module;
+import :memory.win_module;
 
 export namespace memory {
     struct signature_t : public address_t {

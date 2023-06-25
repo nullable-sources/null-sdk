@@ -5,7 +5,7 @@ module;
 #include <format>
 #include <vector>
 #include <ranges>
-export module null.sdk:memory.module;
+export module null.sdk:memory.win_module;
 
 import :utils.logger;
 import :memory.resource;
@@ -16,12 +16,6 @@ extern "C" IMAGE_DOS_HEADER __ImageBase;
 export namespace memory {
     class c_module {
     public:
-        static inline std::vector<c_module*> stored_modules{ };
-        static c_module* find_stored_module(const std::string_view& name) {
-			if(const auto& finded{ std::ranges::find_if(stored_modules, [&](c_module* module) { return module->name == name; }) }; finded != stored_modules.end()) return *finded;
-			return nullptr;
-        }
-
         //@note: i don't fucking want to rewrite it all
         static c_module& self() {
 			static c_module self{ { (HMODULE)&__ImageBase } };
@@ -29,7 +23,6 @@ export namespace memory {
         }
 
     public:
-        std::string name{ };
         pe_image_t pe_image{ };
 
         std::vector<resource_t> resources{ };
@@ -37,14 +30,9 @@ export namespace memory {
     public:
 		c_module() : c_module{ self() } { }
         c_module(const pe_image_t& _pe_image) : pe_image{ _pe_image } { }
-        c_module(const std::string_view& _name, const bool& store = true) : name{ _name } {
-            if(c_module* finded{ find_stored_module(_name) }) {
-                *this = *finded;
-            } else {
-                pe_image = pe_image_t{ (std::uintptr_t)GetModuleHandleA(name.data()) };
-                if(!pe_image.base_address) utils::logger.log(utils::e_log_type::warning, "cant get '{}' module.", name);
-                if(store) stored_modules.push_back(this);
-            }
+        c_module(const std::string_view& name) {
+			pe_image = pe_image_t{ (std::uintptr_t)GetModuleHandleA(name.data()) };
+			if(!pe_image.base_address) utils::logger.log(utils::e_log_type::warning, "cant get '{}' module.", name);
         }
 
     public:

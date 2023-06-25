@@ -28,6 +28,9 @@
     <Filter Include="src\memory\module">
       <UniqueIdentifier>{c0e73a98-a45a-4c8e-bfb8-93eeda424ce0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\memory\export">
+      <UniqueIdentifier>{06031c58-9528-46d0-b320-490b278382d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk.ixx">
@@ -111,11 +114,20 @@
     <ClCompile Include="src\memory\module\dll.ixx">
       <Filter>src\memory\module</Filter>
     </ClCompile>
-    <ClCompile Include="src\memory\module\module.ixx">
+    <ClCompile Include="src\memory\module\win-module.ixx">
       <Filter>src\memory\module</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\color.ixx">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\calling-convention.ixx">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\export\dll-export.ixx">
+      <Filter>src\memory\export</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\export\dll-export-view.ixx">
+      <Filter>src\memory\export</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

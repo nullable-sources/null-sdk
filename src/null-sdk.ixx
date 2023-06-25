@@ -33,8 +33,10 @@ export import :utils.encoding.base85;
 
 export import :memory.address;
 export import :memory.minhook_wrapper;
-export import :memory.module.dll;
-export import :memory.module;
+export import :memory.win_module.dll;
+export import :memory.win_module;
+export import :memory.dll_export;
+export import :memory.dll_export_view;
 export import :memory.pe_image;
 export import :memory.resource;
 export import :memory.signature;
