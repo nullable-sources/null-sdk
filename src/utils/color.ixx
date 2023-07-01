@@ -20,9 +20,9 @@ export namespace null::sdk {
 	public:
 		i_color() { }
 
-		i_color(const channel_t& _rgba) : i_color{ _rgba, _rgba, _rgba, _rgba } { };
-		i_color(const channel_t& _rgb, const channel_t& _a) : i_color{ _rgb, _rgb, _rgb, _a } { }
-		i_color(const channel_t& _r, const channel_t& _g, const channel_t& _b, const channel_t& _a) : channels{ _r, _g, _b, _a } { }
+		i_color(channel_t _rgba) : i_color{ _rgba, _rgba, _rgba, _rgba } { };
+		i_color(channel_t _rgb, channel_t _a) : i_color{ _rgb, _rgb, _rgb, _a } { }
+		i_color(channel_t _r, channel_t _g, channel_t _b, channel_t _a) : channels{ _r, _g, _b, _a } { }
 		i_color(const vec4_t<channel_t>& vec) : channels{ vec.x, vec.y, vec.z, vec.w } { }
 
 		i_color(const i_color<channel_t>& color, const channel_t& _a) : i_color{ color.r, color.g, color.b, _a } { }
@@ -57,29 +57,29 @@ public:
 	struct palette_t {
 		static inline const i_color<int> white	{ 255, 255, 255, 255 };
 		static inline const i_color<int> black	{ 0, 0, 0, 255 };
-		static inline const i_color<int> red		{ 255, 0, 0, 255 };
+		static inline const i_color<int> red	{ 255, 0, 0, 255 };
 		static inline const i_color<int> green	{ 0, 255, 0, 255 };
-		static inline const i_color<int> blue		{ 0, 0, 255, 255 };
+		static inline const i_color<int> blue	{ 0, 0, 255, 255 };
 	};
 
 public: using i_color::i_color;
 	color_t() : i_color{ 255 } { }
 
-	color_t(const float& _rgba) : i_color{ _rgba * 255 } { }
+	color_t(float _rgba) : i_color{ _rgba * 255 } { }
 
-	color_t(const int& _rgb, const float& _a) : i_color{ _rgb, _a * 255 } { }
-	color_t(const float& _rgb, const int& _a) : i_color{ _rgb * 255, _a } { }
-	color_t(const float& _rgb, const float& _a) : i_color{ _rgb * 255, _a * 255 } { }
+	color_t(int _rgb, float _a) : i_color{ _rgb, _a * 255 } { }
+	color_t(float _rgb, int _a) : i_color{ _rgb * 255, _a } { }
+	color_t(float _rgb, float _a) : i_color{ _rgb * 255, _a * 255 } { }
 
-	color_t(const int& _r, const int& _g, const int& _b, const int& _a = 255) : i_color{ _r, _g, _b, _a } { }
-	color_t(const float& _r, const float& _g, const float& _b, const float& _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
+	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ _r, _g, _b, _a } { }
+	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
 
 	color_t(const i_color<int>& color) : i_color{ color } { }
 	color_t(const i_color<int>& color, float _a) : i_color{ color, _a * 255 } { }
 	color_t(const i_color<float>& color) : i_color{ color_t<float>{ color } } { }
 
 public:
-	operator i_color<float>() const { return this->cast<float>() / color_t<float>{ 255.f }; }
+	operator i_color<float>() const { return cast<float>() / color_t<float>{ 255.f }; }
 };
 
 export template <>
@@ -96,14 +96,14 @@ public:
 public: using i_color::i_color;
 	color_t() : i_color{ 1.f } { }
 
-	color_t(const int& _rgba) : i_color{ _rgba / 255.f } { }
+	color_t(int _rgba) : i_color{ _rgba / 255.f } { }
 
-	color_t(const float& _rgb, const int& _a) : i_color{ _rgb, _a / 255.f } { }
-	color_t(const int& _rgb, const float& _a) : i_color{ _rgb / 255.f, _a } { }
-	color_t(const int& _rgb, const int& _a) : i_color{ _rgb / 255.f, _a / 255.f } { }
+	color_t(float _rgb, const int _a) : i_color{ _rgb, _a / 255.f } { }
+	color_t(int _rgb, const float _a) : i_color{ _rgb / 255.f, _a } { }
+	color_t(int _rgb, const int _a) : i_color{ _rgb / 255.f, _a / 255.f } { }
 
-	color_t(const float& _r, const float& _g, const float& _b, const float& _a = 1.f) : i_color{ _r, _g, _b, _a } { }
-	color_t(const int& _r, const int& _g, const int& _b, const int& _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
+	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ _r, _g, _b, _a } { }
+	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
 
 	color_t(const i_color<float>& color) : i_color{ color } { }
 	color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
@@ -113,7 +113,8 @@ private:
 	color_t<float>& round() { std::ranges::transform(channels, channels.begin(), std::roundf); return *this; }
 
 public:
-	operator i_color<int>() const { return color_t<float>{ *this* color_t<int>{ 255 } }.round().cast<int>(); }
+	//@todo: P0847
+	operator i_color<int>() const { return color_t<float>{ *this * color_t<int>{ 255 } }.round().cast<int>(); }
 };
 
 export struct hsv_color_t {

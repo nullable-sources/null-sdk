@@ -17,7 +17,7 @@ export namespace null::sdk::impl {
 
     public:
         i_angle() { }
-        i_angle(const value_t& _value) : value{ _value } { }
+        i_angle(value_t _value) : value{ _value } { }
 
     public:
         operator value_t() const { return value; }
@@ -58,8 +58,8 @@ public:
 
 public:
     angle_t() { }
-    angle_t(const radians_t& radians) : i_angle{ radians } { }
-    angle_t(const degrees_t& degrees);
+    angle_t(radians_t radians) : i_angle{ radians } { }
+    angle_t(degrees_t degrees);
     angle_t(const i_angle<radians_t>& angle) : i_angle{ angle } { }
     angle_t(const i_angle<degrees_t>& degrees);
     angle_t(const angle_t<degrees_t>& degrees);
@@ -88,8 +88,8 @@ public:
 
 public:
     angle_t() { }
-    angle_t(const degrees_t& degrees) : i_angle{ degrees } { }
-    angle_t(const radians_t& radians);
+    angle_t(degrees_t degrees) : i_angle{ degrees } { }
+    angle_t(radians_t radians);
     angle_t(const i_angle<degrees_t>& angle) : i_angle{ angle } { }
     angle_t(const i_angle<radians_t>& radians);
     angle_t(const angle_t<radians_t>& radians);
@@ -110,7 +110,7 @@ public:
 
 angle_t<radians_t>::angle_t(const i_angle<degrees_t>& degrees) : angle_t{ degrees.value } { }
 angle_t<radians_t>::angle_t(const angle_t<degrees_t>& degrees) : i_angle{ degrees.cast() } { }
-angle_t<radians_t>::angle_t(const degrees_t& degrees) : i_angle{ degrees * angle_t<degrees_t>::pi } { }
+angle_t<radians_t>::angle_t(degrees_t degrees) : i_angle{ degrees * angle_t<degrees_t>::pi } { }
 
 degrees_t angle_t<radians_t>::cast() const { return value * pi; }
 angle_t<radians_t>::operator degrees_t() const { return cast(); }
@@ -119,7 +119,7 @@ angle_t<radians_t>::operator angle_t<degrees_t>() const { return angle_t<degrees
 
 angle_t<degrees_t>::angle_t(const i_angle<radians_t>& radians) : angle_t{ radians.value } { }
 angle_t<degrees_t>::angle_t(const angle_t<radians_t>& radians) : i_angle{ radians.cast() } { }
-angle_t<degrees_t>::angle_t(const radians_t& radians) : i_angle{ radians * angle_t<radians_t>::pi } { }
+angle_t<degrees_t>::angle_t(radians_t radians) : i_angle{ radians * angle_t<radians_t>::pi } { }
 
 radians_t angle_t<degrees_t>::cast() const { return value * pi; }
 angle_t<degrees_t>::operator radians_t() const { return cast(); }

@@ -20,26 +20,27 @@ export namespace memory {
 
 	public:
 		resource_t() { }
-		resource_t(const std::string_view& _name, const std::string_view& _type) : name{ _name }, type{ _type } { }
-		resource_t(const std::string_view& _name, const std::string_view& _type, const pe_image_t& _parent_module) : parent_module{ _parent_module }, name{ _name }, type{ _type } { }
+		resource_t(std::string_view _name, std::string_view _type) : name{ _name }, type{ _type } { }
+		resource_t(std::string_view _name, std::string_view _type, const pe_image_t& _parent_module) : parent_module{ _parent_module }, name{ _name }, type{ _type } { }
 
 	public:
 		bool empty() const { return !resource_handle || !resource_data || !locked_data; }
 
+		//@todo: P0847
 		auto& load() {
 			if(!empty()) return *this;
 
 			if(!(resource_handle = FindResourceA(parent_module.base_address, name.data(), type.data())))
-				utils::logger.log(utils::e_log_type::warning, "cant find[type '{}'][name '{}'] resource.Error: '{}'[{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
+				utils::logger(utils::e_log_type::warning, "cant find[type '{}'][name '{}'] resource.Error: '{}'[{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
 
 			if(!(resource_data = LoadResource(parent_module.base_address, resource_handle)))
-				utils::logger.log(utils::e_log_type::warning, "cant load [type '{}'] [name '{}'] resource. Error: '{}' [{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
+				utils::logger(utils::e_log_type::warning, "cant load [type '{}'] [name '{}'] resource. Error: '{}' [{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
 
 			if(!(locked_data_size = SizeofResource(parent_module.base_address, resource_handle)))
-				utils::logger.log(utils::e_log_type::warning, "cant get size [type '{}'] [name '{}'] resource. Error: '{}' [{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
+				utils::logger(utils::e_log_type::warning, "cant get size [type '{}'] [name '{}'] resource. Error: '{}' [{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
 
 			if(!(locked_data = LockResource(resource_data)))
-				utils::logger.log(utils::e_log_type::warning, "cant lock [type '{}'] [name '{}'] resource. Error: '{}' [{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
+				utils::logger(utils::e_log_type::warning, "cant lock [type '{}'] [name '{}'] resource. Error: '{}' [{}]", type, name, std::system_category().message(GetLastError()), GetLastError());
 
 			return *this;
 		}

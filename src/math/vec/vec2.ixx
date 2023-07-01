@@ -24,8 +24,8 @@ public:
 
     //@note:    In general, you can leave the old constructors, but vs does not work well with requires, which causes errors (which do not affect compilation),
     //          so as soon as vs improves on requires, it will be possible to return the old constructors
-    vec2_t(const coordinates_t& value) : vec2_t{ value, value } { }
-    vec2_t(const coordinates_t& _x, const coordinates_t& _y) : x{ _x }, y{ _y } { }
+    vec2_t(coordinates_t value) : vec2_t{ value, value } { }
+    vec2_t(coordinates_t _x, coordinates_t _y) : x{ _x }, y{ _y } { }
     vec2_t(const std::tuple<coordinates_t, coordinates_t>& tuple) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) } { }
 
     vec2_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
@@ -52,6 +52,7 @@ public: //@note: converter opereators and methods
     operator type_t() const { return null::compatibility::data_type_converter_t<vec2_t<coordinates_t>, type_t>::convert(*this); }
 
 public:
+    //@todo: P0847
     auto& operator [](const int& i) const { return coordinates[i]; }
     auto& operator [](const int& i) { return coordinates[i]; }
 

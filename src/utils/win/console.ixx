@@ -27,7 +27,7 @@ export namespace utils {
 		}
 
 		template <typename... args_t>
-		void print(const std::string_view& text, args_t&&... args) {
+		void print(std::string_view text, args_t&&... args) {
 			std::cout << std::vformat(text, std::make_format_args(args...));
 		}
 
@@ -39,10 +39,10 @@ export namespace utils {
 			static inline std::vector<i_command*> registered_commands{ };
 
 		public:
-			static bool handle(const std::string_view& str) {
+			static bool handle(std::string_view str) {
 				if(str.empty()) return false;
 
-				for(const std::string_view& command : str | std::views::split(';') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
+				for(std::string_view command : str | std::views::split(';') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }; })) {
 					const std::vector<std::string_view> args{ command | std::views::split(' ') | std::views::transform([](const auto& arg) { return std::string_view{ arg }; }) | std::views::filter([](const std::string_view& arg) { return !arg.empty(); }) | std::ranges::to<std::vector>() };
 					if(args.empty()) continue;
 
@@ -82,5 +82,5 @@ export namespace utils {
 	}; enum_create_bit_operators(e_dye, false);
 	enum_create_cast_operator(e_dye, -);
 
-	std::ostream& operator<<(std::ostream& os, const e_dye& dye) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), -dye); return os; }
+	std::ostream& operator<<(std::ostream& os, e_dye dye) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), -dye); return os; }
 }

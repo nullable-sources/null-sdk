@@ -20,9 +20,9 @@ export namespace memory {
         std::vector<std::int32_t> bytes{ };
 
     public:
-        signature_t(const c_module& module, const std::string_view& _signature) : signature_t{ module.pe_image, _signature } { }
-        signature_t(const pe_image_t& _pe_image, const std::string_view& _signature) : pe_image{ _pe_image }, signature{ _signature } {
-            if(signature.empty()) utils::logger.log(utils::e_log_type::warning, "'{}' signature empty", _signature);
+        signature_t(const c_module& module, std::string_view _signature) : signature_t{ module.pe_image, _signature } { }
+        signature_t(const pe_image_t& _pe_image, std::string_view _signature) : pe_image{ _pe_image }, signature{ _signature } {
+            if(signature.empty()) utils::logger(utils::e_log_type::warning, "'{}' signature empty", _signature);
             to_bytes();
         }
 
@@ -32,6 +32,7 @@ export namespace memory {
             bytes = signature | std::views::split(' ') | std::views::transform([](const auto& splitted) { return std::string_view{ splitted }.contains("?") ? -1 : (int)strtoul(splitted.data(), nullptr, 16); }) | std::ranges::to<std::vector>();
         }
 
+        //@todo: P0847
         address_t& find() {
             if(!address) {
                 PIMAGE_NT_HEADERS nt_headers{ pe_image.nt_headers() };
@@ -41,7 +42,7 @@ export namespace memory {
                     ) };
 
                 if(!finded.empty()) address = finded.front();
-                else utils::logger.log(utils::e_log_type::warning, std::format("cant find '{}' signature", signature));
+                else utils::logger(utils::e_log_type::warning, std::format("cant find '{}' signature", signature));
             }
             return *this;
         }

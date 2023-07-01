@@ -2,6 +2,7 @@
 #include <type_traits>
 #include <compare>
 
+//@todo: P0847
 //@note: https://developercommunity.visualstudio.com/t/ICE-when-using-explicit-this-parameterD/10236618
 #define impl_default_arithmetic_assignment_func(op, variable_name) { *this = *this op variable_name; return *this; }
 #define impl_class_create_operator(return_type, op, op_func, args, ...) __VA_ARGS__ return_type operator op##args op_func

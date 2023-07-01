@@ -184,6 +184,7 @@ export namespace null::sdk {
 			return result;
 		}
 
+		//@todo: P0847
 		template <typename another_data_t> auto operator*=(const i_matrix<major_type_t, another_data_t, rows_num, columns_num>& matrix) { *this = *this * matrix; return *this; }
 		auto& operator*=(const column_header_t& column) { *this = *this * column; return *this; }
 

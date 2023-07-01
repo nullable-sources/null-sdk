@@ -24,14 +24,14 @@ public:
 public:
 	vec4_t() { }
 
-	vec4_t(const coordinates_t& value) : vec4_t{ value, value, value, value } { }
-	vec4_t(const coordinates_t& _x, const coordinates_t& _y, const coordinates_t& _z = { }, const coordinates_t& _w = { }) : x{ _x }, y{ _y }, z{ _z }, w{ _w } { }
+	vec4_t(coordinates_t value) : vec4_t{ value, value, value, value } { }
+	vec4_t(coordinates_t _x, coordinates_t _y, coordinates_t _z = { }, coordinates_t _w = { }) : x{ _x }, y{ _y }, z{ _z }, w{ _w } { }
 
 	vec4_t(const std::tuple<coordinates_t, coordinates_t, coordinates_t, coordinates_t>& tuple) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ std::get<2>(tuple) }, w{ std::get<3>(tuple) } { }
-	vec4_t(const std::tuple<coordinates_t, coordinates_t, coordinates_t>& tuple, const coordinates_t& _w = { }) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ std::get<2>(tuple) }, w{ _w } { }
-	vec4_t(const std::tuple<coordinates_t, coordinates_t>& tuple, const coordinates_t& _z = { }, const coordinates_t& _w = { }) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ _z }, w{ _w } { }
-	vec4_t(const vec3_t<coordinates_t>& vec, const coordinates_t& _w = { }) : x{ vec.x }, y{ vec.y }, z{ vec.z }, w{ _w } { }
-	vec4_t(const vec2_t<coordinates_t>& vec, const coordinates_t& _z = { }, const coordinates_t& _w = { }) : x{ vec.x }, y{ vec.y }, z{ _z }, w{ _w } { }
+	vec4_t(const std::tuple<coordinates_t, coordinates_t, coordinates_t>& tuple, coordinates_t _w = { }) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ std::get<2>(tuple) }, w{ _w } { }
+	vec4_t(const std::tuple<coordinates_t, coordinates_t>& tuple, coordinates_t _z = { }, coordinates_t _w = { }) : x{ std::get<0>(tuple) }, y{ std::get<1>(tuple) }, z{ _z }, w{ _w } { }
+	vec4_t(const vec3_t<coordinates_t>& vec, coordinates_t _w = { }) : x{ vec.x }, y{ vec.y }, z{ vec.z }, w{ _w } { }
+	vec4_t(const vec2_t<coordinates_t>& vec, coordinates_t _z = { }, coordinates_t _w = { }) : x{ vec.x }, y{ vec.y }, z{ _z }, w{ _w } { }
 
 	vec4_t(const std::array<coordinates_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
 	vec4_t(const std::vector<coordinates_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
@@ -60,6 +60,7 @@ public: //@note: converter opereators and methods
 	operator type_t() const { return null::compatibility::data_type_converter_t<vec4_t<coordinates_t>, type_t>::convert(*this); }
 
 public:
+	//@todo: P0847
 	auto&& operator [](const int& i) { return coordinates[i]; }
 
 	auto& operator ++() { ++x; ++y; ++z; ++w; return *this; }

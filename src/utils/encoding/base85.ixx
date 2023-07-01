@@ -11,10 +11,11 @@ export namespace utils::encoding {
         std::vector<std::uint8_t> output{ }, input{ };
 
     public:
-        base85_t(const std::string_view& _input) : input{ _input.begin(), _input.end() } { }
+        base85_t(std::string_view _input) : input{ _input.begin(), _input.end() } { }
         base85_t(const std::vector<std::uint8_t>& _input) : input{ _input } { }
 
     public:
+        //@todo: P0847
         base85_t& decode() {
             static const auto decode_byte{ [](const std::uint8_t& c) { return c - (c >= '\\' ? 36 : 35); } };
             for(const auto& iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(5)) {

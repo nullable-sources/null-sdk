@@ -16,6 +16,7 @@ export namespace memory {
     public:
         template <typename cast_t> cast_t cast() const { return (cast_t)address; }
 
+        //@todo: P0847
         auto& deref(int steps = 1) { for(; steps >= 1; steps--) address = *cast<std::uintptr_t*>(); return *this; }
         auto derefed(int steps = 1) const { return address_t{ *this }.deref(steps); }
 

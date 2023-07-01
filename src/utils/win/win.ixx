@@ -53,7 +53,7 @@ export namespace utils {
 
 		public:
 			virtual bool create() {
-				if(!RegisterClassA(&wnd_class)) logger.log(e_log_type::error, "register class error");
+				if(!RegisterClassA(&wnd_class)) logger(e_log_type::error, "register class error");
 
 				wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, wnd_class.hInstance, nullptr);
 				if(wnd_handle) {
@@ -67,15 +67,15 @@ export namespace utils {
 			virtual void destroy() {
 				on_destroy();
 
-				if(!wnd_handle) logger.log(e_log_type::error, "window handle is nullptr.");
-				if(!wnd_class.hInstance) logger.log(e_log_type::error, "instance is nullptr.");
+				if(!wnd_handle) logger(e_log_type::error, "window handle is nullptr.");
+				if(!wnd_class.hInstance) logger(e_log_type::error, "instance is nullptr.");
 
 				DestroyWindow(wnd_handle);
 				UnregisterClassA(name.c_str(), wnd_class.hInstance);
 			}
 
 			virtual void main_loop() {
-				if(!wnd_handle) logger.log(e_log_type::error, "window handle is nullptr.");
+				if(!wnd_handle) logger(e_log_type::error, "window handle is nullptr.");
 
 				ShowWindow(wnd_handle, SW_SHOWDEFAULT);
 				UpdateWindow(wnd_handle);
@@ -101,8 +101,8 @@ export namespace utils {
 			}
 
 			template <typename char_t>
-			void write_clipboard(const std::basic_string_view<char_t>& str) const {
-				if(!OpenClipboard(wnd_handle)) logger.log(e_log_type::error, "cant open clipboard");
+			void write_clipboard(std::basic_string_view<char_t> str) const {
+				if(!OpenClipboard(wnd_handle)) logger(e_log_type::error, "cant open clipboard");
 
 				EmptyClipboard();
 				HGLOBAL data{ GlobalAlloc(GMEM_DDESHARE, sizeof(char_t) * (str.length() + 1)) };
@@ -110,19 +110,19 @@ export namespace utils {
 				GlobalUnlock(data);
 
 				SetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT, data);
-				if(!CloseClipboard()) logger.log(e_log_type::error, "cant clise clipboard");
+				if(!CloseClipboard()) logger(e_log_type::error, "cant clise clipboard");
 			}
 
 			template <typename char_t>
 			std::basic_string<char_t> read_clipboard() const {
-				if(!OpenClipboard(wnd_handle)) logger.log(e_log_type::error, "cant open clipboard.");
+				if(!OpenClipboard(wnd_handle)) logger(e_log_type::error, "cant open clipboard.");
 
 				std::basic_string<char_t> clipboard{ };
 				if(HANDLE data{ GetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT) }) {
 					clipboard = (char_t*)GlobalLock(data);
-				} else logger.log(e_log_type::warning, "cant get clipboard data.");
+				} else logger(e_log_type::warning, "cant get clipboard data.");
 
-				if(!CloseClipboard()) logger.log(e_log_type::error, "cant clise clipboard.");
+				if(!CloseClipboard()) logger(e_log_type::error, "cant clise clipboard.");
 				return clipboard;
 			}
 

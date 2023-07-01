@@ -18,7 +18,7 @@ export namespace memory {
         std::unordered_map<std::string, std::unique_ptr<i_export>> stored_exports{ };
 
     private:
-        virtual std::unique_ptr<i_export> instance_export(const std::string_view& export_name) {
+        virtual std::unique_ptr<i_export> instance_export(std::string_view export_name) {
             if(export_name.empty()) {
                 utils::logger(utils::e_log_type::error, "export name is empty.");
                 return nullptr;

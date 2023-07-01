@@ -30,14 +30,14 @@ export namespace memory {
     public:
 		c_module() : c_module{ self() } { }
         c_module(const pe_image_t& _pe_image) : pe_image{ _pe_image } { }
-        c_module(const std::string_view& name) {
+        c_module(std::string_view name) {
 			pe_image = pe_image_t{ (std::uintptr_t)GetModuleHandleA(name.data()) };
-			if(!pe_image.base_address) utils::logger.log(utils::e_log_type::warning, "cant get '{}' module.", name);
+			if(!pe_image.base_address) utils::logger(utils::e_log_type::warning, "cant get '{}' module.", name);
         }
 
     public:
 		//@note: if type empty, will be returned first resource with this name
-        resource_t* find_resource(const std::string_view& name, const std::string_view& type = { }) {
+        resource_t* find_resource(std::string_view name, std::string_view type = { }) {
 			const auto& finded{ std::ranges::find_if(resources, [&](const resource_t& resource) { return resource.name == name && (type.empty() || resource.type == type); }) };
 			return finded != resources.end() ? &(*finded) : nullptr;
         }
