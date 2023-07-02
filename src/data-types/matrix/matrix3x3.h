@@ -5,7 +5,7 @@
 template <template <typename, typename, typename, size_t, size_t> class major_type_t>
 class c_matrix3x3 : public null::sdk::i_matrix<major_type_t, float, 3, 3> {
 public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
-	  static c_matrix3x3 rotation_x(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw) {
+	  static c_matrix3x3 rotation_x(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
 		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  return { {
 			  { 1.f, 0.f,												0.f,											},
@@ -14,7 +14,7 @@ public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 		  } };
 	  }
 
-	  static c_matrix3x3 rotation_y(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw) {
+	  static c_matrix3x3 rotation_y(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
 		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  return { {
 			  { cos,												0.f, direction == math::e_rotation::ccw ? sin : -sin	},
@@ -23,7 +23,7 @@ public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 		  } };
 	  }
 
-	  static c_matrix3x3 rotation_z(const radians_t& angle, const math::e_rotation& direction = math::e_rotation::ccw) {
+	  static c_matrix3x3 rotation_z(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
 		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  return { {
 			  { cos,												direction == math::e_rotation::ccw ? -sin : sin,	0.f },
@@ -32,7 +32,7 @@ public: using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
 		  } };
 	  }
 
-	  static c_matrix3x3 rotation_around_axis(const vec3_t<float>& axis, const radians_t& angle) {
+	  static c_matrix3x3 rotation_around_axis(const vec3_t<float>& axis, radians_t angle) {
 		  const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		  const vec3_t<float> normalized{ axis.normalized() };
 		  return { {

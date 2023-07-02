@@ -1,8 +1,7 @@
 #include <null-sdk.h>
 
 namespace memory {
-	template <typename self_t>
-	auto&& c_module::load_resources(this self_t&& self) {
+	auto&& c_module::load_resources(this auto&& self) {
 		static const auto to_string{
 			[](const char* name) {
 				return
@@ -19,7 +18,7 @@ namespace memory {
 
 				//@note:	of course, you can clean up self.resources, but because of this you will have to reload previously loaded resources
 				//			to be honest, i do not know what is more expensive in performance, and i somehow do not want to do tests, so let it be so
-				if(const auto& finded{ std::ranges::find_if(*resources, [&](const resource_t& resource) { return resource.name == new_resource.name && resource.type == new_resource.type; }) };
+				if(auto finded{ std::ranges::find_if(*resources, [&](const resource_t& resource) { return resource.name == new_resource.name && resource.type == new_resource.type; }) };
 					finded == resources->end()) resources->push_back(new_resource);
 				return true;
 			}

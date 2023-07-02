@@ -15,10 +15,10 @@ namespace null::sdk::impl {
 
     public:
         i_angle() { }
-        i_angle(const value_t& _value) : value{ _value } { }
+        i_angle(value_t _value) : value{ _value } { }
 
     public:
-        template <typename self_t> operator value_t(this self_t&& self) { return self.value; }
+        operator value_t(this auto&& self) { return self.value; }
 
 #define fast_arithmetic_operators(op)                                                                                                                                               \
     impl_class_create_operator(auto, op, { return i_angle<value_t>(self.value op angle.value); }, (this self_t&& self, const i_angle<value_t>& angle), template <typename self_t>)  \
@@ -34,7 +34,7 @@ namespace null::sdk::impl {
 
         fast_logic_operators(< ); fast_logic_operators(> );
 
-        bool operator ==(const value_t& angle) const { return value == angle; };
+        bool operator ==(value_t angle) const { return value == angle; };
     };
 }
 
@@ -53,20 +53,20 @@ public:
     static constexpr double pi{ 180. / std::numbers::pi };
 
 public:
-    static angle_t<radians_t> atan2(const auto& y, const auto& x) { return angle_t<radians_t>{ (radians_t)std::atan2(y, x) }; }
+    static angle_t<radians_t> atan2(auto y, auto x) { return angle_t<radians_t>{ (radians_t)std::atan2(y, x) }; }
 
 public:
     angle_t() { }
-    angle_t(const radians_t& radians) : i_angle{ radians } { }
-    angle_t(const degrees_t& degrees);
+    angle_t(radians_t radians) : i_angle{ radians } { }
+    angle_t(degrees_t degrees);
     angle_t(const i_angle<radians_t>& angle) : i_angle{ angle } { }
     angle_t(const i_angle<degrees_t>& degrees);
     angle_t(const angle_t<degrees_t>& degrees);
 
 public:
     //@credits: https://stackoverflow.com/questions/2320986/easy-way-to-keeping-angles-between-179-and-180-degrees#comment52945562_2321125
-    template <typename self_t> angle_t<radians_t> normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value })).imag(); }
-    template <typename self_t> auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
+    angle_t<radians_t> normalized(this auto&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value })).imag(); }
+    auto&& normalize(this auto&& self) { self = self.normalized(); return self; }
 
     degrees_t cast() const;
     operator degrees_t() const;
@@ -88,15 +88,15 @@ public:
 
 public:
     angle_t() { }
-    angle_t(const degrees_t& degrees) : i_angle{ degrees } { }
-    angle_t(const radians_t& radians);
+    angle_t(degrees_t degrees) : i_angle{ degrees } { }
+    angle_t(radians_t radians);
     angle_t(const i_angle<degrees_t>& angle) : i_angle{ angle } { }
     angle_t(const i_angle<radians_t>& radians);
     angle_t(const angle_t<radians_t>& radians);
 
 public:
-    template <typename self_t> angle_t<degrees_t> normalized(this self_t&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value * pi })).imag() * angle_t<radians_t>::pi; }
-    template <typename self_t> auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
+    angle_t<degrees_t> normalized(this auto&& self) { return std::log(std::exp(std::complex<double>{ 0., self.value * pi })).imag() * angle_t<radians_t>::pi; }
+    auto&& normalize(this auto&& self) { self = self.normalized(); return self; }
 
     radians_t cast() const;
     operator radians_t() const;

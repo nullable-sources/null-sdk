@@ -9,7 +9,7 @@ namespace utils {
     public:
         class c_default_log_listener : public i_event_listener<e_log_type> {
         public:
-            void process_event(const e_log_type& id, const std::unordered_map<std::string, std::any>& parameters) override;
+            void process_event(e_log_type id, const std::unordered_map<std::string, std::any>& parameters) override;
         } default_listener{ };
 
     public:
@@ -29,6 +29,8 @@ namespace utils {
 
     public:
         template <typename... args_t>
-        void log(const e_log_type& id, const std::string_view& str, args_t&&... args) { dispatch_event(id, { { "text", std::vformat(str, std::make_format_args(args...)) } }); }
+        void operator()(e_log_type id, std::string_view str, args_t&&... args) {
+	        dispatch_event(id, { { "text", std::vformat(str, std::make_format_args(args...)) } });
+        }
     } inline logger{ };
 }

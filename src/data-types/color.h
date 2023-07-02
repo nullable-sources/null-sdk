@@ -18,11 +18,11 @@ namespace null::sdk {
 	public:
 		i_color() { }
 
-		i_color(const channel_t& _rgba) : i_color{ _rgba, _rgba, _rgba, _rgba } { };
-		i_color(const channel_t& _rgb, const channel_t& _a) : i_color{ _rgb, _rgb, _rgb, _a } { }
-		i_color(const channel_t& _r, const channel_t& _g, const channel_t& _b, const channel_t& _a) : channels{ _r, _g, _b, _a } { }
+		i_color(channel_t _rgba) : i_color{ _rgba, _rgba, _rgba, _rgba } { };
+		i_color(channel_t _rgb, channel_t _a) : i_color{ _rgb, _rgb, _rgb, _a } { }
+		i_color(channel_t _r, channel_t _g, channel_t _b, channel_t _a) : channels{ _r, _g, _b, _a } { }
 
-		i_color(const i_color<channel_t>& color, const channel_t& _a) : i_color{ color.r, color.g, color.b, _a } { }
+		i_color(const i_color<channel_t>& color, channel_t _a) : i_color{ color.r, color.g, color.b, _a } { }
 		i_color(const std::vector<channel_t>& _channels) { std::ranges::move(_channels, channels.begin()); }
 
 		template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<type_t, i_color<channel_t>>
@@ -35,7 +35,7 @@ namespace null::sdk {
 		template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<i_color<channel_t>, type_t>
 		operator type_t() const { return null::compatibility::data_type_converter_t<i_color<channel_t>, type_t>::convert(*this); }
 
-		template <typename self_t> auto operator -(this self_t&& self) { return i_color{ -self.r, -self.g, -self.b, -self.a }; }
+		auto operator -(this auto&& self) { return i_color{ -self.r, -self.g, -self.b, -self.a }; }
 #define fast_arithmetic_operators(op) impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, op, { return i_color<channel_t>(self.r op color.r, self.g op color.g, self.b op color.b, self.a op color.a); }, impl_default_arithmetic_assignment_func(op, color), template <typename self_t, typename other_channel_t>);
 		fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
@@ -59,14 +59,14 @@ public: using i_color::i_color;
 public:
 	color_t() : i_color{ 255 } { }
 
-	color_t(const float& _rgba) : i_color{ _rgba * 255 } { }
+	color_t(float _rgba) : i_color{ _rgba * 255 } { }
 	
-	color_t(const int& _rgb, const float& _a) : i_color{ _rgb, _a * 255 } { }
-	color_t(const float& _rgb, const int& _a) : i_color{ _rgb * 255, _a } { }
-	color_t(const float& _rgb, const float& _a) : i_color{ _rgb * 255, _a * 255 } { }
+	color_t(int _rgb, float _a) : i_color{ _rgb, _a * 255 } { }
+	color_t(float _rgb, int _a) : i_color{ _rgb * 255, _a } { }
+	color_t(float _rgb, float _a) : i_color{ _rgb * 255, _a * 255 } { }
 	
-	color_t(const int& _r, const int& _g, const int& _b, const int& _a = 255) : i_color{ _r, _g, _b, _a } { }
-	color_t(const float& _r, const float& _g, const float& _b, const float& _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
+	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ _r, _g, _b, _a } { }
+	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ color_t<float>{ _r, _g, _b, _a } } { }
 
 	color_t(const i_color<int>& color) : i_color{ color } { }
 	color_t(const i_color<int>& color, float _a) : i_color{ color, _a * 255 } { }
@@ -90,14 +90,14 @@ public: using i_color::i_color;
 public:
 	color_t() : i_color{ 1.f } { }
 
-	color_t(const int& _rgba) : i_color{ _rgba / 255.f } { }
+	color_t(int _rgba) : i_color{ _rgba / 255.f } { }
 
-	color_t(const float& _rgb, const int& _a) : i_color{ _rgb, _a / 255.f } { }
-	color_t(const int& _rgb, const float& _a) : i_color{ _rgb / 255.f, _a } { }
-	color_t(const int& _rgb, const int& _a) : i_color{ _rgb / 255.f, _a / 255.f } { }
+	color_t(float _rgb, int _a) : i_color{ _rgb, _a / 255.f } { }
+	color_t(int _rgb, float _a) : i_color{ _rgb / 255.f, _a } { }
+	color_t(int _rgb, int _a) : i_color{ _rgb / 255.f, _a / 255.f } { }
 	
-	color_t(const float& _r, const float& _g, const float& _b, const float& _a = 1.f) : i_color{ _r, _g, _b, _a } { }
-	color_t(const int& _r, const int& _g, const int& _b, const int& _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
+	color_t(float _r, float _g, float _b, float _a = 1.f) : i_color{ _r, _g, _b, _a } { }
+	color_t(int _r, int _g, int _b, int _a = 255) : i_color{ color_t<int>{ _r, _g, _b, _a } } { }
 
 	color_t(const i_color<float>& color) : i_color{ color } { }
 	color_t(const i_color<float>& color, int _a) : i_color{ color, _a / 255.f } { }
@@ -119,8 +119,8 @@ public:
 
 public:
 	hsv_color_t() : channels{ 0.f, 0.f, 1.f, 1.f } { }
-	hsv_color_t(const float& _h, const float& _a = 1.f) : hsv_color_t{ _h, 1.f, 1.f, _a } { }
-	hsv_color_t(const float& _h, const float& _s, const float& _v, const float& _a = 1.f) : channels{ _h, _s, _v, _a } { }
+	hsv_color_t(float _h, float _a = 1.f) : hsv_color_t{ _h, 1.f, 1.f, _a } { }
+	hsv_color_t(float _h, float _s, float _v, float _a = 1.f) : channels{ _h, _s, _v, _a } { }
 	hsv_color_t(const null::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
 		double max{ std::ranges::max(rgba.channels | std::views::take(3)) };
 		double delta{ max - std::ranges::min(rgba.channels | std::views::take(3)) };
@@ -158,7 +158,7 @@ public:
 		return null::sdk::i_color<double>{ rgba.r + m, rgba.g + m, rgba.b + m, a }.cast<float>();
 	}
 
-	template <typename self_t> auto operator -(this self_t&& self) { return hsv_color_t{ -self.h, -self.s, -self.v, -self.a }; }
+	auto operator -(this auto&& self) { return hsv_color_t{ -self.h, -self.s, -self.v, -self.a }; }
 #define fast_arithmetic_operators(op) class_create_arithmetic_operators(color, hsv_color_t, op, { return hsv_color_t(self.h op color.h, self.s op color.s, self.v op color.v, self.a op color.a); });
 	fast_arithmetic_operators(+); fast_arithmetic_operators(-); fast_arithmetic_operators(*); fast_arithmetic_operators(/);
 	

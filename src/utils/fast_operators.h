@@ -8,6 +8,9 @@
     impl_class_create_operator(auto, op, op_func, (this self_t&& self, const class_t& varialbe_name), __VA_ARGS__)                  \
     impl_class_create_operator(auto&&, op##=, op_assignment_func, (this self_t&& self, const class_t& varialbe_name), __VA_ARGS__)  \
 
+#define class_create_arithmetic_operators_template(variable_name, class_t, op, op_func, ...)                                                                                          \
+    impl_class_create_arithmetic_operators(variable_name, class_t, op, op_func, impl_default_arithmetic_assignment_func(op, variable_name), template <typename self_t, __VA_ARGS__>)  \
+
 #define class_create_arithmetic_operators(variable_name, class_t, op, op_func)                                                                                          \
     impl_class_create_arithmetic_operators(variable_name, class_t, op, op_func, impl_default_arithmetic_assignment_func(op, variable_name), template <typename self_t>) \
 
