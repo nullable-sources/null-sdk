@@ -14,19 +14,19 @@ import :math.vec4;
 export namespace null::sdk {
 	struct packed_access_t {
 	public:
-		static auto get(auto& matrix, const size_t& i) { return matrix.data[i]; }
-		static void set(auto& matrix, const size_t& i, const auto& new_data) { matrix.data[i] = new_data; }
+		static auto get(auto& matrix, size_t i) { return matrix.data[i]; }
+		static void set(auto& matrix, size_t i, const auto& new_data) { matrix.data[i] = new_data; }
 	};
 
 	template <size_t stride_size>
 	struct stride_access_t {
 	public:
-		static void set(auto& matrix, const size_t& i, const auto& new_data) {
+		static void set(auto& matrix, size_t i, const auto& new_data) {
 			for(int data_i{ }; auto & data : matrix.linear_array | std::views::drop(i) | std::views::stride(stride_size))
 				data = new_data[data_i++];
 		}
 
-		static auto get(auto& matrix, const size_t& i) {
+		static auto get(auto& matrix, size_t i) {
 			return matrix.linear_array | std::views::drop(i) | std::views::stride(stride_size) | std::ranges::to<std::vector>();
 		}
 	};
@@ -51,7 +51,7 @@ export namespace null::sdk {
 		using array_representation_t = std::array<std::array<data_t, columns_num>, rows_num>;
 
 	public:
-		static auto&& get_by_index(auto&& matrix, const size_t& row, const size_t& column) { return matrix.data[row][column]; }
+		static auto&& get_by_index(auto&& matrix, size_t row, size_t column) { return matrix.data[row][column]; }
 	};
 
 	template <typename data_t, typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num>
@@ -66,7 +66,7 @@ export namespace null::sdk {
 		using array_representation_t = std::array<std::array<data_t, rows_num>, columns_num>;
 
 	public:
-		static auto&& get_by_index(auto&& matrix, const size_t& row, const size_t& column) { return matrix.data[column][row]; }
+		static auto&& get_by_index(auto&& matrix, size_t row, size_t column) { return matrix.data[column][row]; }
 	};
 
 	template <template <typename, typename, typename, size_t, size_t> class major_type_t, typename data_t, size_t rows_num, size_t columns_num>
@@ -110,7 +110,7 @@ export namespace null::sdk {
 			if(diagonal_size > std::min(another_rows_num, another_columns_num))
 				set_diagonal(1.f);
 
-			for(const int& row : std::views::iota(0u, std::min(rows_num, another_rows_num)))
+			for(int row : std::views::iota(0u, std::min(rows_num, another_rows_num)))
 				set_row(row, matrix.get_row(row));
 		}
 
@@ -118,35 +118,35 @@ export namespace null::sdk {
 		i_matrix(const type_t& value) { *this = null::compatibility::data_type_converter_t<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>::convert(value); }
 
 	public:
-		auto& get_by_index(const size_t& row, const size_t& column) const { return major_t::get_by_index(*this, row, column); }
-		auto& get_by_index(const size_t& row, const size_t& column) { return major_t::get_by_index(*this, row, column); }
-		auto& fill_rows(const row_header_t& row) { for(const int& i : std::views::iota(0u, rows_num)) set_row(i, row); return *this; }
-		auto& fill_columns(const column_header_t& column) { for(const int& i : std::views::iota(0u, columns_num)) set_column(i, column); return *this; }
+		auto& get_by_index(size_t row, size_t column) const { return major_t::get_by_index(*this, row, column); }
+		auto& get_by_index(size_t row, size_t column) { return major_t::get_by_index(*this, row, column); }
+		auto& fill_rows(const row_header_t& row) { for(int i : std::views::iota(0u, rows_num)) set_row(i, row); return *this; }
+		auto& fill_columns(const column_header_t& column) { for(int i : std::views::iota(0u, columns_num)) set_column(i, column); return *this; }
 
-		auto& set_rows(const rows_t& rows) { for(const int& i : std::views::iota(0u, rows_num)) set_row(i, rows[i]); return *this; }
-		auto& set_row(const int& i, const row_header_t& row) { major_t::row_access_t::set(*this, i, row); return *this; }
-		row_header_t get_row(const int& i) const { return major_t::row_access_t::get(*this, i); }
+		auto& set_rows(const rows_t& rows) { for(int i : std::views::iota(0u, rows_num)) set_row(i, rows[i]); return *this; }
+		auto& set_row(int i, const row_header_t& row) { major_t::row_access_t::set(*this, i, row); return *this; }
+		row_header_t get_row(int i) const { return major_t::row_access_t::get(*this, i); }
 
-		auto& set_columns(const columns_t& columns) { for(const int& i : std::views::iota(0u, columns_num)) set_column(i, columns[i]); return *this; }
-		auto& set_column(const int& i, const column_header_t& column) { major_t::column_access_t::set(*this, i, column); return *this; }
-		column_header_t get_column(const int& i) const { return major_t::column_access_t::get(*this, i); }
+		auto& set_columns(const columns_t& columns) { for(int i : std::views::iota(0u, columns_num)) set_column(i, columns[i]); return *this; }
+		auto& set_column(int i, const column_header_t& column) { major_t::column_access_t::set(*this, i, column); return *this; }
+		column_header_t get_column(int i) const { return major_t::column_access_t::get(*this, i); }
 
 	public:
 		transpose_t transpose() const {
 			transpose_t transpose{ };
-			for(const int& i : std::views::iota(0u, rows_num))
+			for(int i : std::views::iota(0u, rows_num))
 				transpose.set_row(i, get_row(i));
 			return transpose;
 		}
 
 		auto& set_diagonal(const diagonal_t& value) {
-			for(const int& i : std::views::iota(0u, diagonal_size)) data[i][i] = value[i];
+			for(int i : std::views::iota(0u, diagonal_size)) data[i][i] = value[i];
 			return *this;
 		}
 
 		diagonal_t get_diagonal() const {
 			diagonal_t result{ };
-			for(const int& i : std::views::iota(0u, diagonal_size)) { result[i] = data[i][i]; }
+			for(int i : std::views::iota(0u, diagonal_size)) result[i] = data[i][i];
 			return result;
 		}
 
@@ -156,7 +156,7 @@ export namespace null::sdk {
 		template <typename type_t> requires null::compatibility::data_type_converter_defined_concept<i_matrix<major_type_t, data_t, rows_num, columns_num>, type_t>
 		operator type_t() const { return null::compatibility::data_type_converter_t<i_matrix<major_type_t, data_t, rows_num, columns_num>, type_t>::convert(*this); }
 
-		auto& operator [](const int& i) { return data[i]; }
+		auto& operator [](int i) { return data[i]; }
 
 		auto& operator ++() { ++data; return *this; }
 		auto operator ++(int) const { return i_matrix{ data++ }; }
@@ -171,15 +171,15 @@ export namespace null::sdk {
 		auto operator*(const i_matrix<major_type_t, another_data_t, another_rows_num, another_columns_num>& matrix) const {
 			constexpr size_t rows{ std::min(rows_num, another_rows_num) }, columns{ std::min(columns_num, another_columns_num) };
 			i_matrix<major_type_t, another_data_t, rows, another_columns_num> result{ };
-			for(const int& row : std::views::iota(0u, rows))
-				for(const int& column : std::views::iota(0u, another_columns_num))
+			for(int row : std::views::iota(0u, rows))
+				for(int column : std::views::iota(0u, another_columns_num))
 					result.get_by_index(row, column) = get_row(row).dot(matrix.get_column(column));
 			return result;
 		}
 
 		auto operator*(const column_header_t& column) const {
 			column_header_t result{ };
-			for(const int& row : std::views::iota(0u, rows_num))
+			for(int row : std::views::iota(0u, rows_num))
 				result[row] = get_row(row).dot(column);
 			return result;
 		}

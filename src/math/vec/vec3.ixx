@@ -57,8 +57,8 @@ public: //@note: converter opereators and methods
 
 public:
 	//@todo: P0847
-	auto& operator [](const int& i) const { return coordinates[i]; }
-	auto& operator [](const int& i) { return coordinates[i]; }
+	auto& operator [](int i) const { return coordinates[i]; }
+	auto& operator [](int i) { return coordinates[i]; }
 
 	auto& operator ++() { ++x; ++y; ++z; return *this; }
 	auto operator ++(int) const { return vec3_t<coordinates_t>{ x++, y++, z++ }; }

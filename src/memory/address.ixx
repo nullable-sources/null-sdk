@@ -20,17 +20,19 @@ export namespace memory {
         auto& deref(int steps = 1) { for(; steps >= 1; steps--) address = *cast<std::uintptr_t*>(); return *this; }
         auto derefed(int steps = 1) const { return address_t{ *this }.deref(steps); }
 
-        auto& offset(const std::intptr_t& offset) { address += offset; return *this; }
-        auto& offset(const std::vector<std::intptr_t>& offsets) { std::ranges::for_each(offsets, [&](const std::intptr_t& _offset) { address += _offset; }); return *this; }
-        auto offseted(const std::intptr_t& offset) const { return address_t{ *this }.offset(offset); }
-        auto offseted(const std::vector<std::intptr_t>& offsets) const { return address_t{ *this }.offset(offsets); }
+        auto& offset(std::intptr_t offset) { address += offset; return *this; }
+        auto& deref_offset(std::intptr_t _offset) { return offset(_offset).deref(); }
+        auto& deref_offset(const std::vector<std::intptr_t>& offsets) { for(std::intptr_t offset : offsets) { deref_offset(offset); } return *this; }
+        auto offseted(std::intptr_t offset) const { return address_t{ *this }.offset(offset); }
+        auto deref_offseted(std::intptr_t offset) const { return address_t{ *this }.deref_offset(offset); }
+        auto deref_offseted(const std::vector<std::intptr_t>& offsets) const { return address_t{ *this }.deref_offset(offsets); }
 
-        auto& jump(const std::intptr_t& offset) {
+        auto& jump(std::intptr_t offset) {
 			address_t return_address{ offseted(offset) };
-            address = return_address.offset({ return_address.derefed().cast<std::int32_t>(), sizeof(std::uint32_t) });
+            address = return_address.offset(return_address.derefed().cast<std::int32_t>() + sizeof(std::uint32_t));
             return *this;
         }
-        auto jumped(const std::intptr_t& offset) const { return address_t{ *this }.jump(offset); }
+        auto jumped(std::intptr_t offset) const { return address_t{ *this }.jump(offset); }
 
     public:
         template <typename cast_t> operator cast_t() const { return cast<cast_t>(); }
@@ -43,7 +45,7 @@ export namespace memory {
         std::uintptr_t operator[](const int& idx) { return get()[idx]; }
 
         template <typename funtion_t>
-        funtion_t function(const int& index) {
+        funtion_t function(int index) {
             return (funtion_t)(get()[index]);
         }
     };

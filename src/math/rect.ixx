@@ -36,7 +36,7 @@ export template <typename corners_t>
 struct rect_t {
 public:
     template <float min = 0.f, float max = 1.f, float midpoint = std::midpoint(min, max)>
-    static vec2_t<float> scale_from_origin(const null::e_rect_origin& origin) {
+    static vec2_t<float> scale_from_origin(null::e_rect_origin origin) {
         vec2_t<float> scale{ origin& null::e_rect_origin::center ? midpoint : min };
         if(origin & null::e_rect_origin::vertival_mask) scale.y = (origin & -null::e_rect_origin::vertival_mask) >> 1 ? max : min;
         if(origin & null::e_rect_origin::horizontal_mask) scale.x = (origin & -null::e_rect_origin::horizontal_mask) >> 3 ? max : min;
@@ -101,7 +101,7 @@ public:
 
 public:
     //@todo: P0847
-    auto& operator [](const int& i) { return corners[i]; }
+    auto& operator [](int i) { return corners[i]; }
 
     auto& operator ++() { ++min; ++max; return *this; }
     auto operator ++(int) const { return rect_t{ min++, max++ }; }

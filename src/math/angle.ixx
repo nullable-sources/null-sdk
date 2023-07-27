@@ -43,7 +43,7 @@ export namespace null::sdk::impl {
 export template <typename value_t>
 struct angle_t { };
 
-#define make_functions_declaration(return_t, name)   \
+#define make_functions_declaration(return_t, name)  \
     return_t name() const;                          \
     return_t a##name() const;                       \
     return_t name##h() const;                       \
@@ -54,7 +54,7 @@ struct angle_t<radians_t> : public null::sdk::impl::i_angle<radians_t> {
 public:
     static constexpr double pi{ 180. / std::numbers::pi };
 
-    static angle_t<radians_t> atan2(const auto& y, const auto& x) { return angle_t<radians_t>{ (radians_t)std::atan2(y, x) }; }
+    static angle_t<radians_t> atan2(auto y, auto x) { return angle_t<radians_t>{ (radians_t)std::atan2(y, x) }; }
 
 public:
     angle_t() { }
@@ -84,7 +84,7 @@ struct angle_t<degrees_t> : public null::sdk::impl::i_angle<degrees_t> {
 public:
     static constexpr double pi{ std::numbers::pi / 180.f };
 
-    static angle_t<degrees_t> atan2(const auto& y, const auto& x) { return angle_t<degrees_t>{ (radians_t)std::atan2(y, x) }; }
+    static angle_t<degrees_t> atan2(auto y, auto x) { return angle_t<degrees_t>{ (radians_t)std::atan2(y, x) }; }
 
 public:
     angle_t() { }
@@ -119,7 +119,7 @@ angle_t<radians_t>::operator angle_t<degrees_t>() const { return angle_t<degrees
 
 angle_t<degrees_t>::angle_t(const i_angle<radians_t>& radians) : angle_t{ radians.value } { }
 angle_t<degrees_t>::angle_t(const angle_t<radians_t>& radians) : i_angle{ radians.cast() } { }
-angle_t<degrees_t>::angle_t(radians_t radians) : i_angle{ radians * angle_t<radians_t>::pi } { }
+angle_t<degrees_t>::angle_t(radians_t radians) : i_angle{ (degrees_t)(radians * angle_t<radians_t>::pi) } { }
 
 radians_t angle_t<degrees_t>::cast() const { return value * pi; }
 angle_t<degrees_t>::operator radians_t() const { return cast(); }

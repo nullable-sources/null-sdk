@@ -18,7 +18,7 @@ export namespace utils::encoding {
         //@todo: P0847
         base85_t& decode() {
             static const auto decode_byte{ [](const std::uint8_t& c) { return c - (c >= '\\' ? 36 : 35); } };
-            for(const auto& iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(5)) {
+            for(auto iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(5)) {
                 std::uint32_t chunk{ };
                 std::ranges::for_each(std::views::iota(iterator) | std::views::take(std::min((int)std::distance(iterator, input.end()), 5)) | std::views::reverse, [&](const auto& chunk_iterator) { chunk = chunk * 85 + decode_byte(*chunk_iterator); });
                 std::ranges::move(std::views::iota(0, 4)
@@ -30,7 +30,7 @@ export namespace utils::encoding {
 
         base85_t& encode() {
             static const auto encode_byte{ [](std::uint32_t c) { c = (c % 85) + 35; return c + (c >= '\\' ? 1 : 0); } };
-            for(const auto& iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(4)) {
+            for(auto iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(4)) {
                 std::uint32_t chunk{ };
                 std::ranges::for_each(std::views::iota(iterator) | std::views::take(std::min((int)std::distance(iterator, input.end()), 4)) | std::views::reverse, [&](const auto& chunk_iterator) { chunk |= *chunk_iterator << 8 * std::distance(iterator, chunk_iterator); });
                 std::ranges::move(std::views::iota(0, 5)

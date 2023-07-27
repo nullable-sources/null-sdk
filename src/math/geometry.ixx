@@ -23,7 +23,7 @@ export namespace math {
 
 	//@note: rotates the vector by 90 degrees
 	template <typename coordinates_t>
-	vec2_t<coordinates_t> invert_vector_axis(const vec2_t<coordinates_t>& src, const e_rotation& rotation = e_rotation::ccw) {
+	vec2_t<coordinates_t> invert_vector_axis(const vec2_t<coordinates_t>& src, e_rotation rotation = e_rotation::ccw) {
 		return vec2_t<coordinates_t>{
 			rotation == e_rotation::ccw ? src.y : -src.y,
 			rotation == e_rotation::ccw ? -src.x : src.x
@@ -31,7 +31,7 @@ export namespace math {
 	}
 
 	template <typename coordinates_t>
-	vec2_t<coordinates_t> vectors_bisector(const vec2_t<coordinates_t>& point1, const vec2_t<coordinates_t>& point2, const e_rotation& rotation = e_rotation::ccw) {
+	vec2_t<coordinates_t> vectors_bisector(const vec2_t<coordinates_t>& point1, const vec2_t<coordinates_t>& point2, e_rotation rotation = e_rotation::ccw) {
 		return vec2_t{ invert_vector_axis(point1, rotation) + invert_vector_axis(point2, rotation) }.normalized();
 	}
 }

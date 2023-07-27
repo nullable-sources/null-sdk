@@ -26,11 +26,6 @@ export namespace utils {
 			FreeConsole();
 		}
 
-		template <typename... args_t>
-		void print(std::string_view text, args_t&&... args) {
-			std::cout << std::vformat(text, std::make_format_args(args...));
-		}
-
 		//@note: so far, it does not work as it should, due to a different order of initialization of variables,
 		//		 registered_commands is cleared after registering the command.
 		//		 You can still add commands yourself after initializing variables in some method

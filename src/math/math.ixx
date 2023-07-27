@@ -160,5 +160,5 @@ export namespace math {
 		a, b);
 
 	//@note: std::lerp does not support non-arithmetic types
-	auto lerp(auto a, auto b, auto t) { return a + t * (b - a); }
+	auto lerp(const auto& a, const auto& b, const auto& t) { return a + t * (b - a); }
 }

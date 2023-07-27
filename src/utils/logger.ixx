@@ -42,8 +42,14 @@ namespace utils {
 
     public:
         template <typename... args_t>
-        void operator()(e_log_type id, std::string_view str, args_t&&... args) {
+        void log(e_log_type id, std::string_view str, args_t&&... args) {
             dispatch_event(id, { { "text", std::vformat(str, std::make_format_args(args...)) } });
         }
+
+        template <typename... args_t>
+        void operator()(e_log_type id, std::string_view str, args_t&&... args) { log(id, str, args...); }
+
+        template <typename... args_t>
+        void operator()(std::string_view str, args_t&&... args) { log(e_log_type::info, str, args...); }
     } logger{ };
 }
