@@ -11,7 +11,7 @@ angle_t<radians_t>::operator angle_t<degrees_t>() const { return angle_t<degrees
 
 angle_t<degrees_t>::angle_t(const i_angle<radians_t>& radians) : angle_t{ radians.value } { }
 angle_t<degrees_t>::angle_t(const angle_t<radians_t>& radians) : i_angle{ radians.cast() } { }
-angle_t<degrees_t>::angle_t(radians_t radians) : i_angle{ radians * angle_t<radians_t>::pi } { }
+angle_t<degrees_t>::angle_t(radians_t radians) : i_angle{ degrees_t(radians * angle_t<radians_t>::pi) } { }
 
 radians_t angle_t<degrees_t>::cast() const { return value * pi; }
 angle_t<degrees_t>::operator radians_t() const { return cast(); }

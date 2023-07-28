@@ -57,11 +57,17 @@ public:
     auto operator --(this auto&& self, int) { return vec2_t<coordinates_t>{ self.x--, self.y-- }; }
 
     auto operator -(this auto&& self) { return vec2_t<coordinates_t>{ -self.x, -self.y }; }
-#define fast_arithmetic_operators(op) class_create_arithmetic_operators_template(vec, vec2_t<another_coordinates_t>, op, { return vec2_t<coordinates_t>(self.x op vec.x, self.y op vec.y); }, typename another_coordinates_t);
+#define fast_arithmetic_operators(op)                                                                                                                                                                       \
+    class_create_arithmetic_operators_template(vec, vec2_t<another_coordinates_t>, op, { return vec2_t<coordinates_t>(self.x op vec.x, self.y op vec.y); }, typename another_coordinates_t);                \
+    class_create_arithmetic_operators_template(coordinates, another_coordinates_t, op, { return vec2_t<coordinates_t>(self.x op coordinates, self.y op coordinates); }, typename another_coordinates_t);    \
+
     fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
     template <typename another_coordinates_t> bool operator ==(const vec2_t<another_coordinates_t>& vec) const { return x == vec.x && y == vec.y; };
     template <typename another_t> requires std::is_arithmetic_v<another_t> bool operator ==(const another_t& value) const { return x == value && y == value; };
-#define fast_logic_operators(op) class_create_logic_operators(vec, vec2_t, op, { return self.x op vec.x && self.y op vec.y; }, { return self.x op##= vec.x && self.y op##= vec.y; });
+#define fast_logic_operators(op)                                                                                                                                                                                                                    \
+    class_create_logic_operators_template(vec, vec2_t<another_coordinates_t>, op, { return self.x op vec.x && self.y op vec.y; }, { return self.x op##= vec.x && self.y op##= vec.y; }, typename another_coordinates_t);                            \
+    class_create_logic_operators_template(coordinates, another_coordinates_t, op, { return self.x op coordinates && self.y op coordinates; }, { return self.x op##= coordinates && self.y op##= coordinates; }, typename another_coordinates_t);    \
+
     fast_logic_operators(<); fast_logic_operators(>);
 };
