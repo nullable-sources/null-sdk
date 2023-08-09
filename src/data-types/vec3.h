@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
-#include <data-types/vec2.h>
-#include <utils/fast_operators.h>
+#include "data-types/vec2.h"
+#include "utils/fast_operators.h"
 
 template <typename coordinates_t>
 struct vec3_t {
@@ -58,17 +58,17 @@ public:
 	auto operator --(this auto&& self, int) { return vec3_t{ self.x--, self.y--, self.z-- }; }
 
 	auto operator -(this auto&& self) { return vec3_t{ -self.x, -self.y, -self.z }; }
-#define fast_arithmetic_operators(op)																																															\
-	class_create_arithmetic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return vec3_t<coordinates_t>(self.x op vec.x, self.y op vec.y, self.z op vec.z); }, typename another_coordinates_t);					\
-	class_create_arithmetic_operators_template(coordinates, another_coordinates_t, op, { return vec3_t<coordinates_t>(self.x op coordinates, self.y op coordinates, self.z op coordinates); }, typename another_coordinates_t);	\
+#define fast_arithmetic_operators(op)																																																																								\
+	class_create_arithmetic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return vec3_t<coordinates_t>(self.x op vec.x, self.y op vec.y, self.z op vec.z); }, typename another_coordinates_t);																														\
+	class_create_arithmetic_operators(coordinates, another_coordinates_t, op, { return vec3_t<coordinates_t>(self.x op coordinates, self.y op coordinates, self.z op coordinates); }, template <typename self_t, typename another_coordinates_t> requires !std::is_same_v<another_coordinates_t, vec3_t<another_coordinates_t>>);	\
 
 	fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
 	template <typename another_coordinates_t> bool operator ==(const vec3_t<another_coordinates_t>& vec) const { return x == vec.x && y == vec.y && z == vec.z; };
 	template <typename another_t> requires std::is_arithmetic_v<another_t> bool operator ==(const another_t& value) const { return x == value && y == value && z == value; };
-#define fast_logic_operators(op)																																																																			\
-	class_create_logic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return self.x op vec.x && self.y op vec.y && self.z op vec.z; }, { return self.x op##= vec.x && self.y op##= vec.y && self.z op##= vec.z; }, typename another_coordinates_t);											\
-	class_create_logic_operators_template(coordinates, another_coordinates_t, op, { return self.x op coordinates && self.y op coordinates && self.z op coordinates; }, { return self.x op##= coordinates && self.y op##= coordinates && self.z op##= coordinates; }, typename another_coordinates_t);		\
+#define fast_logic_operators(op)																																																																																										\
+	class_create_logic_operators_template(vec, vec3_t<another_coordinates_t>, op, { return self.x op vec.x && self.y op vec.y && self.z op vec.z; }, { return self.x op##= vec.x && self.y op##= vec.y && self.z op##= vec.z; }, typename another_coordinates_t);																																		\
+	class_create_logic_operators(coordinates, another_coordinates_t, op, { return self.x op coordinates && self.y op coordinates && self.z op coordinates; }, { return self.x op##= coordinates && self.y op##= coordinates && self.z op##= coordinates; }, template <typename self_t, typename another_coordinates_t> requires !std::is_same_v<another_coordinates_t, vec3_t<another_coordinates_t>>);	\
 
 	fast_logic_operators(<); fast_logic_operators(>);
 };

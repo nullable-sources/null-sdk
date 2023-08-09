@@ -1,5 +1,5 @@
 #pragma once
-#include <utils/memory/resource/resource.h>
+#include "utils/memory/resource/resource.h"
 
 namespace memory {
     class c_module {

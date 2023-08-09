@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <string>
-#include <utils/memory/pe_image.h>
+#include "utils/memory/pe_image.h"
 
 namespace memory {
 	struct resource_t {

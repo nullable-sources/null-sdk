@@ -1,6 +1,6 @@
 #pragma once
-#include <utils/memory/address.h>
-#include <minhook/include/MinHook.h>
+#include "utils/memory/address.h"
+#include "minhook/include/MinHook.h"
 
 namespace memory {
 	enum class e_hook_type {

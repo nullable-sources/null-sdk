@@ -2,7 +2,7 @@
 #include <numbers>
 #include <cmath>
 #include <complex>
-#include <utils/fast_operators.h>
+#include "utils/fast_operators.h"
 
 using radians_t = double;
 using degrees_t = float;
@@ -29,8 +29,8 @@ namespace null::sdk::impl {
         fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/ ); fast_arithmetic_operators(%);
 
 #define fast_logic_operators(op)                                                                                                                \
-    class_create_logic_operators(angle, i_angle<value_t>, op, { return self.value op angle.value; }, { return self.value op##= angle.value; }); \
-    class_create_logic_operators(angle, value_t, op, { return self.value op angle; }, { return self.value op##= angle; });                      \
+    class_create_logic_operators_default(angle, i_angle<value_t>, op, { return self.value op angle.value; }, { return self.value op##= angle.value; }); \
+    class_create_logic_operators_default(angle, value_t, op, { return self.value op angle; }, { return self.value op##= angle; });                      \
 
         fast_logic_operators(< ); fast_logic_operators(> );
 

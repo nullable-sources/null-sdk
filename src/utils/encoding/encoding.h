@@ -1,6 +1,6 @@
 #pragma once
-#include <utils/win/win.h>
-#include <utils/encoding/base85.h>
+#include "utils/win/win.h"
+#include "utils/encoding/base85.h"
 
 namespace utils::encoding {
 	static std::string utf8_to_ascii(std::wstring_view utf8) {

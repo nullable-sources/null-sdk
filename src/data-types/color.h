@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include <utils/fast_operators.h>
-#include <data-types/vec4.h>
+#include "utils/fast_operators.h"
+#include "data-types/vec4.h"
 
 namespace null::sdk {
 	template <typename channel_t>
@@ -36,11 +36,11 @@ namespace null::sdk {
 		operator type_t() const { return null::compatibility::data_type_converter_t<i_color<channel_t>, type_t>::convert(*this); }
 
 		auto operator -(this auto&& self) { return i_color{ -self.r, -self.g, -self.b, -self.a }; }
-#define fast_arithmetic_operators(op) impl_class_create_arithmetic_operators(color, i_color<other_channel_t>, op, { return i_color<channel_t>(self.r op color.r, self.g op color.g, self.b op color.b, self.a op color.a); }, impl_default_arithmetic_assignment_func(op, color), template <typename self_t, typename other_channel_t>);
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators_template(color, i_color<other_channel_t>, op, { return i_color<channel_t>(self.r op color.r, self.g op color.g, self.b op color.b, self.a op color.a); }, typename other_channel_t);
 		fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
 		template <typename another_channel_t> bool operator==(const i_color<another_channel_t>& color) const { return channels == color.channels; };
-#define fast_logic_operators(op) class_create_logic_operators(color, i_color, op, { return self.r op color.r && self.g op color.g && self.b op color.b && self.a op color.a; }, { return self.r op##= color.r && self.g op## = color.g && self.b op## = color.b() && self.a op## = color.a; });
+#define fast_logic_operators(op) class_create_logic_operators_default(color, i_color, op, { return self.r op color.r && self.g op color.g && self.b op color.b && self.a op color.a; }, { return self.r op##= color.r && self.g op## = color.g && self.b op## = color.b() && self.a op## = color.a; });
 		fast_logic_operators(<); fast_logic_operators(>);
 	};
 }
@@ -159,11 +159,11 @@ public:
 	}
 
 	auto operator -(this auto&& self) { return hsv_color_t{ -self.h, -self.s, -self.v, -self.a }; }
-#define fast_arithmetic_operators(op) class_create_arithmetic_operators(color, hsv_color_t, op, { return hsv_color_t(self.h op color.h, self.s op color.s, self.v op color.v, self.a op color.a); });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators_default(color, hsv_color_t, op, { return hsv_color_t(self.h op color.h, self.s op color.s, self.v op color.v, self.a op color.a); });
 	fast_arithmetic_operators(+); fast_arithmetic_operators(-); fast_arithmetic_operators(*); fast_arithmetic_operators(/);
 	
 	bool operator==(const hsv_color_t&) const = default;
-#define fast_logic_operators(op) class_create_logic_operators(color, hsv_color_t, op, { return self.h op color.h && self.s op color.s && self.v op color.v && self.a op color.a; }, { return self.h op##= color.h && self.s op##= color.s && self.v op##= color.v && self.a op##= color.a; });
+#define fast_logic_operators(op) class_create_logic_operators_default(color, hsv_color_t, op, { return self.h op color.h && self.s op color.s && self.v op color.v && self.a op color.a; }, { return self.h op##= color.h && self.s op##= color.s && self.v op##= color.v && self.a op##= color.a; });
 	fast_logic_operators(<); fast_logic_operators(>);
 };
 

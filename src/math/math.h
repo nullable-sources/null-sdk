@@ -2,9 +2,9 @@
 #include <numbers>
 #include <cmath>
 #include <array>
-#include <data-types/vec3.h>
-#include <data-types/vec4.h>
-#include <data-types/rect.h>
+#include "data-types/vec3.h"
+#include "data-types/vec4.h"
+#include "data-types/rect.h"
 
 //@note: Yes, thrash code, yes shit, but what can I do? I'm fucked up trying to put i_vec2<x_t, y_t>/i_vec3<x_t, y_t, z_t>/i_vec4<x_t, y_t, z_t, w_t>/i_rect<x_t, y_t> in one argument to use only one impl_math_make_arg implementation.
 #define impl_math_arg(arg) arg

@@ -1,5 +1,5 @@
 #pragma once
-#include <data-types/vec2.h>
+#include "data-types/vec2.h"
 
 namespace null {
     enum e_rect_origin {
@@ -101,12 +101,12 @@ public:
     auto operator --(this auto&& self, int) { return rect_t{ self.min--, self.max-- }; }
 
     auto operator -(this auto&& self) { return rect_t{ -self.min, -self.max }; }
-#define fast_arithmetic_operators(op) class_create_arithmetic_operators(rect, rect_t, op, { return rect_t(self.min op rect.min, self.max op rect.max); });
+#define fast_arithmetic_operators(op) class_create_arithmetic_operators_default(rect, rect_t, op, { return rect_t(self.min op rect.min, self.max op rect.max); });
     fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(*); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 
     template <typename another_corners_t> bool operator ==(const rect_t<another_corners_t>& rect) const { return min == rect.min && max == rect.max; };
     template <typename another_corners_t> bool operator ==(const vec2_t<another_corners_t>& vec) const { return min == vec && max == vec; };
     template <typename another_t> bool operator ==(const another_t& value) const { return min == value && max == value; };
-#define fast_logic_operators(op) class_create_logic_operators(rect, rect_t, op, { return self.min op rect.min && self.max op rect.max; }, { return self.min op##= rect.min && self.max op##= rect.max; });
+#define fast_logic_operators(op) class_create_logic_operators_default(rect, rect_t, op, { return self.min op rect.min && self.max op rect.max; }, { return self.min op##= rect.min && self.max op##= rect.max; });
     fast_logic_operators(<); fast_logic_operators(>);
 };

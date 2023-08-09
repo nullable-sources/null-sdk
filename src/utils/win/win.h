@@ -5,9 +5,9 @@
 #include <iostream>
 #include <ranges>
 
-#include <data-types/vec2.h>
-#include <data-types/callbacks.h>
-#include <utils/logger/logger.h>
+#include "data-types/vec2.h"
+#include "data-types/callbacks.h"
+#include "utils/logger/logger.h"
 
 namespace utils {
 	namespace win {

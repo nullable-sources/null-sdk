@@ -1,6 +1,6 @@
 #pragma once
-#include <data-types/matrix/matrix.h>
-#include <math/geometry.h>
+#include "data-types/matrix/matrix.h"
+#include "math/geometry.h"
 
 template <template <typename, typename, typename, size_t, size_t> class major_type_t>
 class c_matrix3x3 : public null::sdk::i_matrix<major_type_t, float, 3, 3> {

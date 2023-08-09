@@ -1,5 +1,5 @@
 #pragma once
-#include <data-types/vec4.h>
+#include "data-types/vec4.h"
 
 namespace null::sdk {
 	struct packed_access_t {
@@ -153,7 +153,7 @@ namespace null::sdk {
 		auto operator --(this auto&& self, int) { return i_matrix{ self.data-- }; }
 		
 		auto operator -(this auto&& self) { return i_matrix{ -self.data }; }
-	#define fast_arithmetic_operators(op) class_create_arithmetic_operators(matrix, i_matrix, op, { return self.data op matrix.data; });
+	#define fast_arithmetic_operators(op) class_create_arithmetic_operators_default(matrix, i_matrix, op, { return self.data op matrix.data; });
 		fast_arithmetic_operators(-); fast_arithmetic_operators(+); fast_arithmetic_operators(/); fast_arithmetic_operators(%);
 		
 		template <typename another_data_t, size_t another_rows_num, size_t another_columns_num>
@@ -178,7 +178,7 @@ namespace null::sdk {
 		
 		template <typename another_data_t> bool operator ==(const i_matrix<major_type_t, another_data_t, rows_num, columns_num>& matrix) const { return data == matrix.data; };
 		template <typename another_t> bool operator ==(const another_t& value) const { return data == value; };
-	#define fast_logic_operators(op) class_create_logic_operators(matrix, i_matrix, op, { return self.data op matrix.data; }, { return self.data op##= matrix.data; });
+	#define fast_logic_operators(op) class_create_logic_operators_default(matrix, i_matrix, op, { return self.data op matrix.data; }, { return self.data op##= matrix.data; });
 		fast_logic_operators(<); fast_logic_operators(>);
 	};
 }
