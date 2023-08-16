@@ -157,7 +157,7 @@ namespace null::sdk {
 		fast_ops_structure_all_prefix_operators(data);
 		fast_ops_structure_all_postfix_operators(data);
 		
-		template <typename self_t, typename other_data_t, size_t other_rows_num, size_t other_columns_num>
+		template <typename other_data_t, size_t other_rows_num, size_t other_columns_num>
 		auto operator*(const i_matrix<major_type_t, other_data_t, other_rows_num, other_columns_num>& rhs) const {
 			constexpr size_t rows{ std::min(rows_num, other_rows_num) }, columns{ std::min(columns_num, other_columns_num) };
 			i_matrix<major_type_t, other_data_t, rows, other_columns_num> result{ };
