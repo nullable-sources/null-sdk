@@ -1,31 +1,108 @@
 #pragma once
 #include <type_traits>
 
-#define impl_default_arithmetic_assignment_func(op, variable_name) { self = self op variable_name; return self; }
-#define impl_class_create_operator(return_type, op, op_func, args, ...) __VA_ARGS__ return_type operator op##args op_func
+#define impl_fast_ops_body_variant_this_rhs_field(op, field) field op rhs.field
+#define impl_fast_ops_body_variant_self_rhs_field(op, field) self.field op rhs.field
 
-#define impl_class_create_operators(variable_name, class_t, op, op_func, op_assignment_func, ...)                        \
-    impl_class_create_operator(auto, op, op_func, (this self_t&& self, const class_t& variable_name), __VA_ARGS__)                  \
-    impl_class_create_operator(auto&&, op##=, op_assignment_func, (this self_t&& self, const class_t& variable_name), __VA_ARGS__)  \
+#define impl_fast_ops_body_variant_this_rhs_value(op, field) field op rhs
+#define impl_fast_ops_body_variant_self_rhs_value(op, field) impl_fast_ops_body_variant_this_rhs_value(op, self.field)
 
-#define class_create_arithmetic_operators_template(variable_name, class_t, op, op_func, ...)                        \
-    class_create_arithmetic_operators(variable_name, class_t, op, op_func, template <typename self_t, __VA_ARGS__>) \
+#define impl_fast_ops_body_variant_this_postfix(op, field) field##op
+#define impl_fast_ops_body_variant_self_postfix(op, field) impl_fast_ops_body_variant_this_postfix(op, self.field)
 
-#define class_create_arithmetic_operators_default(variable_name, class_t, op, op_func)                  \
-    class_create_arithmetic_operators(variable_name, class_t, op, op_func, template <typename self_t>)  \
+#define impl_fast_ops_body_variant_this_prefix(op, field) op##field
+#define impl_fast_ops_body_variant_self_prefix(op, field) impl_fast_ops_body_variant_this_prefix(op, self.field)
 
-#define class_create_arithmetic_operators(variable_name, class_t, op, op_func, ...)                                                             \
-    impl_class_create_operators(variable_name, class_t, op, op_func, impl_default_arithmetic_assignment_func(op, variable_name), __VA_ARGS__)   \
 
-#define class_create_logic_operators(variable_name, class_t, op, op_func, op_arithmetic_func, ...)                                  \
-	impl_class_create_operator(bool, op, op_func, (this self_t&& self, const class_t& variable_name), __VA_ARGS__)                  \
-	impl_class_create_operator(bool, op##=, op_arithmetic_func, (this self_t&& self, const class_t& variable_name), __VA_ARGS__)    \
+#define impl_fast_ops_arg(arg) arg
 
-#define class_create_logic_operators_template(variable_name, class_t, op, op_func, op_assignment_func, ...)                         \
-    class_create_logic_operators(variable_name, class_t, op, op_func, op_assignment_func, template <typename self_t, __VA_ARGS__>)  \
+#define impl_fast_ops_get_comma(op, variant, _1, _2, _3, _4, name, ...) name
+#define impl_fast_ops_get_delimiter(op, variant, delimiter_literal, _1, _2, _3, _4, name, ...) name
+#define fast_ops_make_body(type /*delimiter or comma*/, ...)                                                                                                                   \
+	impl_fast_ops_arg(                                                                                                                                  \
+		impl_fast_ops_get_##type(                                                                                                                       \
+			__VA_ARGS__, impl_fast_ops_##type##_4, impl_fast_ops_##type##_3, impl_fast_ops_##type##_2, impl_fast_ops_##type##_1, impl_fast_ops_##type## \
+		)(__VA_ARGS__)                                                                                                                                  \
+	)                                                                                                                                                   \
 
-#define class_create_logic_operators_default(variable_name, class_t, op, op_func, op_arithmetic_func)                   \
-    class_create_logic_operators(variable_name, class_t, op, op_func, op_arithmetic_func, template <typename self_t>)   \
+#define impl_fast_ops_delimiter_1(op, variant, delimiter_literal, field)            impl_fast_ops_body_variant_##variant(op, field)
+#define impl_fast_ops_delimiter_2(op, variant, delimiter_literal, _1, _2)			impl_fast_ops_delimiter_1(op, variant, , _1)                            delimiter_literal impl_fast_ops_delimiter_1(op, variant, , _2)
+#define impl_fast_ops_delimiter_3(op, variant, delimiter_literal, _1, _2, _3)		impl_fast_ops_delimiter_2(op, variant, delimiter_literal, _1, _2)       delimiter_literal impl_fast_ops_delimiter_1(op, variant, , _3)
+#define impl_fast_ops_delimiter_4(op, variant, delimiter_literal, _1, _2, _3, _4)   impl_fast_ops_delimiter_3(op, variant, delimiter_literal, _1, _2, _3)   delimiter_literal impl_fast_ops_delimiter_1(op, variant, , _4)
+
+#define impl_fast_ops_comma_1(op, variant, field)           impl_fast_ops_body_variant_##variant(op, field)
+#define impl_fast_ops_comma_2(op, variant, _1, _2)			impl_fast_ops_comma_1(op, variant, _1)           , impl_fast_ops_comma_1(op, variant, _2)
+#define impl_fast_ops_comma_3(op, variant, _1, _2, _3)		impl_fast_ops_comma_2(op, variant, _1, _2)       , impl_fast_ops_comma_1(op, variant, _3)
+#define impl_fast_ops_comma_4(op, variant, _1, _2, _3, _4)  impl_fast_ops_comma_3(op, variant, _1, _2, _3)   , impl_fast_ops_comma_1(op, variant, _4)
+
+
+//@note: global fast_ops defines
+#define fast_ops_args_pack(...) __VA_ARGS__
+
+#define impl_fast_ops_ref_op_fn(op, body_variant, ...) { fast_ops_make_body(delimiter, op, self_##body_variant, ;, __VA_ARGS__); return self; }
+#define impl_fast_ops_new_op_fn(op, body_variant, ...) { return std::decay_t<self_t>(fast_ops_make_body(comma, op, self_##body_variant, __VA_ARGS__)); }
+#define impl_fast_ops_logical_op_fn(op, body_variant, ...) { return fast_ops_make_body(delimiter, op, body_variant, &&, __VA_ARGS__); }
+#define impl_fast_ops_arithmetic_assignment_fn(op) { self = self op rhs; return self; }
+
+#define impl_fast_ops_create_op(return_t, op, args, op_fn, ...) __VA_ARGS__ return_t operator op##args op_fn
+#define impl_fast_ops_create_lhs_op(return_t, op, op_fn, ...) impl_fast_ops_create_op(return_t, op, (this self_t&& self), op_fn, __VA_ARGS__)
+#define impl_fast_ops_create_rhs_op(return_t, rhs_t, op, op_fn, ...) impl_fast_ops_create_op(return_t, op, (rhs_t rhs), op_fn, __VA_ARGS__)
+#define impl_fast_ops_create_lhs_rhs_op(return_t, rhs_t, op, op_fn, ...) impl_fast_ops_create_op(return_t, op, (this self_t&& self, rhs_t rhs), op_fn, __VA_ARGS__)
+#define impl_fast_ops_create_ops(op_ret_t, assigment_op_ret_t, rhs_t, op, op_fn, op_assignment_fn, ... /*templates*/)   \
+    impl_fast_ops_create_lhs_rhs_op(op_ret_t,           rhs_t, op,     op_fn,              __VA_ARGS__)                 \
+    impl_fast_ops_create_lhs_rhs_op(assigment_op_ret_t, rhs_t, op##=,  op_assignment_fn,   __VA_ARGS__)                 \
+
+
+//@note: converting operators utils
+#define fast_ops_structure_convert_operator(templates, covnerting_t, construct, member_op, ... /*members*/)  \
+	impl_fast_ops_create_op(, fast_ops_args_pack(covnerting_t), , { return  construct(fast_ops_make_body(comma, member_op, this_prefix, __VA_ARGS__)); }, templates)
+
+//@note: unary operators utils
+#define fast_ops_structure_prefix_operator(return_t, op_t/*new/ref*/, op, ... /*members*/)                                                                                         \
+	impl_fast_ops_create_lhs_op(return_t, op, impl_fast_ops_##op_t##_op_fn(op, prefix, __VA_ARGS__), template <typename self_t>)     \
+
+#define fast_ops_structure_postfix_operator(return_t, op, ... /*members*/)                                                                                         \
+	impl_fast_ops_create_op(return_t, op, (this self_t&& self, int), impl_fast_ops_new_op_fn(op, postfix, __VA_ARGS__), template <typename self_t>)     \
+
+#define fast_ops_structure_prefix_operators(op, ... /*members*/)            \
+	fast_ops_structure_prefix_operator(auto&&, ref, op##op, __VA_ARGS__)    \
+	fast_ops_structure_prefix_operator(auto, new, op, __VA_ARGS__)          \
+
+#define fast_ops_structure_all_prefix_operators(... /*members*/)    \
+	fast_ops_structure_prefix_operators(+, __VA_ARGS__);            \
+	fast_ops_structure_prefix_operators(-, __VA_ARGS__);            \
+
+#define fast_ops_structure_all_postfix_operators(... /*members*/)    \
+	fast_ops_structure_postfix_operator(auto, ++, __VA_ARGS__);            \
+	fast_ops_structure_postfix_operator(auto, --, __VA_ARGS__);            \
+
+//@note: arithmetic operators utils
+#define fast_ops_structure_arithmetic_operators(templates, rhs_t, op, body_variant, ... /*members*/)                                                                        \
+    impl_fast_ops_create_ops(auto, auto&&, rhs_t, op, impl_fast_ops_new_op_fn(op, body_variant, __VA_ARGS__), impl_fast_ops_arithmetic_assignment_fn(op), templates) \
+
+#define fast_ops_structure_arithmetic_operators_user(templates, rhs_t, op, op_fn)                                   \
+    impl_fast_ops_create_ops(auto, auto&&, rhs_t, op, op_fn, impl_fast_ops_arithmetic_assignment_fn(op), templates) \
+
+#define fast_ops_structure_all_arithmetic_operators(templates, rhs_t, body_variant, ... /*members*/)            \
+	fast_ops_structure_arithmetic_operators(fast_ops_args_pack(templates), rhs_t, +, body_variant, __VA_ARGS__) \
+	fast_ops_structure_arithmetic_operators(fast_ops_args_pack(templates), rhs_t, -, body_variant, __VA_ARGS__) \
+	fast_ops_structure_arithmetic_operators(fast_ops_args_pack(templates), rhs_t, *, body_variant, __VA_ARGS__) \
+	fast_ops_structure_arithmetic_operators(fast_ops_args_pack(templates), rhs_t, /, body_variant, __VA_ARGS__) \
+	fast_ops_structure_arithmetic_operators(fast_ops_args_pack(templates), rhs_t, %, body_variant, __VA_ARGS__) \
+
+//@note: comparison operators utils
+#define fast_ops_structure_comparison_operators(templates, rhs_t, op, body_variant, ... /*members*/)                                                                                        \
+    impl_fast_ops_create_ops(bool, bool, rhs_t, op, impl_fast_ops_logical_op_fn(op, body_variant, __VA_ARGS__), impl_fast_ops_logical_op_fn(op##=, body_variant, __VA_ARGS__), templates)   \
+
+#define fast_ops_structure_comparison_operators_user(templates, rhs_t, op, op_fn, op_equal_fn)  \
+    impl_fast_ops_create_ops(bool, bool, rhs_t, op, op_fn, op_equal_fn, templates)              \
+
+#define fast_ops_structure_equal_operator(templates, rhs_t, body_variant, ... /*members*/)                                                                  \
+	impl_fast_ops_create_rhs_op(bool, rhs_t, ==, const impl_fast_ops_logical_op_fn(== , this_##body_variant, __VA_ARGS__), fast_ops_args_pack(templates))   \
+
+#define fast_ops_structure_all_comparison_operators(templates, rhs_t, body_variant, ... /*members*/)                                        \
+	fast_ops_structure_comparison_operators(fast_ops_args_pack(templates), rhs_t, <, self_##body_variant, __VA_ARGS__)                             \
+	fast_ops_structure_comparison_operators(fast_ops_args_pack(templates), rhs_t, >, self_##body_variant, __VA_ARGS__)                             \
 
 //@credits: thx lagcomp/csgo_sdk for this superior code
 #define enum_create_cast_operator(enum_t, op) inline constexpr auto operator op(enum_t a) { return static_cast<std::underlying_type_t<enum_t>>(a); }

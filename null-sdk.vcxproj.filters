@@ -46,6 +46,9 @@
     <Filter Include="src\data-types\matrix">
       <UniqueIdentifier>{340c9657-ce0d-4006-be08-05b54a57ae35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\data-types\color">
+      <UniqueIdentifier>{c1db2c4f-1097-4347-b64d-ff3281a167b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -58,9 +61,6 @@
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\data-types\callbacks.h">
-      <Filter>src\data-types</Filter>
-    </ClInclude>
-    <ClInclude Include="src\data-types\color.h">
       <Filter>src\data-types</Filter>
     </ClInclude>
     <ClInclude Include="src\data-types\rect.h">
@@ -132,6 +132,9 @@
     <ClInclude Include="src\data-types\matrix\matrix3x3.h">
       <Filter>src\data-types\matrix</Filter>
     </ClInclude>
+    <ClInclude Include="src\data-types\color\color.h">
+      <Filter>src\data-types\color</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\utils\win\win.cpp">
@@ -148,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\memory\resource\resource.cpp">
       <Filter>src\utils\memory\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\data-types\color\color.cpp">
+      <Filter>src\data-types\color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

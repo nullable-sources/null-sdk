@@ -21,5 +21,5 @@
 #include "data-types/matrix/matrix4x4.h"
 #include "data-types/matrix/matrix3x3.h"
 #include "data-types/matrix/matrix2x2.h"
-#include "data-types/color.h"
+#include "data-types/color/color.h"
 #include "data-types/callbacks.h"

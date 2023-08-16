@@ -3,18 +3,12 @@
 angle_t<radians_t>::angle_t(const i_angle<degrees_t>& degrees) : angle_t{ degrees.value } { }
 angle_t<radians_t>::angle_t(const angle_t<degrees_t>& degrees) : i_angle{ degrees.cast() } { }
 angle_t<radians_t>::angle_t(degrees_t degrees) : i_angle{ degrees * angle_t<degrees_t>::pi } { }
-
-degrees_t angle_t<radians_t>::cast() const { return value * pi; }
-angle_t<radians_t>::operator degrees_t() const { return cast(); }
 angle_t<radians_t>::operator angle_t<degrees_t>() const { return angle_t<degrees_t>{ cast() }; }
 
 
 angle_t<degrees_t>::angle_t(const i_angle<radians_t>& radians) : angle_t{ radians.value } { }
 angle_t<degrees_t>::angle_t(const angle_t<radians_t>& radians) : i_angle{ radians.cast() } { }
 angle_t<degrees_t>::angle_t(radians_t radians) : i_angle{ degrees_t(radians * angle_t<radians_t>::pi) } { }
-
-radians_t angle_t<degrees_t>::cast() const { return value * pi; }
-angle_t<degrees_t>::operator radians_t() const { return cast(); }
 angle_t<degrees_t>::operator angle_t<radians_t>() const { return angle_t<radians_t>{ cast() }; }
 
 #define make_function(type, name, body) type angle_t<type>::name##() const { return body; }

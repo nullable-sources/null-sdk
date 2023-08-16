@@ -1,13 +1,13 @@
 ﻿#include <iostream>
 #include <null-sdk.h>
 
-math_make_templates(vec2_t, coordinates_t)
+math_define_templates(vec2_t, coordinates_t)
 void print_type(const std::string_view& str, const vec2_t<coordinates_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}]", vec.x, vec.y) << " }" << std::endl; }
 
-math_make_templates(vec3_t, coordinates_t)
+math_define_templates(vec3_t, coordinates_t)
 void print_type(const std::string_view& str, const vec3_t<coordinates_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}; {}]", vec.x, vec.y, vec.z) << " }" << std::endl; }
 
-math_make_templates(rect_t, coordinates_t)
+math_define_templates(rect_t, coordinates_t)
 void print_type(const std::string_view& str, const rect_t<coordinates_t>& rect) { std::cout << str << "{ " << std::format("min: [{}; {}]; max: [{}; {}]", rect.min.x, rect.min.y, rect.max.x, rect.max.y) << " }" << std::endl; }
 
 void callbacks() {
