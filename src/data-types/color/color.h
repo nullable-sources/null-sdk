@@ -40,6 +40,8 @@ namespace null::sdk {
 
 		template <typename self_t> auto rgb(this self_t&& self) { return vec3_t<channel_t>{ self.r, self.g, self.b }; }
 
+		channel_t brightness() const { return *std::max_element(channels.begin(), std::prev(channels.end())); }
+
 	public:
 		fast_ops_structure_convert_operator(, vec3_t<channel_t>() const, vec3_t<channel_t>, , r, g, b);
 		fast_ops_structure_convert_operator(, vec4_t<channel_t>() const, vec4_t<channel_t>, , r, g, b, a);
