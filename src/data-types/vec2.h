@@ -26,7 +26,7 @@ public:
 	vec2_t(coord_t _x, coord_t _y) : x{ _x }, y{ _y } { }
 
 	vec2_t(const std::array<coord_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
-	vec2_t(const std::vector<coord_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
+	vec2_t(const std::vector<coord_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), std::min(_coordinates.size(), array_size)), coordinates.begin()); }
 	vec2_t(const std::tuple<coord_t, coord_t>& tuple) : coordinates{ std::apply([](auto... n) { return std::array{ n... }; }, tuple) } { }
 
 	template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, vec2_t<coord_t>>

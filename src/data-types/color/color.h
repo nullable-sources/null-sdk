@@ -30,7 +30,7 @@ namespace null::sdk {
 
 		i_color(const i_color<channel_t>& color, channel_t _a) : i_color{ color.r, color.g, color.b, _a } { }
 		i_color(const std::array<channel_t, channels_size>& _channels) : channels{ _channels } { }
-		i_color(const std::vector<channel_t>& _channels) { std::move(_channels.begin(), std::next(_channels.begin(), channels_size), channels.begin()); }
+		i_color(const std::vector<channel_t>& _channels) { std::move(_channels.begin(), std::next(_channels.begin(), std::min(_channels.size(), channels_size)), channels.begin()); }
 
 		template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, i_color<channel_t>>
 		i_color(const type_t& value) : i_color{ null::compatibility::data_type_converter_t<type_t, i_color<channel_t>>::convert(value) } { }

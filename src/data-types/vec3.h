@@ -23,7 +23,7 @@ public:
 	vec3_t(const vec2_t<coord_t>& vec, coord_t _z = { }) : x{ vec.x }, y{ vec.y }, z{ _z } { }
 
 	vec3_t(const std::array<coord_t, array_size>& _coordinates) : coordinates{ _coordinates } { }
-	vec3_t(const std::vector<coord_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), array_size), coordinates.begin()); }
+	vec3_t(const std::vector<coord_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), std::min(_coordinates.size(), array_size)), coordinates.begin()); }
 	vec3_t(const std::tuple<coord_t, coord_t, coord_t>& tuple) : coordinates{ std::apply([](auto... n) { return std::array{ n... }; }, tuple) } { }
 	vec3_t(const std::tuple<coord_t, coord_t>& tuple, coord_t _z = { }) : coordinates{ std::apply([&](auto... n) { return std::array{ n..., _z }; }, tuple) } { }
 
