@@ -36,9 +36,9 @@ public:
 		const float cos{ std::cosf(angle) }, sin{ std::sinf(angle) };
 		const vec3_t<float> normalized{ axis.normalized() };
 		return { {
-			{ std::pow(normalized.x, 2) * (1.f - cos) + cos,					normalized.x * normalized.y * (1.f - cos) - normalized.z * sin, normalized.x * normalized.z * (1.f - cos) + normalized.y * sin	},
-			{ normalized.y * normalized.x * (1.f - cos) + normalized.z * sin,	std::pow(normalized.y, 2) * (1.f - cos) + cos,					normalized.y * normalized.z * (1.f - cos) - normalized.x * sin	},
-			{ normalized.z * normalized.x * (1.f - cos) - normalized.y * sin,	normalized.z * normalized.y * (1.f - cos) + normalized.x * sin,	std::pow(normalized.z, 2) * (1.f - cos) + cos					}
+			{ std::powf(normalized.x, 2) * (1.f - cos) + cos,					normalized.x * normalized.y * (1.f - cos) - normalized.z * sin, normalized.x * normalized.z * (1.f - cos) + normalized.y * sin	},
+			{ normalized.y * normalized.x * (1.f - cos) + normalized.z * sin,	std::powf(normalized.y, 2) * (1.f - cos) + cos,					normalized.y * normalized.z * (1.f - cos) - normalized.x * sin	},
+			{ normalized.z * normalized.x * (1.f - cos) - normalized.y * sin,	normalized.z * normalized.y * (1.f - cos) + normalized.x * sin,	std::powf(normalized.z, 2) * (1.f - cos) + cos					}
 		} };
 	}
 
