@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup Label="NullProperties">
+        <NullSdkRoot>$(MSBuildThisFileDirectory)</NullSdkRoot>
+        <NullSdkConfiguration Condition="'$(UseDebugLibraries)' == 'true'">debug</NullSdkConfiguration>
+        <NullSdkConfiguration Condition="'$(UseDebugLibraries)' == 'false'">release</NullSdkConfiguration>
+    </PropertyGroup>
+
+    <ItemDefinitionGroup>
+        <ClCompile>
+            <AdditionalIncludeDirectories>$(NullSdkRoot)src;$(NullSdkRoot)third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+        </ClCompile>
+        <Lib>
+            <AdditionalLibraryDirectories>$(NullSdkRoot)build;$(NullSdkRoot)third-party\minhook\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+            <AdditionalDependencies>null-sdk-$(NullSdkConfiguration)-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies Condition="'$(NullSdkConfiguration)'=='debug'">libMinHook-$(LibrariesArchitecture)-v141-mdd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies Condition="'$(NullSdkConfiguration)'=='release'">libMinHook-$(LibrariesArchitecture)-v141-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Lib>
+        <Link>
+            <AdditionalLibraryDirectories>$(NullSdkRoot)build;$(NullSdkRoot)third-party\minhook\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+            <AdditionalDependencies>null-sdk-$(NullSdkConfiguration)-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies Condition="'$(NullSdkConfiguration)'=='debug'">libMinHook-$(LibrariesArchitecture)-v141-mdd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies Condition="'$(NullSdkConfiguration)'=='release'">libMinHook-$(LibrariesArchitecture)-v141-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+</Project>
