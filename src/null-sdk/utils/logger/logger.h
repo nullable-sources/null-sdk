@@ -5,7 +5,7 @@
 
 namespace utils {
 	enum class e_log_type { info, warning, error, assert };
-	class c_log_dispatcher : public c_event_dispatcher<e_log_type> {
+	class c_log_event_dispatcher : public c_event_dispatcher<e_log_type> {
 	public:
 		class c_default_log_listener : public i_event_listener<e_log_type> {
 		public:
@@ -13,14 +13,14 @@ namespace utils {
 		} default_listener{ };
 
 	public:
-		c_log_dispatcher() {
+		c_log_event_dispatcher() {
 			attach_listener(e_log_type::info, &default_listener);
 			attach_listener(e_log_type::warning, &default_listener);
 			attach_listener(e_log_type::error, &default_listener);
 			attach_listener(e_log_type::assert, &default_listener);
 		}
 
-		~c_log_dispatcher() {
+		~c_log_event_dispatcher() {
 			detach_listener(e_log_type::info, &default_listener);
 			detach_listener(e_log_type::warning, &default_listener);
 			detach_listener(e_log_type::error, &default_listener);

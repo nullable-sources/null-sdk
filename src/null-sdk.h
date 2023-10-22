@@ -21,5 +21,5 @@
 #include "null-sdk/data-types/matrix/matrix4x4.h"
 #include "null-sdk/data-types/matrix/matrix3x3.h"
 #include "null-sdk/data-types/matrix/matrix2x2.h"
-#include "null-sdk/data-types/color/color.h"
+#include "null-sdk/data-types/color/hsv.h"
 #include "null-sdk/data-types/callbacks.h"

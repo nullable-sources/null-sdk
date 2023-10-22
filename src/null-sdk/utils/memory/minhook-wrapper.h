@@ -26,12 +26,12 @@ namespace memory {
 			return MH_OK;
 		}
 
-		static MH_STATUS disable() { return MH_DisableHook(hooked_address); }
+		static inline MH_STATUS disable() { return MH_DisableHook(hooked_address); }
 	};
 
 	namespace minhook {
-		static MH_STATUS initialize() { return MH_Initialize(); }
-		static MH_STATUS destroy() { return MH_Uninitialize(); }
+		static inline MH_STATUS initialize() { return MH_Initialize(); }
+		static inline MH_STATUS destroy() { return MH_Uninitialize(); }
 	}
 }
 

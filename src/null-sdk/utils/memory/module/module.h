@@ -17,8 +17,8 @@ namespace memory {
 		std::vector<resource_t> resources{ };
 
 	public:
-		c_module(const pe_image_t& _pe_image) : pe_image{ _pe_image } { }
-		c_module(std::string_view _name, bool store = true) : name{ _name } {
+		c_module(const pe_image_t& _pe_image) : pe_image(_pe_image) { }
+		c_module(std::string_view _name, bool store = true) : name(_name) {
 			if(c_module* finded{ find_stored_module(_name) }) {
 				*this = *finded;
 			} else {
@@ -42,10 +42,10 @@ namespace memory {
 
 		public:
 			i_export() { }
-			i_export(const address_t& _address) : address_t{ _address } { }
-			i_export(std::string_view _module_name, std::string_view _name) : name{ _name } {
+			i_export(const address_t& _address) : address_t(_address) { }
+			i_export(std::string_view _module_name, std::string_view _name) : name(_name) {
 				if(module = (c_dll*)find_stored_module(_module_name)) {
-					if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
+					if(i_export* finded = module->find_stored_export(_name)) *this = *finded;
 					else {
 						address = module->get_export(_name);
 						module->stored_exports.push_back(this);
@@ -54,8 +54,8 @@ namespace memory {
 					address = c_dll{ _module_name, false }.get_export(name);
 				}
 			}
-			i_export(c_dll* _module, std::string_view _name) : module{ _module }, name{ _name }, address_t{ _module->get_export(_name) } {
-				if(i_export* finded{ module->find_stored_export(_name) }) *this = *finded;
+			i_export(c_dll* _module, std::string_view _name) : module(_module), name(_name), address_t(_module->get_export(_name)) {
+				if(i_export* finded = module->find_stored_export(_name)) *this = *finded;
 				else module->stored_exports.push_back(this);
 			}
 		};
@@ -66,13 +66,13 @@ namespace memory {
 		template <typename return_t, typename ...args_t>
 		class c_export<return_t(args_t...)> : public i_export {
 		public: using i_export::i_export;
-			typedef return_t(*prototype_t)(args_t...);
+			using prototype_t = return_t(__stdcall*)(args_t...);
 
 		public:
-			return_t operator()(args_t... args) {
+			inline return_t operator()(args_t... args) {
 				if(module && !address) { address = module->load_export(name); }
 				if(!address) utils::logger(utils::e_log_type::warning, "'{}' export address == nullptr", name.empty() ? "unknown" : name);
-				return ((prototype_t)address)(args...);
+				return ((prototype_t)address)(std::forward<args_t>(args)...);
 			}
 		};
 
@@ -80,7 +80,7 @@ namespace memory {
 		std::vector<i_export*> stored_exports{ };
 
 	public:
-		c_dll(std::string_view _name, bool store = true) : c_module{ _name, store } { }
+		c_dll(std::string_view _name, bool store = true) : c_module(_name, store) { }
 
 	public:
 		virtual i_export* find_stored_export(std::string_view _name);

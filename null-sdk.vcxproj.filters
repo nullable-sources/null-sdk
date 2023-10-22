@@ -135,6 +135,12 @@
     <ClInclude Include="src\null-sdk\data-types\color\color.h">
       <Filter>src\data-types\color</Filter>
     </ClInclude>
+    <ClInclude Include="src\null-sdk\data-types\color\hsv.h">
+      <Filter>src\data-types\color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\null-sdk\data-types\color\rgba.h">
+      <Filter>src\data-types\color</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk\utils\win\win.cpp">
@@ -151,9 +157,6 @@
     </ClCompile>
     <ClCompile Include="src\null-sdk\utils\memory\resource\resource.cpp">
       <Filter>src\utils\memory\resource</Filter>
-    </ClCompile>
-    <ClCompile Include="src\null-sdk\data-types\color\color.cpp">
-      <Filter>src\data-types\color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

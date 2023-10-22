@@ -7,7 +7,7 @@ namespace memory {
 		address_t base_address{ };
 
 	public:
-		PIMAGE_DOS_HEADER dos_header() { return base_address.cast<PIMAGE_DOS_HEADER>(); }
-		PIMAGE_NT_HEADERS nt_headers() { return address_t{ base_address }.offset({ dos_header()->e_lfanew }).cast<PIMAGE_NT_HEADERS>(); }
+		inline constexpr PIMAGE_DOS_HEADER dos_header() { return base_address.cast<PIMAGE_DOS_HEADER>(); }
+		inline PIMAGE_NT_HEADERS nt_headers() { return base_address.offseted(dos_header()->e_lfanew).cast<PIMAGE_NT_HEADERS>(); }
 	};
 }

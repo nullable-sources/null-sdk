@@ -4,10 +4,5 @@
     <ProjectGuid>{f7a10a5c-0fae-424b-8f2b-6cc4e4d898d1}</ProjectGuid>
   </PropertyGroup>
   
-  <Import Project="null-sdk.vcxproj" />  
-  <PropertyGroup>
-    <NullProjectName>null-sdk</NullProjectName>
-    <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(NullProjectName)\</IntDir>
-    <TargetName>$(NullProjectName)-$(Configuration)-$(PlatformShortName)</TargetName>
-  </PropertyGroup>
+  <Import Project="null-sdk.vcxproj" />
 </Project>

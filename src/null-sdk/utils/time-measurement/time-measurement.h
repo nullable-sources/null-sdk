@@ -41,7 +41,7 @@ namespace utils {
 		virtual std::chrono::nanoseconds representation() const override { return delta; }
 
 		virtual void update() override {
-			std::chrono::steady_clock::time_point now{ std::chrono::steady_clock::now() };
+			std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 			delta = now - last_update;
 			last_update = now;
 		}
@@ -53,13 +53,13 @@ namespace utils {
 		std::deque<std::chrono::nanoseconds> measurements{ };
 
 	public:
-		c_cumulative_time_measurement(const int& _max_size) : max_size{ _max_size } { }
+		c_cumulative_time_measurement(const int& _max_size) : max_size(_max_size) { }
 
 	public:
 		virtual std::chrono::nanoseconds representation() const override { return delta / measurements.size(); }
 
 		virtual void update() override {
-			std::chrono::steady_clock::time_point now{ std::chrono::steady_clock::now() };
+			std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
 			if(measurements.size() >= max_size) {
 				delta -= measurements.front();

@@ -22,6 +22,8 @@
     <ClInclude Include="src\null-sdk\data-types\angle\angle.h" />
     <ClInclude Include="src\null-sdk\data-types\callbacks.h" />
     <ClInclude Include="src\null-sdk\data-types\color\color.h" />
+    <ClInclude Include="src\null-sdk\data-types\color\hsv.h" />
+    <ClInclude Include="src\null-sdk\data-types\color\rgba.h" />
     <ClInclude Include="src\null-sdk\data-types\matrix\matrix.h" />
     <ClInclude Include="src\null-sdk\data-types\matrix\matrix2x2.h" />
     <ClInclude Include="src\null-sdk\data-types\matrix\matrix3x3.h" />
@@ -50,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk\data-types\angle\angle.cpp" />
-    <ClCompile Include="src\null-sdk\data-types\color\color.cpp" />
     <ClCompile Include="src\null-sdk\utils\logger\logger.cpp" />
     <ClCompile Include="src\null-sdk\utils\memory\module\module.cpp" />
     <ClCompile Include="src\null-sdk\utils\memory\resource\resource.cpp" />
@@ -118,7 +119,7 @@
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
-    <TargetName>$(ProjectName)-$(Configuration)-$(PlatformShortName)</TargetName>
+    <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -126,7 +127,7 @@
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
-    <TargetName>$(ProjectName)-$(Configuration)-$(PlatformShortName)</TargetName>
+    <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -134,7 +135,7 @@
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
-    <TargetName>$(ProjectName)-$(Configuration)-$(PlatformShortName)</TargetName>
+    <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -142,7 +143,7 @@
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
-    <TargetName>$(ProjectName)-$(Configuration)-$(PlatformShortName)</TargetName>
+    <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
     <ClCompile>
