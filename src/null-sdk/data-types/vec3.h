@@ -27,7 +27,7 @@ public:
 	inline vec3_t(const std::tuple<coord_t, coord_t, coord_t>& tuple) : coordinates(std::apply([](auto... n) { return std::array(n...); }, tuple)) { }
 	inline vec3_t(const std::tuple<coord_t, coord_t>& tuple, coord_t _z = { }) : coordinates(std::apply([&](auto... n) { return std::array(n..., _z); }, tuple)) { }
 
-	template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, vec3_t<coorcoord_tdinates_t>>
+	template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, vec3_t<coord_t>>
 	inline constexpr vec3_t(const type_t& value) : vec3_t(null::compatibility::data_type_converter_t<type_t, vec3_t<coord_t>>::convert(value)) { }
 
 public:
