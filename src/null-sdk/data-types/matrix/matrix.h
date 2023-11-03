@@ -26,60 +26,65 @@ namespace null::sdk {
 	template <typename data_t> struct vec_type_selector_t<3, data_t> { using vec_t = vec3_t<data_t>; };
 	template <typename data_t> struct vec_type_selector_t<4, data_t> { using vec_t = vec4_t<data_t>; };
 
-	template <typename data_t, typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num> struct row_major_t;
-	template <typename data_t, typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num> struct column_major_t;
+	struct row_major_t;
+	struct column_major_t;
 
-	template <typename data_t, typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num>
 	struct row_major_t {
 	public:
-		using transpose_t = column_major_t;
+		using transpose_major_t = column_major_t;
 
-		using row_access_t = packed_access_t;
-		using column_access_t = stride_access_t<columns_num>;
+		template <size_t rows_num> using row_access_t = packed_access_t;
+		template <size_t columns_num> using column_access_t = stride_access_t<columns_num>;
 
-		using vec_representation_t = vec_type_selector_t<rows_num, typename row_header_t>::vec_t;
+		template <typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num>
+		using vec_representation_t = typename vec_type_selector_t<rows_num, row_header_t>::vec_t;
+
+		template <typename data_t, size_t rows_num, size_t columns_num>
 		using array_representation_t = std::array<std::array<data_t, columns_num>, rows_num>;
 
 	public:
 		static auto&& get_by_index(auto&& matrix, size_t row, size_t column) { return matrix.data[row][column]; }
 	};
 
-	template <typename data_t, typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num>
 	struct column_major_t {
 	public:
-		using transpose_t = row_major_t;
+		using transpose_major_t = row_major_t;
 
-		using row_access_t = stride_access_t<rows_num>;
-		using column_access_t = packed_access_t;
+		template <size_t rows_num> using row_access_t = stride_access_t<rows_num>;
+		template <size_t columns_num> using column_access_t = packed_access_t;
 
-		using vec_representation_t = vec_type_selector_t<columns_num, typename column_header_t>::vec_t;
+		template <typename row_header_t, typename column_header_t, size_t rows_num, size_t columns_num>
+		using vec_representation_t = typename vec_type_selector_t<columns_num, column_header_t>::vec_t;
+
+		template <typename data_t, size_t rows_num, size_t columns_num>
 		using array_representation_t = std::array<std::array<data_t, rows_num>, columns_num>;
 
 	public:
 		static auto&& get_by_index(auto&& matrix, size_t row, size_t column) { return matrix.data[column][row]; }
 	};
 
-	template <template <typename, typename, typename, size_t, size_t> class major_type_t, typename data_t, size_t rows_num, size_t columns_num>
+	template <typename major_type_t, typename data_t, size_t rows_num, size_t columns_num>
 	class i_matrix {
 	public:
 		static i_matrix identity() { return i_matrix{ }.set_diagonal({ 1.f }); }
 
 	public:
-		static constexpr size_t diagonal_size{ std::min(rows_num, columns_num) };
-		static constexpr size_t linear_size{ rows_num * columns_num };
+		static constexpr size_t diagonal_size = std::min(rows_num, columns_num);
+		static constexpr size_t linear_size = rows_num * columns_num;
 
-		using column_header_t = vec_type_selector_t<rows_num, data_t>::vec_t;
-		using columns_t = vec_type_selector_t<columns_num, typename column_header_t>::vec_t;
+		using column_header_t = typename  vec_type_selector_t<rows_num, data_t>::vec_t;
+		using columns_t = typename vec_type_selector_t<columns_num, column_header_t>::vec_t;
 		
-		using row_header_t = vec_type_selector_t<columns_num, data_t>::vec_t;
-		using rows_t = vec_type_selector_t<rows_num, typename row_header_t>::vec_t;
+		using row_header_t = typename vec_type_selector_t<columns_num, data_t>::vec_t;
+		using rows_t = typename vec_type_selector_t<rows_num, row_header_t>::vec_t;
 
-		using diagonal_t = vec_type_selector_t<diagonal_size, data_t>::vec_t;
+		using diagonal_t = typename vec_type_selector_t<diagonal_size, data_t>::vec_t;
 
-		using major_t = major_type_t<data_t, typename row_header_t, typename column_header_t, rows_num, columns_num>;
-		using transpose_t = i_matrix<major_t::transpose_t, data_t, rows_num, columns_num>;
-		using vec_representation_t = major_t::vec_representation_t;
-		using array_representation_t = major_t::array_representation_t;
+		using transpose_t = i_matrix<typename major_type_t::transpose_major_t, data_t, rows_num, columns_num>;
+		using row_access_t = typename major_type_t::template row_access_t<rows_num>;
+		using column_access_t = typename major_type_t::template column_access_t<columns_num>;
+		using vec_representation_t = typename major_type_t::template vec_representation_t<row_header_t, column_header_t, rows_num, columns_num>;
+		using array_representation_t = typename major_type_t::template array_representation_t<data_t, rows_num, columns_num>;
 
 		template <typename other_data_t>
 		using different_data_type_t = i_matrix<major_type_t, other_data_t, rows_num, columns_num>;
@@ -97,6 +102,7 @@ namespace null::sdk {
 	public:
 		inline constexpr i_matrix() { }
 
+		inline constexpr i_matrix(std::same_as<row_header_t> auto&& ... headers) { set_rows(rows_t(headers...)); }
 		inline constexpr i_matrix(const rows_t& rows) { set_rows(rows); }
 		inline i_matrix(const array_representation_t& matrix) : array(matrix) { }
 		inline i_matrix(const std::array<data_t, linear_size>& matrix) : linear_array(matrix) { }
@@ -111,20 +117,20 @@ namespace null::sdk {
 		}
 		
 		template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>
-		inline constexpr i_matrix(const type_t& value) : i_matrix{ null::compatibility::data_type_converter_t<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>::convert(value) } { }
+		inline constexpr i_matrix(const type_t& value) : i_matrix(null::compatibility::data_type_converter_t<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>::convert(value)) { }
 
 	public:
-		template <typename self_t> inline auto&& get_by_index(this self_t&& self, size_t row, size_t column) { return major_t::get_by_index(self, row, column); }
+		template <typename self_t> inline auto&& get_by_index(this self_t&& self, size_t row, size_t column) { return major_type_t::get_by_index(self, row, column); }
 		template <typename self_t> inline auto&& fill_rows(this self_t&& self, const row_header_t& row) { for(int i : std::views::iota(0u, rows_num)) self.set_row(i, row); return self; }
 		template <typename self_t> inline auto&& fill_columns(this self_t&& self, const column_header_t& column) { for(int i : std::views::iota(0u, columns_num)) self.set_column(i, column); return self; }
 
 		template <typename self_t> inline auto&& set_rows(this self_t&& self, const rows_t& rows) { for(int i : std::views::iota(0u, rows_num)) self.set_row(i, rows[i]); return self; }
-		template <typename self_t> inline auto&& set_row(this self_t&& self, size_t i, const row_header_t& row) { major_t::row_access_t::set(self, i, row); return self; }
-		template <typename self_t> inline row_header_t get_row(this self_t&& self, size_t i) { return major_t::row_access_t::get(self, i); }
+		template <typename self_t> inline auto&& set_row(this self_t&& self, size_t i, const row_header_t& row) { row_access_t::set(self, i, row); return self; }
+		template <typename self_t> inline row_header_t get_row(this self_t&& self, size_t i) { return row_access_t::get(self, i); }
 
 		template <typename self_t> inline auto&& set_columns(this self_t&& self, const columns_t& columns) { for(int i : std::views::iota(0u, columns_num)) self.set_column(i, columns[i]); return self; }
-		template <typename self_t> inline auto&& set_column(this self_t&& self, size_t i, const column_header_t& column) { major_t::column_access_t::set(self, i, column); return self; }
-		template <typename self_t> inline column_header_t get_column(this self_t&& self, size_t i) { return major_t::column_access_t::get(self, i); }
+		template <typename self_t> inline auto&& set_column(this self_t&& self, size_t i, const column_header_t& column) { column_access_t::set(self, i, column); return self; }
+		template <typename self_t> inline column_header_t get_column(this self_t&& self, size_t i) { return column_access_t::get(self, i); }
 
 	public:
 		inline transpose_t transpose() const {
@@ -183,7 +189,7 @@ namespace null::sdk {
 }
 
 #define make_matrix_definition(rows_num, columns_num)																																						\
-	template <template <typename, typename, typename, size_t, size_t> class major_type_t>																													\
+	template <typename major_type_t>																																										\
 	class c_matrix##rows_num##x##columns_num : public null::sdk::i_matrix<major_type_t, float, rows_num, columns_num> {																						\
 	public:																																																	\
 		using null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>::i_matrix;																													\

@@ -2,12 +2,12 @@
 #include "matrix.h"
 #include "../../math/geometry.h"
 
-template <template <typename, typename, typename, size_t, size_t> class major_type_t>
+template <typename major_type_t>
 class c_matrix2x2 : public null::sdk::i_matrix<major_type_t, float, 2, 2> {
 public:
 	static inline c_matrix2x2 rotation(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
 		const float cos = std::cosf(angle), sin = std::sinf(angle);
-		return vec2_t(
+		return c_matrix2x2(
 			vec2_t(cos,												direction == math::e_rotation::ccw ? -sin : sin),
 			vec2_t(direction == math::e_rotation::ccw ? sin : -sin,	cos)
 		);
