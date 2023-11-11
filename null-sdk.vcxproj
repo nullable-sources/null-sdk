@@ -118,7 +118,7 @@
     <OutDir>$(ProjectDir)build\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
-    <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
+    <PublicIncludeDirectories>src\;third-party\;third-party\fmt\include</PublicIncludeDirectories>
     <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
@@ -126,7 +126,7 @@
     <OutDir>$(ProjectDir)build\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
-    <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
+    <PublicIncludeDirectories>src\;third-party\;third-party\fmt\include</PublicIncludeDirectories>
     <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
@@ -134,7 +134,7 @@
     <OutDir>$(ProjectDir)build\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
-    <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
+    <PublicIncludeDirectories>src\;third-party\;third-party\fmt\include</PublicIncludeDirectories>
     <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
@@ -142,7 +142,7 @@
     <OutDir>$(ProjectDir)build\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
-    <PublicIncludeDirectories>src\;third-party\</PublicIncludeDirectories>
+    <PublicIncludeDirectories>src\;third-party\;third-party\fmt\include</PublicIncludeDirectories>
     <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
@@ -166,8 +166,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libMinHook-x86-v141-mdd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libMinHook-x86-v141-mdd.lib;fmt-debug-x86.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
@@ -195,10 +195,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>libMinHook-x86-v141-mdd.lib</AdditionalDependencies>
+      <AdditionalDependencies>libMinHook-x86-v141-mdd.lib;fmt-release-x86.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
@@ -222,10 +222,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>libMinHook-x64-v141-mdd.lib</AdditionalDependencies>
+      <AdditionalDependencies>libMinHook-x64-v141-mdd.lib;fmt-debug-x64.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
@@ -253,10 +253,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>libMinHook-x64-v141-mdd.lib</AdditionalDependencies>
+      <AdditionalDependencies>libMinHook-x64-v141-mdd.lib;fmt-release-x64.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

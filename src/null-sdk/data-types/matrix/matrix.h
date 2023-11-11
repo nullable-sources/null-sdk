@@ -72,7 +72,7 @@ namespace null::sdk {
 		static constexpr size_t diagonal_size = std::min(rows_num, columns_num);
 		static constexpr size_t linear_size = rows_num * columns_num;
 
-		using column_header_t = typename  vec_type_selector_t<rows_num, data_t>::vec_t;
+		using column_header_t = typename vec_type_selector_t<rows_num, data_t>::vec_t;
 		using columns_t = typename vec_type_selector_t<columns_num, column_header_t>::vec_t;
 		
 		using row_header_t = typename vec_type_selector_t<columns_num, data_t>::vec_t;

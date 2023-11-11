@@ -54,8 +54,8 @@
 
 
 //@note: converting operators utils
-#define fast_ops_structure_convert_operator(specifiers, templates, covnerting_t, construct, member_op, ... /*members*/)  \
-	impl_fast_ops_create_op(specifiers, , fast_ops_args_pack(covnerting_t), , { return  construct(fast_ops_make_body(comma, member_op, this_prefix, __VA_ARGS__)); }, templates)
+#define fast_ops_structure_convert_operator(specifiers, templates, covnerting_t, construct, member_op, ... /*members*/)															\
+	impl_fast_ops_create_op(specifiers, , fast_ops_args_pack(covnerting_t), , { return construct(fast_ops_make_body(comma, member_op, this_prefix, __VA_ARGS__)); }, templates)
 
 //@note: unary operators utils
 #define fast_ops_structure_prefix_operator(specifiers, return_t, op_t/*new/ref*/, op, ... /*members*/)											\
