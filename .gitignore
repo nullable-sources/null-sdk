@@ -1,5 +1,4 @@
 build/
 .vs/
 *.user
-
-null-sdk.static-linking.log
+*.static-linking.log
