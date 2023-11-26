@@ -168,6 +168,7 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
       <AdditionalDependencies>libMinHook-x86-v141-mdd.lib;fmt-debug-x86.lib</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
@@ -199,6 +200,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
@@ -226,6 +228,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
@@ -257,6 +260,7 @@
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)third-party\minhook\lib;$(ProjectDir)third-party\fmt\libs</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
