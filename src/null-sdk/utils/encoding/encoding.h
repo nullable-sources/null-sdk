@@ -14,4 +14,10 @@ namespace utils::encoding {
 		MultiByteToWideChar(CP_ACP, 0, ascii.data(), ascii.length(), utf8.data(), utf8.length());
 		return utf8;
 	}
+
+	static std::wstring utf8_to_utf16(std::string_view utf8) {
+		std::wstring utf16(MultiByteToWideChar(CP_UTF8, 0, utf8.data(), utf8.length(), 0, 0), L'\0');
+		MultiByteToWideChar(CP_UTF8, 0, utf8.data(), utf8.length(), utf16.data(), utf16.length());
+		return utf16;
+	}
 }

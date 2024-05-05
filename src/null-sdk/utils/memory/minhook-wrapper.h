@@ -18,11 +18,11 @@ namespace memory {
 		static MH_STATUS setup(const address_t& address) {
 			hooked_address = address;
 			if constexpr(type == e_hook_type::standard) {
-				if(MH_STATUS status{ MH_CreateHook(address, &hook_class_t::hook, (LPVOID*)&original) }; status != MH_OK) return status;
+				if(MH_STATUS status = MH_CreateHook(address, &hook_class_t::hook, (LPVOID*)&original); status != MH_OK) return status;
 			} else if constexpr(type == e_hook_type::proxy) {
-				if(MH_STATUS status{ MH_CreateHook(address, &hook_class_t::hook_proxy, (LPVOID*)&original) }; status != MH_OK) return status;
+				if(MH_STATUS status = MH_CreateHook(address, &hook_class_t::hook_proxy, (LPVOID*)&original); status != MH_OK) return status;
 			}
-			if(MH_STATUS status{ MH_EnableHook(address) }; status != MH_OK) return status;
+			if(MH_STATUS status = MH_EnableHook(address); status != MH_OK) return status;
 			return MH_OK;
 		}
 
