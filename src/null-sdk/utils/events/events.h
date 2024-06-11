@@ -4,12 +4,13 @@
 #include <any>
 
 namespace utils {
+	using event_parameters_t = std::unordered_map<std::string, std::any>;
 	template <typename event_id_t>
 	struct i_event_listener {
 	public:
 		virtual void on_attach() { }
 		virtual void on_detach() { }
-		virtual void process_event(event_id_t id, const std::unordered_map<std::string, std::any>& parameters) = 0;
+		virtual void process_event(event_id_t id, const event_parameters_t& parameters) = 0;
 	};
 
 	template <typename event_id_t>
@@ -26,7 +27,7 @@ namespace utils {
 			}
 		}
 
-		virtual void dispatch_event(event_id_t id, const std::unordered_map<std::string, std::any>& parameters) {
+		virtual void dispatch_event(event_id_t id, const event_parameters_t& parameters) {
 			for(i_event_listener<event_id_t>* listener : listeners[id]) listener->process_event(id, parameters);
 		}
 	};

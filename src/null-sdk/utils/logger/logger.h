@@ -9,7 +9,7 @@ namespace utils {
 	public:
 		class c_default_log_listener : public i_event_listener<e_log_type> {
 		public:
-			void process_event(e_log_type id, const std::unordered_map<std::string, std::any>& parameters) override;
+			void process_event(e_log_type id, const event_parameters_t& parameters) override;
 		} default_listener{ };
 
 	public:
