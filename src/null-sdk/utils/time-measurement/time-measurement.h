@@ -3,72 +3,72 @@
 #include <deque>
 
 namespace utils {
-	class c_immediate_time_measurement {
-	protected:
-		std::chrono::steady_clock::time_point measurement_start{ };
+    class c_immediate_time_measurement {
+    protected:
+        std::chrono::steady_clock::time_point measurement_start{ };
 
-	public:
-		c_immediate_time_measurement() { }
+    public:
+        c_immediate_time_measurement() { }
 
-	public:
-		virtual std::chrono::nanoseconds representation() const { return std::chrono::steady_clock::now() - measurement_start; }
-		
-		virtual void begin() { measurement_start = std::chrono::steady_clock::now(); }
-	};
+    public:
+        virtual std::chrono::nanoseconds representation() const { return std::chrono::steady_clock::now() - measurement_start; }
 
-	class c_retained_time_measurement : public c_immediate_time_measurement {
-	protected:
-		std::chrono::steady_clock::time_point last_update{ };
+        virtual void begin() { measurement_start = std::chrono::steady_clock::now(); }
+    };
 
-	public:
-		c_retained_time_measurement() { }
+    class c_retained_time_measurement : public c_immediate_time_measurement {
+    protected:
+        std::chrono::steady_clock::time_point last_update{ };
 
-	public:
-		virtual std::chrono::nanoseconds representation() const override { return last_update - measurement_start; }
+    public:
+        c_retained_time_measurement() { }
 
-		virtual void begin() override { last_update = measurement_start = std::chrono::steady_clock::now(); }
-		virtual void update() { last_update = std::chrono::steady_clock::now(); }
-	};
+    public:
+        virtual std::chrono::nanoseconds representation() const override { return last_update - measurement_start; }
 
-	class c_segment_time_measurement : public c_retained_time_measurement {
-	protected:
-		std::chrono::nanoseconds delta{ };
+        virtual void begin() override { last_update = measurement_start = std::chrono::steady_clock::now(); }
+        virtual void update() { last_update = std::chrono::steady_clock::now(); }
+    };
 
-	public:
-		c_segment_time_measurement() { }
+    class c_segment_time_measurement : public c_retained_time_measurement {
+    protected:
+        std::chrono::nanoseconds delta{ };
 
-	public:
-		virtual std::chrono::nanoseconds representation() const override { return delta; }
+    public:
+        c_segment_time_measurement() { }
 
-		virtual void update() override {
-			std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-			delta = now - last_update;
-			last_update = now;
-		}
-	};
+    public:
+        virtual std::chrono::nanoseconds representation() const override { return delta; }
 
-	class c_cumulative_time_measurement : public c_segment_time_measurement {
-	protected:
-		int max_size{ };
-		std::deque<std::chrono::nanoseconds> measurements{ };
+        virtual void update() override {
+            std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+            delta = now - last_update;
+            last_update = now;
+        }
+    };
 
-	public:
-		c_cumulative_time_measurement(const int& _max_size) : max_size(_max_size) { }
+    class c_cumulative_time_measurement : public c_segment_time_measurement {
+    protected:
+        int max_size{ };
+        std::deque<std::chrono::nanoseconds> measurements{ };
 
-	public:
-		virtual std::chrono::nanoseconds representation() const override { return delta / measurements.size(); }
+    public:
+        c_cumulative_time_measurement(const int& _max_size) : max_size(_max_size) { }
 
-		virtual void update() override {
-			std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    public:
+        virtual std::chrono::nanoseconds representation() const override { return delta / measurements.size(); }
 
-			if(measurements.size() >= max_size) {
-				delta -= measurements.front();
-				measurements.pop_front();
-			}
+        virtual void update() override {
+            std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
-			delta += measurements.emplace_back(now - last_update);
+            if(measurements.size() >= max_size) {
+                delta -= measurements.front();
+                measurements.pop_front();
+            }
 
-			last_update = now;
-		}
-	};
+            delta += measurements.emplace_back(now - last_update);
+
+            last_update = now;
+        }
+    };
 }

@@ -77,23 +77,23 @@
 	math_define_rect_function(name, math_make_rect_function(name, __VA_ARGS__), __VA_ARGS__)		\
 
 namespace math {
-	math_define_functions(abs, std::abs, a);
-	math_define_functions(mod, std::fmod, a, b);
-	math_define_functions(remainder, std::remainder, a, b);
-	math_define_functions(fma, std::fma, a, b, c);
-	math_define_functions(dim, std::fdim, a, b);
+    math_define_functions(abs, std::abs, a);
+    math_define_functions(mod, std::fmod, a, b);
+    math_define_functions(remainder, std::remainder, a, b);
+    math_define_functions(fma, std::fma, a, b, c);
+    math_define_functions(dim, std::fdim, a, b);
 
-	math_define_functions(ceil, std::ceil, a);
-	math_define_functions(floor, std::floor, a);
-	math_define_functions(trunc, std::trunc, a);
-	math_define_functions(round, std::round, a);
-	math_define_functions(nearbyint, std::nearbyint, a);
-	math_define_functions(rint, std::rint, a);
+    math_define_functions(ceil, std::ceil, a);
+    math_define_functions(floor, std::floor, a);
+    math_define_functions(trunc, std::trunc, a);
+    math_define_functions(round, std::round, a);
+    math_define_functions(nearbyint, std::nearbyint, a);
+    math_define_functions(rint, std::rint, a);
 
-	math_define_functions(clamp, std::clamp, a, min, max);
-	math_define_functions(min, std::min, a, b);
-	math_define_functions(max, std::max, a, b);
+    math_define_functions(clamp, std::clamp, a, min, max);
+    math_define_functions(min, std::min, a, b);
+    math_define_functions(max, std::max, a, b);
 
-	//@note: std::lerp does not support non-arithmetic types
-	static inline constexpr auto lerp(auto a, auto b, auto t) { return a + t * (b - a); }
+    //@note: std::lerp does not support non-arithmetic types
+    static inline constexpr auto lerp(auto a, auto b, auto t) { return a + t * (b - a); }
 }
