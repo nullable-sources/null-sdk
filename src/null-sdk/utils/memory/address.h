@@ -35,14 +35,34 @@ namespace memory {
         inline constexpr operator bool() const { return address; }
     };
 
-    struct vtable_t : private address_t {
+    struct vtable_t {
     public:
-        inline constexpr std::uintptr_t* get() { return *cast<std::uintptr_t**>(); }
-        inline std::uintptr_t operator[](int idx) { return get()[idx]; }
+        template <std::size_t, typename>
+        struct func_t;
 
-        template <typename funtion_t>
-        inline funtion_t function(int index) {
-            return (funtion_t)(get()[index]);
-        }
+        template <std::size_t index, typename return_t, typename ...args_t>
+        class func_t<index, return_t(args_t...)> {
+        public:
+            template <typename self_t>
+            using prototype_t = return_t(__thiscall*)(self_t, args_t...);
+
+        public:
+            template <typename self_t>
+            static inline prototype_t<self_t> get(self_t self) {
+                return vtable_t::get<self_t, prototype_t<self_t>>(self, index);
+            }
+
+            template <typename self_t>
+            static inline return_t call(self_t self, args_t&&... args) {
+                return get(self)(self, std::forward<args_t>(args)...);
+            }
+        };
+
+    public:
+        template <typename self_t>
+        static inline constexpr std::uintptr_t* get(self_t self) { return *(std::uintptr_t**)self; }
+
+        template <typename self_t, typename prototype_t = memory::address_t>
+        static inline constexpr prototype_t get(self_t self, std::size_t index) { return (prototype_t)(get(self)[index]); }
     };
 }
