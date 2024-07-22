@@ -2,3 +2,5 @@ build/
 .vs/
 *.user
 *.static-linking.log
+
+third-party/boost/
