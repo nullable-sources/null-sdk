@@ -53,8 +53,8 @@ namespace memory {
             }
 
             template <typename self_t>
-            static inline return_t call(self_t self, args_t&&... args) {
-                return get(self)(self, std::forward<args_t>(args)...);
+            static inline return_t call(self_t self, args_t... args) {
+                return func_t::get(self)(self, std::forward<args_t>(args)...);
             }
         };
 
