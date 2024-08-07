@@ -141,6 +141,15 @@
     <ClInclude Include="src\null-sdk\data-types\color\rgba.h">
       <Filter>src\data-types\color</Filter>
     </ClInclude>
+    <ClInclude Include="src\null-sdk\data-types\angle\euler3d.h">
+      <Filter>src\data-types\angle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\null-sdk\data-types\angle\euler2d.h">
+      <Filter>src\data-types\angle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\null-sdk\utils\fast-defines.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk\utils\win\win.cpp">

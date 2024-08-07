@@ -23,3 +23,5 @@
 #include "null-sdk/data-types/matrix/matrix2x2.h"
 #include "null-sdk/data-types/color/hsv.h"
 #include "null-sdk/data-types/callbacks.h"
+#include "null-sdk/data-types/angle/euler2d.h"
+#include "null-sdk/data-types/angle/euler3d.h"
