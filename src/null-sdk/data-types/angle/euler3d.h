@@ -1,6 +1,7 @@
 #pragma once
 #include "../../utils/fast-defines.h"
 #include "../matrix/matrix2x2.h"
+#include "../matrix/matrix3x3.h"
 #include "angle.h"
 
 namespace null::sdk {
@@ -12,8 +13,6 @@ namespace null::sdk {
 
     public:
         inline constexpr i_euler3d() { }
-        template <typename direction_t>
-        inline constexpr i_euler3d(const vec3_t<direction_t>& direction) { set_angles(direction); }
 
         template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, i_euler3d<angle_value_t, rotation>>
         inline constexpr i_euler3d(const type_t& value) : i_euler3d(null::compatibility::data_type_converter_t<type_t, i_euler3d<angle_value_t, rotation>>::convert(value)) { }
@@ -95,15 +94,17 @@ namespace null::sdk {
         };                                                                                                                                                                      \
                                                                                                                                                                                 \
     public:                                                                                                                                                                     \
-        i_##implementation_name##_euler3d() { }                                                                                                                                 \
+        inline constexpr i_##implementation_name##_euler3d() { }                                                                                                                \
         template <null::sdk::is_angle_type_t another_angle_value_t>                                                                                                             \
-        i_##implementation_name##_euler3d(__fast_defs__unpack_seq(1, euler_raw_ctor, __VA_ARGS__))                                                                              \
+        inline constexpr i_##implementation_name##_euler3d(__fast_defs__unpack_seq(1, euler_raw_ctor, __VA_ARGS__))                                                             \
             : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                                                                                         \
         template <null::sdk::is_angle_type_t another_angle_value_t>                                                                                                             \
-        i_##implementation_name##_euler3d(__fast_defs__unpack_seq(1, euler_type_ctor, __VA_ARGS__))                                                                             \
+        inline constexpr i_##implementation_name##_euler3d(__fast_defs__unpack_seq(1, euler_type_ctor, __VA_ARGS__))                                                            \
             : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                                                                                         \
+        template <typename direction_t>                                                                                                                                         \
+        inline i_##implementation_name##_euler3d(const vec3_t<direction_t>& direction) { i_euler3d<angle_value_t, rotation>::set_angles(direction); }                           \
                                                                                                                                                                                 \
-public:                                                                                                                                                                         \
+    public:                                                                                                                                                                     \
         fast_ops_structure_equal_operator(inline constexpr, template <is_angle_type_t angle_other_t>, const i_euler3d::euler_rotation_t<angle_other_t>&, rhs_field, x, y, z);   \
         fast_ops_structure_equal_operator(inline constexpr, , angle_value_t, rhs_value, x, y, z);                                                                               \
     };                                                                                                                                                                          \
