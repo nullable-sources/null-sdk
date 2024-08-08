@@ -4,10 +4,24 @@
 #include <vector>
 
 #include "../utils/compatibility/data-type-converter.h"
+#include "../utils/fast-defines.h"
 #include "../utils/fast_operators.h"
 
+namespace null::sdk {
+#define __fast_defs__vec2_getter(_x, _y) template <typename self_t> inline constexpr auto _x##_y(this self_t&& self) { return vec2_t<coord_t>(self. _x, self. _y); }
+    
+    template <typename coord_t>
+    struct vec2_getter_t {
+    public:
+        __fast_defs__vec2_getter(x, x);
+        __fast_defs__vec2_getter(x, y);
+        __fast_defs__vec2_getter(y, x);
+        __fast_defs__vec2_getter(y, y);
+    };
+}
+
 template <typename coord_t>
-struct vec2_t {
+struct vec2_t : public null::sdk::vec2_getter_t<coord_t> {
 public:
     static constexpr size_t array_size = 2; //@note: size array{ x, y }
 

@@ -3,8 +3,54 @@
 #include "vec2.h"
 #include "../utils/fast_operators.h"
 
+namespace null::sdk {
+#define __fast_defs__vec3_getter(_x, _y, _z) template <typename self_t> inline constexpr auto _x##_y##_z(this self_t&& self) { return vec3_t<coord_t>(self. _x, self. _y, self. _z); }
+
+    template <typename coord_t>
+    struct vec3_getter_t {
+    public:
+        __fast_defs__vec2_getter(x, x);
+        __fast_defs__vec2_getter(x, y);
+        __fast_defs__vec2_getter(x, z);
+        __fast_defs__vec2_getter(y, x);
+        __fast_defs__vec2_getter(y, y);
+        __fast_defs__vec2_getter(y, z);
+        __fast_defs__vec2_getter(z, x);
+        __fast_defs__vec2_getter(z, y);
+        __fast_defs__vec2_getter(z, z);
+
+        __fast_defs__vec3_getter(x, x, x);
+        __fast_defs__vec3_getter(x, x, y);
+        __fast_defs__vec3_getter(x, x, z);
+        __fast_defs__vec3_getter(x, y, x);
+        __fast_defs__vec3_getter(x, y, y);
+        __fast_defs__vec3_getter(x, y, z);
+        __fast_defs__vec3_getter(x, z, x);
+        __fast_defs__vec3_getter(x, z, y);
+        __fast_defs__vec3_getter(x, z, z);
+        __fast_defs__vec3_getter(y, x, x);
+        __fast_defs__vec3_getter(y, x, y);
+        __fast_defs__vec3_getter(y, x, z);
+        __fast_defs__vec3_getter(y, y, x);
+        __fast_defs__vec3_getter(y, y, y);
+        __fast_defs__vec3_getter(y, y, z);
+        __fast_defs__vec3_getter(y, z, x);
+        __fast_defs__vec3_getter(y, z, y);
+        __fast_defs__vec3_getter(y, z, z);
+        __fast_defs__vec3_getter(z, x, x);
+        __fast_defs__vec3_getter(z, x, y);
+        __fast_defs__vec3_getter(z, x, z);
+        __fast_defs__vec3_getter(z, y, x);
+        __fast_defs__vec3_getter(z, y, y);
+        __fast_defs__vec3_getter(z, y, z);
+        __fast_defs__vec3_getter(z, z, x);
+        __fast_defs__vec3_getter(z, z, y);
+        __fast_defs__vec3_getter(z, z, z);
+    };
+}
+
 template <typename coord_t>
-struct vec3_t {
+struct vec3_t : public null::sdk::vec3_getter_t<coord_t> {
 public:
     static constexpr size_t array_size = 3; //@note: size array{ x, y, z }
 
@@ -38,9 +84,6 @@ public:
 
     template <typename self_t> inline vec3_t<coord_t> normalized(this self_t&& self) { return self / self.length(); }
     template <typename self_t> inline void normalize(this self_t&& self) { self /= self.length(); }
-
-public:
-    template <typename self_t> inline constexpr auto xy(this self_t&& self) { return vec2_t<coord_t>(self.x, self.y); }
 
 public:
     fast_ops_structure_convert_operator(inline constexpr, template <typename other_t>, vec3_t<other_t>() const, vec3_t<other_t>, (other_t), x, y, z);
