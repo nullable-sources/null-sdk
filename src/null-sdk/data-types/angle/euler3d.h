@@ -24,6 +24,14 @@ namespace null::sdk {
         using euler_type_t = i_euler3d<_angle_value_t, rotation, coordinate_system, up_axis>;
 
     public:
+        static constexpr inline math::e_rotation directions_rotation() {
+            if constexpr(coordinate_system == e_coordinate_system::right_handed)
+                return math::e_rotation::cw;
+            else
+                return math::e_rotation::ccw;
+        }
+
+    public:
         inline constexpr i_euler3d() { }
 
         template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, euler_t>
@@ -45,24 +53,33 @@ namespace null::sdk {
         template <typename self_t>
         vec3_t<float> forward(this self_t&& self) {
             vec3_t<float> vector(1.f, 0.f, 0.f);
-            vector = matrix3x3_t::rotation_y(self.pitch, rotation) * vector;
-            vector = matrix3x3_t::rotation_z(self.yaw, rotation) * vector;
+            vector = matrix3x3_t::rotation_y(self.pitch, directions_rotation()) * vector;
+            vector = matrix3x3_t::rotation_z(self.yaw, directions_rotation()) * vector;
             return vector.normalized();
         }
 
         template <typename self_t>
         vec3_t<float> right(this self_t&& self) {
-            vec3_t<float> vector(0.f, 1.f, 0.f);
-            vector = matrix3x3_t::rotation_x(self.roll, rotation) * vector;
-            vector = matrix3x3_t::rotation_z(self.yaw, rotation) * vector;
+            constexpr float direction = coordinate_system == e_coordinate_system::right_handed ? -1.f : 1.f;
+
+            vec3_t<float> vector(0.f, 0.f, 0.f);
+            if constexpr(up_axis == e_up_axis::z) vector.y = direction;
+            else vector.z = direction;
+
+            vector = matrix3x3_t::rotation_x(self.roll, directions_rotation()) * vector;
+            vector = matrix3x3_t::rotation_z(self.yaw, directions_rotation()) * vector;
             return vector.normalized();
         }
 
         template <typename self_t>
         vec3_t<float> up(this self_t&& self) {
-            vec3_t<float> vector(0.f, 0.f, 1.f);
-            vector = matrix3x3_t::rotation_x(self.roll, rotation) * vector;
-            vector = matrix3x3_t::rotation_y(self.pitch, rotation) * vector;
+            vec3_t<float> vector(0.f, 0.f, 0.f);
+            if constexpr(up_axis == e_up_axis::z) vector.z = 1.f;
+            else vector.y = 1.f;
+
+            vector = matrix3x3_t::rotation_x(self.roll, directions_rotation()) * vector;
+            vector = matrix3x3_t::rotation_y(self.pitch, directions_rotation()) * vector;
+            vector = matrix3x3_t::rotation_z(self.yaw, directions_rotation()) * vector;
             return vector.normalized();
         }
 
@@ -136,16 +153,16 @@ namespace null::sdk {
         inline i_##implementation_name##_euler3d(const vec3_t<direction_t>& direction) { euler_interface_t::set_angles(direction); }                                            \
                                                                                                                                                                                 \
     public:                                                                                                                                                                     \
-        fast_ops_structure_equal_operator(inline constexpr, template <is_angle_type_t angle_other_t>, const i_euler3d::euler_type_t<angle_other_t>&, rhs_field, x, y, z);        \
+        fast_ops_structure_equal_operator(inline constexpr, template <is_angle_type_t angle_other_t>, const i_euler3d::euler_type_t<angle_other_t>&, rhs_field, x, y, z);       \
         fast_ops_structure_equal_operator(inline constexpr, , angle_value_t, rhs_value, x, y, z);                                                                               \
     };                                                                                                                                                                          \
 
-#define __make_euler_implementation_shortcat(implementation_name)                                                       \
-    template <null::sdk::is_angle_type_t angle_value_t,                                                                 \
-        math::e_rotation rotation = math::e_rotation::ccw,                                                              \
-        null::sdk::e_coordinate_system coordinate_system = null::sdk::e_coordinate_system::right_handed,                       \
-        null::sdk::e_up_axis up_axis = null::sdk::e_up_axis::z                                                          \
-    >                                                                               \
+#define __make_euler_implementation_shortcat(implementation_name)                                                                                   \
+    template <null::sdk::is_angle_type_t angle_value_t,                                                                                             \
+        math::e_rotation rotation = math::e_rotation::ccw,                                                                                          \
+        null::sdk::e_coordinate_system coordinate_system = null::sdk::e_coordinate_system::right_handed,                                            \
+        null::sdk::e_up_axis up_axis = null::sdk::e_up_axis::z                                                                                      \
+    >                                                                                                                                               \
     using euler3d_##implementation_name##_t = null::sdk::i_##implementation_name##_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;    \
 
     //@note: For the standard description of the coordinate order, the coordinate system from aviation is used,

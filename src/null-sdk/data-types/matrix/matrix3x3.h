@@ -32,17 +32,6 @@ public:
         );
     }
 
-    static inline c_matrix3x3 rotation_multiplied(radians_t angle_x, radians_t angle_y, radians_t angle_z) {
-        const float xcos = std::cosf(angle_x), xsin = std::sinf(angle_x);
-        const float ycos = std::cosf(angle_y), ysin = std::sinf(angle_y);
-        const float zcos = std::cosf(angle_z), zsin = std::sinf(angle_z);
-        return c_matrix3x3(
-            vec3_t(xcos * ycos, xcos * ysin * zsin - xsin * zcos, xcos * ysin * zcos + xsin * zsin),
-            vec3_t(xsin * ycos, xsin * ysin * zsin + xcos * zcos, xsin * ysin * zcos - xcos * zsin),
-            vec3_t(-ysin,       ycos * zsin,                      ycos * zcos                     )
-        );
-    }
-
     static inline c_matrix3x3 rotation_around_axis(const vec3_t<float>& axis, radians_t angle) {
         const float cos = std::cosf(angle), sin = std::sinf(angle);
         const vec3_t<float> normalized = axis.normalized();
