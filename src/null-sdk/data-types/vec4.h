@@ -3,13 +3,84 @@
 #include "vec3.h"
 #include "../utils/fast_operators.h"
 
+template <typename coord_t>
+struct vec4_t;
+
 namespace null::sdk {
 #define __fast_defs__vec4_getter(_x, _y, _z, _w) template <typename self_t> inline constexpr auto _x##_y##_z##_w(this self_t&& self) { return vec4_t<coord_t>(self. _x, self. _y, self. _z, self. _w); }
+
+#define __fast_defs__vec4_setter(_x, _y, _z, _w)                                                                                                                                                                                                \
+    template <typename self_t> inline constexpr auto&& _x##_y##_z##_w(this self_t&& self, coord_t rhs) { self. _x = self. _y = self. _z = self. _w = rhs; return self; }                                                                        \
+    template <typename self_t> inline constexpr auto&& _x##_y##_z##_w(this self_t&& self, coord_t x_rhs, coord_t y_rhs, coord_t z_rhs, coord_t w_rhs) { self. _x = x_rhs; self. _y = y_rhs; self. _z = z_rhs; self. _w = w_rhs; return self; }  \
+    template <typename self_t> inline constexpr auto&& _x##_y##_z##_w(this self_t&& self, const vec4_t<coord_t>& rhs) { self ._x = rhs.x; self. _y = rhs.y; self. _z = rhs.z; self. _w = rhs.w; return self; }                                  \
 
     //@todo: either change the compiler (msvc is not able to compile the implementation via BOOST_PP_SEQ_FOR_EACH_PRODUCT), or wait for its support to appear (I doubt that this will happen)
     template <typename coord_t>
     struct vec4_getter_t {
     public:
+        __fast_defs__vec2_setter(x, y);
+        __fast_defs__vec2_setter(x, z);
+        __fast_defs__vec2_setter(x, w);
+        __fast_defs__vec2_setter(y, x);
+        __fast_defs__vec2_setter(y, z);
+        __fast_defs__vec2_setter(y, w);
+        __fast_defs__vec2_setter(z, x);
+        __fast_defs__vec2_setter(z, y);
+        __fast_defs__vec2_setter(z, w);
+        __fast_defs__vec2_setter(w, x);
+        __fast_defs__vec2_setter(w, y);
+        __fast_defs__vec2_setter(w, z);
+
+        __fast_defs__vec3_setter(x, y, z);
+        __fast_defs__vec3_setter(x, y, w);
+        __fast_defs__vec3_setter(x, z, y);
+        __fast_defs__vec3_setter(x, z, w);
+        __fast_defs__vec3_setter(x, w, y);
+        __fast_defs__vec3_setter(x, w, z);
+        __fast_defs__vec3_setter(y, x, z);
+        __fast_defs__vec3_setter(y, x, w);
+        __fast_defs__vec3_setter(y, z, x);
+        __fast_defs__vec3_setter(y, z, w);
+        __fast_defs__vec3_setter(y, w, x);
+        __fast_defs__vec3_setter(y, w, z);
+        __fast_defs__vec3_setter(z, x, y);
+        __fast_defs__vec3_setter(z, x, w);
+        __fast_defs__vec3_setter(z, y, x);
+        __fast_defs__vec3_setter(z, y, w);
+        __fast_defs__vec3_setter(z, w, x);
+        __fast_defs__vec3_setter(z, w, y);
+        __fast_defs__vec3_setter(w, x, y);
+        __fast_defs__vec3_setter(w, x, z);
+        __fast_defs__vec3_setter(w, y, x);
+        __fast_defs__vec3_setter(w, y, z);
+        __fast_defs__vec3_setter(w, z, x);
+        __fast_defs__vec3_setter(w, z, y);
+
+        __fast_defs__vec4_setter(x, y, z, w);
+        __fast_defs__vec4_setter(x, y, w, z);
+        __fast_defs__vec4_setter(x, z, y, w);
+        __fast_defs__vec4_setter(x, z, w, y);
+        __fast_defs__vec4_setter(x, w, y, z);
+        __fast_defs__vec4_setter(x, w, z, y);
+        __fast_defs__vec4_setter(y, x, z, w);
+        __fast_defs__vec4_setter(y, x, w, z);
+        __fast_defs__vec4_setter(y, z, x, w);
+        __fast_defs__vec4_setter(y, z, w, x);
+        __fast_defs__vec4_setter(y, w, x, z);
+        __fast_defs__vec4_setter(y, w, z, x);
+        __fast_defs__vec4_setter(z, x, y, w);
+        __fast_defs__vec4_setter(z, x, w, y);
+        __fast_defs__vec4_setter(z, y, x, w);
+        __fast_defs__vec4_setter(z, y, w, x);
+        __fast_defs__vec4_setter(z, w, x, y);
+        __fast_defs__vec4_setter(z, w, y, x);
+        __fast_defs__vec4_setter(w, x, y, z);
+        __fast_defs__vec4_setter(w, x, z, y);
+        __fast_defs__vec4_setter(w, y, x, z);
+        __fast_defs__vec4_setter(w, y, z, x);
+        __fast_defs__vec4_setter(w, z, x, y);
+        __fast_defs__vec4_setter(w, z, y, x);
+
         __fast_defs__vec2_getter(x, x);
         __fast_defs__vec2_getter(x, y);
         __fast_defs__vec2_getter(x, z);

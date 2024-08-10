@@ -3,12 +3,35 @@
 #include "vec2.h"
 #include "../utils/fast_operators.h"
 
+template <typename coord_t>
+struct vec3_t;
+
 namespace null::sdk {
 #define __fast_defs__vec3_getter(_x, _y, _z) template <typename self_t> inline constexpr auto _x##_y##_z(this self_t&& self) { return vec3_t<coord_t>(self. _x, self. _y, self. _z); }
+
+#define __fast_defs__vec3_setter(_x, _y, _z)                                                                                                                                                                    \
+    template <typename self_t> inline constexpr auto&& _x##_y##_z(this self_t&& self, coord_t rhs) { self. _x = self. _y = self. _z = rhs; return self; }                                                   \
+    template <typename self_t> inline constexpr auto&& _x##_y##_z(this self_t&& self, coord_t x_rhs, coord_t y_rhs, coord_t z_rhs) { self. _x = x_rhs; self. _y = y_rhs; self. _z = z_rhs; return self; }   \
+    template <typename self_t> inline constexpr auto&& _x##_y##_z(this self_t&& self, const vec3_t<coord_t>& rhs) { self ._x = rhs.x; self. _y = rhs.y; self. _z = rhs.z; return self; }                    \
 
     template <typename coord_t>
     struct vec3_getter_t {
     public:
+        __fast_defs__vec2_setter(x, y);
+        __fast_defs__vec2_setter(x, z);
+        __fast_defs__vec2_setter(y, x);
+        __fast_defs__vec2_setter(y, z);
+        __fast_defs__vec2_setter(z, x);
+        __fast_defs__vec2_setter(z, y);
+
+        __fast_defs__vec3_setter(x, y, z);
+        __fast_defs__vec3_setter(x, z, y);
+        __fast_defs__vec3_setter(y, x, z);
+        __fast_defs__vec3_setter(y, z, x);
+        __fast_defs__vec3_setter(z, x, y);
+        __fast_defs__vec3_setter(z, y, x);
+
+
         __fast_defs__vec2_getter(x, x);
         __fast_defs__vec2_getter(x, y);
         __fast_defs__vec2_getter(x, z);

@@ -7,12 +7,23 @@
 #include "../utils/fast-defines.h"
 #include "../utils/fast_operators.h"
 
+template <typename coord_t>
+struct vec2_t;
+
 namespace null::sdk {
 #define __fast_defs__vec2_getter(_x, _y) template <typename self_t> inline constexpr auto _x##_y(this self_t&& self) { return vec2_t<coord_t>(self. _x, self. _y); }
-    
+
+#define __fast_defs__vec2_setter(_x, _y)                                                                                                                            \
+    template <typename self_t> inline constexpr auto&& _x##_y(this self_t&& self, coord_t rhs) { self._x = self._y = rhs; return self; }                            \
+    template <typename self_t> inline constexpr auto&& _x##_y(this self_t&& self, coord_t x_rhs, coord_t y_rhs) { self._x = x_rhs; self._y = y_rhs; return self; }  \
+    template <typename self_t> inline constexpr auto&& _x##_y(this self_t&& self, const vec2_t<coord_t>& rhs) { self._x = rhs.x; self._y = rhs.y; return self; }    \
+
     template <typename coord_t>
     struct vec2_getter_t {
     public:
+        __fast_defs__vec2_setter(x, y);
+        __fast_defs__vec2_setter(y, x);
+
         __fast_defs__vec2_getter(x, x);
         __fast_defs__vec2_getter(x, y);
         __fast_defs__vec2_getter(y, x);
