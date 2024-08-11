@@ -6,7 +6,7 @@
 
 #include "null-sdk/utils/memory/address.h"
 #include "null-sdk/utils/memory/signature.h"
-#include "null-sdk/utils/memory/pe_image.h"
+#include "null-sdk/utils/memory/pe-image.h"
 #include "null-sdk/utils/memory/module/module.h"
 #include "null-sdk/utils/memory/minhook-wrapper.h"
 #include "null-sdk/utils/memory/resource/resource.h"

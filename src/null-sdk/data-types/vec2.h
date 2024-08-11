@@ -5,7 +5,7 @@
 
 #include "../utils/compatibility/data-type-converter.h"
 #include "../utils/fast-defines.h"
-#include "../utils/fast_operators.h"
+#include "../utils/fast-operators.h"
 
 template <typename coord_t>
 struct vec2_t;

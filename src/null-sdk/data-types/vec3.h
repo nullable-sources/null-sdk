@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
 #include "vec2.h"
-#include "../utils/fast_operators.h"
+#include "../utils/fast-operators.h"
 
 template <typename coord_t>
 struct vec3_t;

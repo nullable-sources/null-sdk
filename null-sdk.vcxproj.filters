@@ -57,7 +57,7 @@
     <ClInclude Include="src\null-sdk\utils\win\win.h">
       <Filter>src\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\fast_operators.h">
+    <ClInclude Include="src\null-sdk\utils\fast-operators.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\null-sdk\data-types\callbacks.h">
@@ -78,7 +78,7 @@
     <ClInclude Include="src\null-sdk\utils\memory\signature.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\pe_image.h">
+    <ClInclude Include="src\null-sdk\utils\memory\pe-image.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
     <ClInclude Include="src\null-sdk\utils\memory\minhook-wrapper.h">

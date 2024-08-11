@@ -3,7 +3,7 @@
 #include <ranges>
 #include <algorithm>
 
-#include "../../utils/fast_operators.h"
+#include "../../utils/fast-operators.h"
 #include "../vec4.h"
 
 namespace null::sdk {
