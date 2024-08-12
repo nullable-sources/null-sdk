@@ -12,6 +12,19 @@ namespace null::sdk {
 
     enum class e_up_axis { y, z };
 
+    enum class e_axis_boundires_behaviour {
+        none,
+        normalize,
+        clamp
+    };
+
+    template <is_angle_type_t angle_value_t>
+    struct axis_definition_t {
+    public:
+        e_axis_boundires_behaviour normalize_behaviour{ e_axis_boundires_behaviour::normalize }, clamp_behaviour{ e_axis_boundires_behaviour::clamp };
+        angle_value_t normalize_boundires{ angle_t<angle_value_t>::default_boundires }, clamp_boundires{ angle_t<angle_value_t>::default_boundires };
+    };
+    
     template <is_angle_type_t angle_value_t,
         math::e_rotation rotation,
         e_coordinate_system coordinate_system,
@@ -24,11 +37,11 @@ namespace null::sdk {
         using euler_type_t = i_euler3d<_angle_value_t, rotation, coordinate_system, up_axis>;
 
     public:
+        static constexpr axis_definition_t<angle_value_t> roll_definition{ }, pitch_definition{ }, yaw_definition{ };
+
         static constexpr inline math::e_rotation directions_rotation() {
-            if constexpr(coordinate_system == e_coordinate_system::right_handed)
-                return math::e_rotation::cw;
-            else
-                return math::e_rotation::ccw;
+            if constexpr(coordinate_system == e_coordinate_system::right_handed) return math::e_rotation::cw;
+            else return math::e_rotation::ccw;
         }
 
     public:
@@ -84,6 +97,78 @@ namespace null::sdk {
         }
 
     public:
+        template <typename self_t>
+        auto&& roll_clamp(this self_t&& self) {
+            if constexpr(std::decay_t<self_t>::roll_definition.clamp_behaviour == e_axis_boundires_behaviour::clamp)
+                self.roll.clamp<std::decay_t<self_t>::roll_definition.clamp_boundires>();
+            else if(std::decay_t<self_t>::roll_definition.clamp_behaviour == e_axis_boundires_behaviour::normalize)
+                self.roll.normalize<std::decay_t<self_t>::roll_definition.clamp_boundires>();
+
+            return self;
+        }
+
+        template <typename self_t>
+        auto&& roll_normalize(this self_t&& self) {
+            if constexpr(std::decay_t<self_t>::roll_definition.normalize_behaviour == e_axis_boundires_behaviour::normalize)
+                self.roll.normalize<std::decay_t<self_t>::roll_definition.normalize_boundires>();
+            else if(std::decay_t<self_t>::roll_definition.normalize_behaviour == e_axis_boundires_behaviour::clamp)
+                self.roll.clamp<std::decay_t<self_t>::roll_definition.normalize_boundires>();
+
+            return self;
+        }
+
+        template <typename self_t>
+        auto&& pitch_clamp(this self_t&& self) {
+            if constexpr(std::decay_t<self_t>::pitch_definition.clamp_behaviour == e_axis_boundires_behaviour::clamp)
+                self.pitch.clamp<std::decay_t<self_t>::pitch_definition.clamp_boundires>();
+            else if(std::decay_t<self_t>::pitch_definition.clamp_behaviour == e_axis_boundires_behaviour::normalize)
+                self.pitch.normalize<std::decay_t<self_t>::pitch_definition.clamp_boundires>();
+
+            return self;
+        }
+
+        template <typename self_t>
+        auto&& pitch_normalize(this self_t&& self) {
+            if constexpr(std::decay_t<self_t>::pitch_definition.normalize_behaviour == e_axis_boundires_behaviour::normalize)
+                self.pitch.normalize<std::decay_t<self_t>::pitch_definition.normalize_boundires>();
+            else if(std::decay_t<self_t>::pitch_definition.normalize_behaviour == e_axis_boundires_behaviour::clamp)
+                self.pitch.clamp<std::decay_t<self_t>::pitch_definition.normalize_boundires>();
+
+            return self;
+        }
+
+        template <typename self_t>
+        auto&& yaw_clamp(this self_t&& self) {
+            if constexpr(std::decay_t<self_t>::yaw_definition.clamp_behaviour == e_axis_boundires_behaviour::clamp)
+                self.yaw.clamp<std::decay_t<self_t>::yaw_definition.clamp_boundires>();
+            else if(std::decay_t<self_t>::yaw_definition.clamp_behaviour == e_axis_boundires_behaviour::normalize)
+                self.yaw.normalize<std::decay_t<self_t>::yaw_definition.clamp_boundires>();
+
+            return self;
+        }
+
+        template <typename self_t>
+        auto&& yaw_normalize(this self_t&& self) {
+            if constexpr(std::decay_t<self_t>::yaw_definition.normalize_behaviour == e_axis_boundires_behaviour::normalize)
+                self.yaw.normalize<std::decay_t<self_t>::yaw_definition.normalize_boundires>();
+            else if(std::decay_t<self_t>::yaw_definition.normalize_behaviour == e_axis_boundires_behaviour::clamp)
+                self.yaw.clamp<std::decay_t<self_t>::yaw_definition.normalize_boundires>();
+
+            return self;
+        }
+
+        template <typename self_t>
+        self_t clamped(this self_t self) { return self.roll_clamp().pitch_clamp().yaw_clamp(); }
+
+        template <typename self_t>
+        auto&& clamp(this self_t&& self) { self = self.clamped(); return self; }
+
+        template <typename self_t>
+        self_t normalized(this self_t self) { return self.roll_normalize().pitch_normalize().yaw_normalize(); }
+
+        template <typename self_t>
+        auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
+
         template <typename self_t, typename direction_t>
         auto&& set_angles(this self_t&& self, const vec3_t<direction_t>& direction) {
             self.roll = angle_value_t{ };

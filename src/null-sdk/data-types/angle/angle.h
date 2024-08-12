@@ -1,7 +1,8 @@
 #pragma once
 #include <numbers>
 #include <cmath>
-#include <complex>
+#include <algorithm>
+
 #include "../../utils/fast-operators.h"
 
 using radians_t = double;
@@ -52,6 +53,9 @@ template <>
 struct angle_t<radians_t> : public null::sdk::i_angle<radians_t> {
 public:
     static constexpr double pi = 180. / std::numbers::pi;
+    static constexpr radians_t minimal_boundires = std::numbers::pi / 180.;
+    static constexpr radians_t maximal_boundires = std::numbers::pi * 2.;
+    static constexpr radians_t default_boundires = std::numbers::pi * 2.;
 
 public:
     static angle_t<radians_t> atan2(auto y, auto x) { return angle_t<radians_t>((radians_t)std::atan2(y, x)); }
@@ -65,9 +69,24 @@ public:
     inline constexpr angle_t(const angle_t<degrees_t>& degrees);
 
 public:
-    //@credits: https://stackoverflow.com/questions/2320986/easy-way-to-keeping-angles-between-179-and-180-degrees#comment52945562_2321125
-    angle_t<radians_t> normalized() const { return std::log(std::exp(std::complex<double>(0., angle))).imag(); }
-    template <typename self_t> auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
+    template <radians_t boundires = default_boundires>
+    angle_t<radians_t> clamped() const { return std::clamp(angle, boundires * -1, boundires); }
+
+    template <radians_t boundires = default_boundires, typename self_t>
+    auto&& clamp(this self_t&& self) { self = self.clamped<boundires>(); return self; }
+
+    template <radians_t boundires = default_boundires>
+    angle_t<radians_t> normalized() const {
+        constexpr degrees_t setp = std::clamp(boundires * 2, minimal_boundires, maximal_boundires);
+
+        radians_t new_angle = angle;
+        while(new_angle > boundires) new_angle -= setp;
+        while(new_angle < boundires * -1) new_angle += setp;
+        return new_angle;
+    }
+
+    template <radians_t boundires, typename self_t>
+    auto&& normalize(this self_t&& self) { self = self.normalized<boundires>(); return self; }
 
     inline constexpr degrees_t cast() const { return angle * pi; }
     inline constexpr operator degrees_t() const { return cast(); }
@@ -83,6 +102,9 @@ template <>
 struct angle_t<degrees_t> : public null::sdk::i_angle<degrees_t> {
 public:
     static constexpr double pi = std::numbers::pi / 180.f;
+    static constexpr degrees_t minimal_boundires = 1.f;
+    static constexpr degrees_t maximal_boundires = 360.f;
+    static constexpr degrees_t default_boundires = 360.f;
 
 public:
     static angle_t<degrees_t> atan2(const auto& y, const auto& x) { return angle_t<degrees_t>((radians_t)std::atan2(y, x)); }
@@ -96,8 +118,24 @@ public:
     inline constexpr angle_t(const angle_t<radians_t>& radians);
 
 public:
-    angle_t<degrees_t> normalized() const { return std::log(std::exp(std::complex<double>(0., angle * pi))).imag() * angle_t<radians_t>::pi; }
-    template <typename self_t> auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
+    template <degrees_t boundires = default_boundires>
+    angle_t<degrees_t> clamped() const { return std::clamp(angle, boundires * -1, boundires); }
+
+    template <degrees_t boundires = default_boundires, typename self_t>
+    auto&& clamp(this self_t&& self) { self = self.clamped<boundires>(); return self; }
+
+    template <degrees_t boundires = default_boundires>
+    angle_t<degrees_t> normalized() const {
+        constexpr degrees_t setp = std::clamp(boundires * 2, minimal_boundires, maximal_boundires);
+
+        degrees_t new_angle = angle;
+        while(new_angle > boundires) new_angle -= setp;
+        while(new_angle < boundires * -1) new_angle += setp;
+        return new_angle;
+    }
+
+    template <degrees_t boundires = default_boundires, typename self_t>
+    auto&& normalize(this self_t&& self) { self = self.normalized<boundires>(); return self; }
 
     inline constexpr radians_t cast() const { return angle * pi; }
     inline constexpr operator radians_t() const { return cast(); }
