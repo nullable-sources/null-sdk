@@ -29,6 +29,10 @@
   <ItemGroup>
     <ResourceCompile Include="resources\resources.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\test-document.txt" />
+    <Text Include="resources\test-document2.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -33,6 +33,11 @@ namespace memory {
         static inline cast_t cast(const resource_t& resource) { return cast_t{ }; }
     };
 
+    template <>
+    struct resource_cast_t<std::vector<std::uint8_t>> {
+        static inline std::vector<std::uint8_t> cast(const resource_t& resource) { return std::vector<std::uint8_t>((std::uint8_t*)resource.locked_data, (std::uint8_t*)resource.locked_data + resource.locked_data_size); }
+    };
+
     template <typename string_t>
     struct resource_cast_t<std::basic_string<string_t>> {
         static inline std::basic_string<string_t> cast(const resource_t& resource) { return std::basic_string<string_t>((string_t*)resource.locked_data, (string_t*)resource.locked_data + resource.locked_data_size); }

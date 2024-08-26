@@ -1,4 +1,5 @@
 #pragma once
+#include "../../logger/logger.h"
 #include "../resource/resource.h"
 
 namespace memory {

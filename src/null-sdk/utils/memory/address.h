@@ -1,5 +1,8 @@
 #pragma once
-#include "../win/win.h"
+#include <cstdint>
+#include <vector>
+#include <ranges>
+#include <algorithm>
 
 //@credits: thx lagcomp/csgo_sdk for this superior code
 namespace memory {

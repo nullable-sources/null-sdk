@@ -19,4 +19,12 @@
       <Filter>resources</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\test-document.txt">
+      <Filter>resources</Filter>
+    </Text>
+    <Text Include="resources\test-document2.txt">
+      <Filter>resources</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
