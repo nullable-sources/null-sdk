@@ -4,8 +4,15 @@
 #include <ranges>
 #include <algorithm>
 
-//@credits: thx lagcomp/csgo_sdk for this superior code
+#include "../../utils/fast-operators.h"
+
 namespace memory {
+    template <typename value_t>
+    concept is_not_sdk_address_t = !std::is_same_v<value_t, address_t>;
+
+    template <typename value_t>
+    concept is_sdk_address_t = std::is_same_v<value_t, address_t>;
+
     struct address_t {
     public:
         std::uintptr_t address{ };
@@ -34,6 +41,16 @@ namespace memory {
         inline address_t jumped(std::intptr_t offset) const { return address_t(*this).jump(offset); }
 
     public:
+        fast_ops_structure_all_postfix_operators(inline constexpr, address);
+
+        fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, const address_t&, rhs_field, address);
+
+        fast_ops_structure_equal_operator(inline constexpr, , const address_t&, rhs_field, address);
+
+        fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, const address_t&, rhs_field, address);
+
+        inline constexpr address_t operator &(const address_t& rhs) const { return address & rhs.address; }
+
         template <typename cast_t> inline constexpr operator cast_t() const { return cast<cast_t>(); }
         inline constexpr operator bool() const { return address; }
     };
