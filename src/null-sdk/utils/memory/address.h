@@ -7,12 +7,6 @@
 #include "../../utils/fast-operators.h"
 
 namespace memory {
-    template <typename value_t>
-    concept is_not_sdk_address_t = !std::is_same_v<value_t, address_t>;
-
-    template <typename value_t>
-    concept is_sdk_address_t = std::is_same_v<value_t, address_t>;
-
     struct address_t {
     public:
         std::uintptr_t address{ };
@@ -54,6 +48,12 @@ namespace memory {
         template <typename cast_t> inline constexpr operator cast_t() const { return cast<cast_t>(); }
         inline constexpr operator bool() const { return address; }
     };
+
+    template <typename value_t>
+    concept is_not_sdk_address_t = !std::is_same_v<value_t, address_t>;
+
+    template <typename value_t>
+    concept is_sdk_address_t = std::is_same_v<value_t, address_t>;
 
     struct vtable_t {
     public:
