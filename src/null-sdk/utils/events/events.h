@@ -8,7 +8,7 @@
 namespace ntl {
     using event_parameters_t = std::unordered_map<std::string, std::any>;
     template <typename event_id_t>
-    struct NULLSDK_API i_event_listener {
+    struct i_event_listener {
     public:
         virtual void on_attach() { }
         virtual void on_detach() { }
@@ -16,7 +16,7 @@ namespace ntl {
     };
 
     template <typename event_id_t>
-    class NULLSDK_API c_event_dispatcher {
+    class c_event_dispatcher {
     public:
         std::unordered_map<event_id_t, std::vector<i_event_listener<event_id_t>*>> listeners{ };
 

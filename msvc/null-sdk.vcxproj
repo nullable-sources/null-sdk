@@ -66,12 +66,7 @@
     <None Include="..\src\null-sdk\utils\memory\module\module.inl" />
     <None Include="..\src\null-sdk\utils\memory\resource\resource.inl" />
   </ItemGroup>
-
-  <!-- @note: include extension solution if it exist -->
-  <ItemGroup Condition="'$(NullSdkUseExtension)' == 'true'">
-    <ProjectReference Include="$(NullSdkUseExtensionProject)"/>
-  </ItemGroup>
-
+  
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -81,6 +76,9 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Configuration">
+    <ConfigurationType Condition="'$(NullSdkLinkingVCX)'=='static'">StaticLibrary</ConfigurationType>
+    <ConfigurationType Condition="'$(NullSdkLinkingVCX)'=='dynamic'">DynamicLibrary</ConfigurationType>
+
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseDebugLibraries Condition="'$(Configuration)'=='debug'">true</UseDebugLibraries>
@@ -116,6 +114,9 @@
       <PreprocessorDefinitions Condition="'$(Platform)'=='Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)'=='debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)'=='release'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+
+      <PreprocessorDefinitions Condition="'$(NullSdkLinkingVCX)'=='static'">NULLSDK_STATIC_LINKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(NullSdkLinkingVCX)'=='dynamic'">NULLSDK_DYNAMIC_LINKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
