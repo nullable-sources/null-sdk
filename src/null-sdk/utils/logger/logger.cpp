@@ -9,6 +9,4 @@ namespace ntl::utils {
             case e_log_type::assert: { throw std::runtime_error{ std::any_cast<std::string>(parameters.at("text")) }; } break;
         }
     }
-
-    NULLSDK_API c_log_event_dispatcher logger{ };
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32422.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "null-sdk.static-linking", "msvc\null-sdk.static-linking.vcxproj", "{F7A10A5C-0FAE-424B-8F2B-6CC4E4D898D1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "null-sdk", "null-sdk.vcxproj", "{F7A10A5C-0FAE-424B-8F2B-6CC4E4D898D1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win-utils", "examples\win-utils\win-utils.vcxproj", "{4D0B61D1-1831-471E-ADFE-D0E30DE1626B}"
 EndProject
@@ -14,6 +14,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minhook-wrapper", "examples\minhook-wrapper\minhook-wrapper.vcxproj", "{D0F8303C-E690-497B-9F37-D496E3332577}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "commands", "examples\commands\commands.vcxproj", "{4CA2F77C-1BCA-4D7C-896C-16957C575B45}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F7A10A5C-0FAE-424B-8F2B-6CC4E4D898D1} = {F7A10A5C-0FAE-424B-8F2B-6CC4E4D898D1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "data-types", "examples\data-types\data-types.vcxproj", "{A61DD5CA-49CA-4451-B269-F20F67ECD00E}"
 EndProject

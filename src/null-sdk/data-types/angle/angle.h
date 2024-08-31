@@ -3,7 +3,6 @@
 #include <cmath>
 #include <algorithm>
 
-#include "null-sdk/api-defines.h"
 #include "null-sdk/utils/fast-operators.h"
 
 using radians_t = double;

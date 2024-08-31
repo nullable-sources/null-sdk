@@ -3,7 +3,7 @@
 #include "../resource/resource.h"
 
 namespace ntl::mem {
-    class NULLSDK_API c_module {
+    class c_module {
     public:
         static inline std::vector<c_module*> stored_modules{ };
         static c_module* find_stored_module(std::string_view name);
@@ -34,9 +34,9 @@ namespace ntl::mem {
         resource_t* find_resource(std::string_view name, std::string_view type = { }); //@note: if type empty, will be returned first resource with this name
     };
 
-    class NULLSDK_API c_dll : public c_module {
+    class c_dll : public c_module {
     public:
-        class NULLSDK_API i_export : public address_t {
+        class i_export : public address_t {
         public:
             c_dll* module{ };
             std::string name{ };
@@ -65,7 +65,7 @@ namespace ntl::mem {
         class c_export;
 
         template <typename return_t, typename ...args_t>
-        class NULLSDK_API c_export<return_t(args_t...)> : public i_export {
+        class c_export<return_t(args_t...)> : public i_export {
         public: using i_export::i_export;
         public:
             using prototype_t = return_t(__stdcall*)(args_t...);

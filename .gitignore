@@ -1,8 +1,6 @@
 build/
 .vs/
 *.user
-
-*.dynamic-linking.log
-*.static-linking.log
+*.log
 
 third-party/boost/

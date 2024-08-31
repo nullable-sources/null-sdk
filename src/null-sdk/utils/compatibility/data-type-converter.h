@@ -1,8 +1,6 @@
 #pragma once
 #include <concepts>
 
-#include "null-sdk/api-defines.h"
-
 namespace ntl::compatibility {
     template <typename from_t, typename to_t>
     struct data_type_converter_t {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup Label="NullProperties">
-        <NullSdkRoot>$(MSBuildThisFileDirectory)..\</NullSdkRoot>
+        <NullSdkRoot>$(MSBuildThisFileDirectory)</NullSdkRoot>
         <NullSdkConfiguration Condition="'$(UseDebugLibraries)' == 'true'">debug</NullSdkConfiguration>
         <NullSdkConfiguration Condition="'$(UseDebugLibraries)' == 'false'">release</NullSdkConfiguration>
         <NullSdkLibPostfix>$(NullSdkConfiguration)-$(LibrariesArchitecture)</NullSdkLibPostfix>

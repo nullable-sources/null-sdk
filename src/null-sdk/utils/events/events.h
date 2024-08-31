@@ -3,8 +3,6 @@
 #include <unordered_map>
 #include <any>
 
-#include "null-sdk/api-defines.h"
-
 namespace ntl {
     using event_parameters_t = std::unordered_map<std::string, std::any>;
     template <typename event_id_t>

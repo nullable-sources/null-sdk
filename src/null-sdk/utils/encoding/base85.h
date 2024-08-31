@@ -2,10 +2,8 @@
 #include <ranges>
 #include <algorithm>
 
-#include "null-sdk/api-defines.h"
-
 namespace ntl::encoding {
-    struct NULLSDK_API base85_t {
+    struct base85_t {
     public:
         std::vector<std::uint8_t> output{ }, input{ };
 

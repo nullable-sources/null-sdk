@@ -5,7 +5,7 @@
 #include "../pe-image.h"
 
 namespace ntl::mem {
-    struct NULLSDK_API resource_t {
+    struct resource_t {
     public:
         pe_image_t parent_module{ };
         std::string name{ }, type{ };

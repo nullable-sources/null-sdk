@@ -2,7 +2,7 @@
 #include "module/module.h"
 
 namespace ntl::mem {
-    struct NULLSDK_API signature_t : public address_t {
+    struct signature_t : public address_t {
     public:
         pe_image_t pe_image{ };
         std::string signature{ };

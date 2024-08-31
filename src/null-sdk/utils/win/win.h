@@ -24,7 +24,7 @@ namespace ntl {
             callbacks_t<e_window_callbacks::on_wnd_proc, int(HWND, UINT, WPARAM, LPARAM)>
         >;
 
-        class NULLSDK_API c_window {
+        class c_window {
         public:
             window_callbacks_t callbacks{ };
 
@@ -101,10 +101,10 @@ namespace ntl {
     namespace console {
         inline FILE* old_out{ }, * old_in{ };
 
-        NULLSDK_API void attach();
-        NULLSDK_API void detach();
+        void attach();
+        void detach();
 
-        class NULLSDK_API i_command {
+        class i_command {
         public:
             static inline std::vector<i_command*> registered_commands{ };
 
