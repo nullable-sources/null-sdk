@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="NullVCXProperties">
+    <NullSdkConfigProps Condition="Exists('$(SolutionDir)third-party\null-projects-config\null-sdk-config.props')">$(SolutionDir)third-party\null-projects-config\null-sdk-config.props</NullSdkConfigProps>
+  </PropertyGroup>
+
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="debug|Win32">
+      <Configuration>debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release|Win32">
+      <Configuration>release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="debug|x64">
+      <Configuration>debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release|x64">
+      <Configuration>release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="..\src\null-sdk\api-defines.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\angle\angle.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\angle\euler3d.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\angle\euler2d.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\callbacks.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\color\color.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\color\hsv.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\color\rgba.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\matrix\matrix.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\matrix\matrix2x2.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\matrix\matrix3x3.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\matrix\matrix4x4.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\rect.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\vec2.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\vec3.h" />
+    <ClInclude Include="..\src\null-sdk\data-types\vec4.h" />
+    <ClInclude Include="..\src\null-sdk\math\geometry.h" />
+    <ClInclude Include="..\src\null-sdk\math\math.h" />
+    <ClInclude Include="..\src\null-sdk.h" />
+    <ClInclude Include="..\src\null-sdk\utils\compatibility\data-type-converter.h" />
+    <ClInclude Include="..\src\null-sdk\utils\encoding\base85.h" />
+    <ClInclude Include="..\src\null-sdk\utils\encoding\encoding.h" />
+    <ClInclude Include="..\src\null-sdk\utils\events\events.h" />
+    <ClInclude Include="..\src\null-sdk\utils\fast-defines.h" />
+    <ClInclude Include="..\src\null-sdk\utils\fast-operators.h" />
+    <ClInclude Include="..\src\null-sdk\utils\logger\logger.h" />
+    <ClInclude Include="..\src\null-sdk\utils\memory\address.h" />
+    <ClInclude Include="..\src\null-sdk\utils\memory\minhook-wrapper.h" />
+    <ClInclude Include="..\src\null-sdk\utils\memory\module\module.h" />
+    <ClInclude Include="..\src\null-sdk\utils\memory\pe-image.h" />
+    <ClInclude Include="..\src\null-sdk\utils\memory\resource\resource.h" />
+    <ClInclude Include="..\src\null-sdk\utils\memory\signature.h" />
+    <ClInclude Include="..\src\null-sdk\utils\time-measurement\time-measurement.h" />
+    <ClInclude Include="..\src\null-sdk\utils\win\win.h" />
+    <ClCompile Include="..\src\null-sdk\data-types\angle\angle.cpp" />
+    <ClCompile Include="..\src\null-sdk\utils\logger\logger.cpp" />
+    <ClCompile Include="..\src\null-sdk\utils\memory\module\module.cpp" />
+    <ClCompile Include="..\src\null-sdk\utils\memory\resource\resource.cpp" />
+    <ClCompile Include="..\src\null-sdk\utils\win\win.cpp" />
+    <None Include="..\src\null-sdk\utils\memory\module\module.inl" />
+    <None Include="..\src\null-sdk\utils\memory\resource\resource.inl" />
+  </ItemGroup>
+
+  <!-- @note: include extension solution if it exist -->
+  <ItemGroup Condition="'$(NullSdkUseExtension)' == 'true'">
+    <ProjectReference Include="$(NullSdkUseExtensionProject)"/>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{f7a10a5c-0fae-424b-8f2b-6cc4e4d898d1}</ProjectGuid>
+    <RootNamespace>null_sdk</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configuration">
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseDebugLibraries Condition="'$(Configuration)'=='debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='release'">false</UseDebugLibraries>
+    <WholeProgramOptimization Condition="'$(Configuration)'=='release'">true</WholeProgramOptimization>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)..\build\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)-$(PlatformShortName)\obj-$(ProjectName)\</IntDir>
+    <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
+    <TargetName>null-sdk-$(Configuration)-$(PlatformShortName)</TargetName>
+    <LinkIncremental Condition="'$(Configuration)'=='debug'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='release'">false</LinkIncremental>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\src;$(ProjectDir)..\third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FunctionLevelLinking Condition="'$(Configuration)'=='release'">true</FunctionLevelLinking>
+      <IntrinsicFunctions Condition="'$(Configuration)'=='release'">true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NOMINMAX;NULLSDK_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Platform)'=='Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='release'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences Condition="'$(Configuration)'=='release'">true</OptimizeReferences>
+      <EnableCOMDATFolding Condition="'$(Configuration)'=='release'">true</EnableCOMDATFolding>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\third-party\minhook\lib;$(ProjectDir)..\third-party\fmt\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libMinHook-$(LibrariesArchitecture)-v141-mdd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221,4006 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies Condition="'$(Configuration)'=='debug'">fmt-debug-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)'=='release'">fmt-release-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

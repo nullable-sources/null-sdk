@@ -10,10 +10,10 @@
 template <typename coord_t>
 struct vec2_t;
 
-namespace null::sdk {
-#define __fast_defs__vec2_getter(_x, _y) template <typename self_t> inline constexpr auto _x##_y(this self_t&& self) { return vec2_t<coord_t>(self. _x, self. _y); }
+namespace ntl::sdk {
+#define FAST_DEFS__VEC2_GETTER(_x, _y) template <typename self_t> inline constexpr auto _x##_y(this self_t&& self) { return vec2_t<coord_t>(self. _x, self. _y); }
 
-#define __fast_defs__vec2_setter(_x, _y)                                                                                                                            \
+#define FAST_DEFS__VEC2_SETTER(_x, _y)                                                                                                                              \
     template <typename self_t> inline constexpr auto&& _x##_y(this self_t&& self, coord_t rhs) { self._x = self._y = rhs; return self; }                            \
     template <typename self_t> inline constexpr auto&& _x##_y(this self_t&& self, coord_t x_rhs, coord_t y_rhs) { self._x = x_rhs; self._y = y_rhs; return self; }  \
     template <typename self_t> inline constexpr auto&& _x##_y(this self_t&& self, const vec2_t<coord_t>& rhs) { self._x = rhs.x; self._y = rhs.y; return self; }    \
@@ -21,18 +21,18 @@ namespace null::sdk {
     template <typename coord_t>
     struct vec2_getter_t {
     public:
-        __fast_defs__vec2_setter(x, y);
-        __fast_defs__vec2_setter(y, x);
+        FAST_DEFS__VEC2_SETTER(x, y);
+        FAST_DEFS__VEC2_SETTER(y, x);
 
-        __fast_defs__vec2_getter(x, x);
-        __fast_defs__vec2_getter(x, y);
-        __fast_defs__vec2_getter(y, x);
-        __fast_defs__vec2_getter(y, y);
+        FAST_DEFS__VEC2_GETTER(x, x);
+        FAST_DEFS__VEC2_GETTER(x, y);
+        FAST_DEFS__VEC2_GETTER(y, x);
+        FAST_DEFS__VEC2_GETTER(y, y);
     };
 }
 
 template <typename coord_t>
-struct vec2_t : public null::sdk::vec2_getter_t<coord_t> {
+struct vec2_t : public ntl::sdk::vec2_getter_t<coord_t> {
 public:
     static constexpr size_t array_size = 2; //@note: size array{ x, y }
 
@@ -45,8 +45,8 @@ public:
 public:
     inline constexpr vec2_t() { }
 
-    //@note:	In general, you can leave the old constructors, but vs does not work well with requires, which causes errors (which do not affect compilation),
-    //		  so as soon as vs improves on requires, it will be possible to return the old constructors
+    //@note: In general, you can leave the old constructors, but vs does not work well with requires, which causes errors (which do not affect compilation),
+    //       so as soon as vs improves on requires, it will be possible to return the old constructors
     inline constexpr vec2_t(coord_t value) : vec2_t(value, value) { }
     inline constexpr vec2_t(coord_t _x, coord_t _y) : x(_x), y(_y) { }
 
@@ -54,8 +54,8 @@ public:
     inline vec2_t(const std::vector<coord_t>& _coordinates) { std::move(_coordinates.begin(), std::next(_coordinates.begin(), std::min(_coordinates.size(), array_size)), coordinates.begin()); }
     inline vec2_t(const std::tuple<coord_t, coord_t>& tuple) : coordinates(std::apply([](auto... n) { return std::array(n...); }, tuple)) { }
 
-    template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, vec2_t<coord_t>>
-    inline constexpr vec2_t(const type_t& value) : vec2_t(null::compatibility::data_type_converter_t<type_t, vec2_t<coord_t>>::convert(value)) { }
+    template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, vec2_t<coord_t>>
+    inline constexpr vec2_t(const type_t& value) : vec2_t(ntl::compatibility::data_type_converter_t<type_t, vec2_t<coord_t>>::convert(value)) { }
 
 public:
     inline float length() const { return std::hypot(x, y); }
@@ -68,23 +68,23 @@ public:
     inline void normalize(this auto&& self) { self /= self.length(); }
 
 public:
-    fast_ops_structure_convert_operator(inline constexpr, template <typename other_t>, vec2_t<other_t>() const, vec2_t<other_t>, (other_t), x, y);
-    fast_ops_structure_convert_operator(inline constexpr, , fast_ops_args_pack(std::tuple<coord_t, coord_t>)() const, std::make_tuple, , x, y);
+    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, template <typename other_t>, vec2_t<other_t>() const, vec2_t<other_t>, (other_t), x, y);
+    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , FAST_OPS_ARGS_PACK(std::tuple<coord_t, coord_t>)() const, std::make_tuple, , x, y);
 
-    template <typename type_t> requires null::compatibility::data_type_convertertable<vec2_t<coord_t>, type_t>
-    inline constexpr operator type_t() const { return null::compatibility::data_type_converter_t<vec2_t<coord_t>, type_t>::convert(*this); }
+    template <typename type_t> requires ntl::compatibility::data_type_convertertable<vec2_t<coord_t>, type_t>
+    inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<vec2_t<coord_t>, type_t>::convert(*this); }
 
     template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.coordinates[i]; }
 
-    fast_ops_structure_all_prefix_operators(inline constexpr, x, y);
-    fast_ops_structure_all_postfix_operators(inline constexpr, x, y);
+    FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, x, y);
+    FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, x, y);
 
-    fast_ops_structure_all_arithmetic_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, typename other_t>), const vec2_t<other_t>&, rhs_field, x, y);
-    fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, coord_t, rhs_value, x, y);
+    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec2_t<other_t>&, RHS_FIELD, x, y);
+    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, coord_t, RHS_VALUE, x, y);
 
-    fast_ops_structure_equal_operator(inline constexpr, template <typename other_t>, const vec2_t<other_t>&, rhs_field, x, y);
-    fast_ops_structure_equal_operator(inline constexpr, , coord_t, rhs_value, x, y);
+    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const vec2_t<other_t>&, RHS_FIELD, x, y);
+    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , coord_t, RHS_VALUE, x, y);
 
-    fast_ops_structure_all_comparison_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, typename other_t>), const vec2_t<other_t>&, rhs_field, x, y);
-    fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, coord_t, rhs_value, x, y);
+    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec2_t<other_t>&, RHS_FIELD, x, y);
+    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, coord_t, RHS_VALUE, x, y);
 };

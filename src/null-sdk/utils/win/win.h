@@ -5,11 +5,11 @@
 #include <iostream>
 #include <ranges>
 
-#include "../../data-types/vec2.h"
-#include "../../data-types/callbacks.h"
-#include "../logger/logger.h"
+#include "null-sdk/data-types/vec2.h"
+#include "null-sdk/data-types/callbacks.h"
+#include "null-sdk/utils/logger/logger.h"
 
-namespace utils {
+namespace ntl {
     namespace win {
         enum class e_window_callbacks {
             on_create, //@note: void()
@@ -24,7 +24,7 @@ namespace utils {
             callbacks_t<e_window_callbacks::on_wnd_proc, int(HWND, UINT, WPARAM, LPARAM)>
         >;
 
-        class c_window {
+        class NULLSDK_API c_window {
         public:
             window_callbacks_t callbacks{ };
 
@@ -64,7 +64,7 @@ namespace utils {
 
             template <typename char_t>
             void write_clipboard(std::basic_string_view<char_t> str) const {
-                if(!OpenClipboard(wnd_handle)) logger(e_log_type::error, "cant open clipboard");
+                if(!OpenClipboard(wnd_handle)) utils::logger(utils::e_log_type::error, "cant open clipboard");
 
                 EmptyClipboard();
                 HGLOBAL data = GlobalAlloc(GMEM_DDESHARE, sizeof(char_t) * (str.length() + 1));
@@ -72,19 +72,19 @@ namespace utils {
                 GlobalUnlock(data);
 
                 SetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT, data);
-                if(!CloseClipboard()) logger(e_log_type::error, "cant clise clipboard");
+                if(!CloseClipboard()) utils::logger(utils::e_log_type::error, "cant clise clipboard");
             }
 
             template <typename char_t>
             std::basic_string<char_t> read_clipboard() const {
-                if(!OpenClipboard(wnd_handle)) logger(e_log_type::error, "cant open clipboard.");
+                if(!OpenClipboard(wnd_handle)) utils::logger(utils::e_log_type::error, "cant open clipboard.");
 
                 std::basic_string<char_t> clipboard{ };
                 if(HANDLE data = GetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT)) {
                     clipboard = (char_t*)GlobalLock(data);
-                } else logger(e_log_type::warning, "cant get clipboard data.");
+                } else utils::logger(utils::e_log_type::warning, "cant get clipboard data.");
 
-                if(!CloseClipboard()) logger(e_log_type::error, "cant clise clipboard.");
+                if(!CloseClipboard()) utils::logger(utils::e_log_type::error, "cant clise clipboard.");
                 return clipboard;
             }
 
@@ -101,10 +101,10 @@ namespace utils {
     namespace console {
         inline FILE* old_out{ }, * old_in{ };
 
-        void attach();
-        void detach();
+        NULLSDK_API void attach();
+        NULLSDK_API void detach();
 
-        class i_command {
+        class NULLSDK_API i_command {
         public:
             static inline std::vector<i_command*> registered_commands{ };
 
@@ -135,7 +135,7 @@ namespace utils {
         yellow = red | green,
 
         restore = white,
-    }; enum_create_bit_operators(e_dye, false);
-    enum_create_cast_operator(e_dye, -);
+    }; ENUM_CREATE_BIT_OPERATORS(e_dye, false);
+    ENUM_CREATE_CAST_OPERATOR(e_dye, -);
     static std::ostream& operator<<(std::ostream& os, e_dye dye) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), -dye); return os; }
 }

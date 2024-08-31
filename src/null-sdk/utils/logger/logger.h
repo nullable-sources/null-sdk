@@ -3,9 +3,9 @@
 #include <format>
 #include "../events/events.h"
 
-namespace utils {
+namespace ntl::utils {
     enum class e_log_type { info, warning, error, assert };
-    class c_log_event_dispatcher : public c_event_dispatcher<e_log_type> {
+    class NULLSDK_API c_log_event_dispatcher : public c_event_dispatcher<e_log_type> {
     public:
         class c_default_log_listener : public i_event_listener<e_log_type> {
         public:
@@ -32,5 +32,7 @@ namespace utils {
         void operator()(e_log_type id, std::string_view str, args_t&&... args) {
             dispatch_event(id, { { "text", std::vformat(str, std::make_format_args(args...)) } });
         }
-    } inline logger{ };
+    };
+
+    NULLSDK_API extern c_log_event_dispatcher logger;
 }

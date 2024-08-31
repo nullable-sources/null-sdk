@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <null-sdk.h>
 
-class c_kernel32_dll : public memory::c_dll {
+class c_kernel32_dll : public ntl::mem::c_dll {
 public: using c_dll::c_dll;
 public:
     c_export<void(LPSYSTEM_INFO lpSystemInfo)> get_native_system_info{ "kernel32.dll", "GetNativeSystemInfo" };
@@ -17,18 +17,18 @@ int main() {
         std::cout << std::format("sys_info.dwPageSize == {}\n", sys_info.dwPageSize);
 
         {
-            memory::c_dll _kernel32{ "kernel32.dll" };
-            memory::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep(&_kernel32, "Beep");
+            ntl::mem::c_dll _kernel32{ "kernel32.dll" };
+            ntl::mem::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep(&_kernel32, "Beep");
             beep(750, 300);
         }
 
         {
-            memory::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep("kernel32.dll", "Beep");
+            ntl::mem::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep("kernel32.dll", "Beep");
             beep(750, 300);
         }
 
         {
-            memory::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep(memory::c_dll("kernel32.dll").get_export("Beep"));
+            ntl::mem::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep(ntl::mem::c_dll("kernel32.dll").get_export("Beep"));
             beep(750, 300);
         }
 

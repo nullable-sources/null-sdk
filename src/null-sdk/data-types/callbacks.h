@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace utils {
+namespace ntl {
     template <auto, typename>
     struct callback_t { };
 

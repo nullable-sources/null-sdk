@@ -3,10 +3,10 @@
 #include <ranges>
 #include <algorithm>
 
-#include "../../utils/fast-operators.h"
-#include "../vec4.h"
+#include "null-sdk/utils/fast-operators.h"
+#include "null-sdk/data-types/vec4.h"
 
-namespace null::sdk {
+namespace ntl::sdk {
     template <typename channel_t>
     struct i_color {
     public:
@@ -32,8 +32,8 @@ namespace null::sdk {
         inline i_color(const std::array<channel_t, channels_size>& _channels) : channels(_channels) { }
         inline i_color(const std::vector<channel_t>& _channels) { std::move(_channels.begin(), std::next(_channels.begin(), std::min(_channels.size(), channels_size)), channels.begin()); }
 
-        template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, i_color<channel_t>>
-        inline constexpr i_color(const type_t& value) : i_color(null::compatibility::data_type_converter_t<type_t, i_color<channel_t>>::convert(value)) { }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, i_color<channel_t>>
+        inline constexpr i_color(const type_t& value) : i_color(ntl::compatibility::data_type_converter_t<type_t, i_color<channel_t>>::convert(value)) { }
 
     public:
         template <typename other_t> inline constexpr i_color<other_t> cast() const { return i_color<other_t>((other_t)r, (other_t)g, (other_t)b, (other_t)a); }
@@ -43,23 +43,23 @@ namespace null::sdk {
         inline channel_t brightness() const { return *std::max_element(channels.begin(), std::prev(channels.end())); }
 
     public:
-        fast_ops_structure_convert_operator(inline constexpr, , vec3_t<channel_t>() const, vec3_t<channel_t>, , r, g, b);
-        fast_ops_structure_convert_operator(inline constexpr, , vec4_t<channel_t>() const, vec4_t<channel_t>, , r, g, b, a);
-        fast_ops_structure_convert_operator(inline constexpr, , fast_ops_args_pack(std::tuple<channel_t, channel_t, channel_t, channel_t>)() const, std::make_tuple, , r, g, b, a);
+        FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec3_t<channel_t>() const, vec3_t<channel_t>, , r, g, b);
+        FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec4_t<channel_t>() const, vec4_t<channel_t>, , r, g, b, a);
+        FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , FAST_OPS_ARGS_PACK(std::tuple<channel_t, channel_t, channel_t, channel_t>)() const, std::make_tuple, , r, g, b, a);
 
-        template <typename type_t> requires null::compatibility::data_type_convertertable<i_color<channel_t>, type_t>
-        inline constexpr operator type_t() const { return null::compatibility::data_type_converter_t<i_color<channel_t>, type_t>::convert(*this); }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<i_color<channel_t>, type_t>
+        inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<i_color<channel_t>, type_t>::convert(*this); }
 
-        fast_ops_structure_all_prefix_operators(inline constexpr, r, g, b, a);
-        fast_ops_structure_all_postfix_operators(inline constexpr, r, g, b, a);
+        FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, r, g, b, a);
+        FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, r, g, b, a);
 
-        fast_ops_structure_all_arithmetic_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, typename other_t>), const i_color<other_t>&, rhs_field, r, g, b, a);
-        fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, channel_t, rhs_value, r, g, b, a);
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const i_color<other_t>&, RHS_FIELD, r, g, b, a);
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, channel_t, RHS_VALUE, r, g, b, a);
 
-        fast_ops_structure_equal_operator(inline constexpr, template <typename other_t>, const i_color<other_t>&, rhs_field, r, g, b, a);
-        fast_ops_structure_equal_operator(inline constexpr, , channel_t, rhs_value, r, g, b, a);
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const i_color<other_t>&, RHS_FIELD, r, g, b, a);
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , channel_t, RHS_VALUE, r, g, b, a);
 
-        fast_ops_structure_all_comparison_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, typename other_t>), const i_color<other_t>&, rhs_field, r, g, b, a);
-        fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, channel_t, rhs_value, r, g, b, a);
+        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const i_color<other_t>&, RHS_FIELD, r, g, b, a);
+        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, channel_t, RHS_VALUE, r, g, b, a);
     };
 }

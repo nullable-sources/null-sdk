@@ -6,10 +6,10 @@
 template <typename coord_t>
 struct vec3_t;
 
-namespace null::sdk {
-#define __fast_defs__vec3_getter(_x, _y, _z) template <typename self_t> inline constexpr auto _x##_y##_z(this self_t&& self) { return vec3_t<coord_t>(self. _x, self. _y, self. _z); }
+namespace ntl::sdk {
+#define FAST_DEFS__VEC3_GETTER(_x, _y, _z) template <typename self_t> inline constexpr auto _x##_y##_z(this self_t&& self) { return vec3_t<coord_t>(self. _x, self. _y, self. _z); }
 
-#define __fast_defs__vec3_setter(_x, _y, _z)                                                                                                                                                                    \
+#define FAST_DEFS__VEC3_SETTER(_x, _y, _z)                                                                                                                                                                \
     template <typename self_t> inline constexpr auto&& _x##_y##_z(this self_t&& self, coord_t rhs) { self. _x = self. _y = self. _z = rhs; return self; }                                                   \
     template <typename self_t> inline constexpr auto&& _x##_y##_z(this self_t&& self, coord_t x_rhs, coord_t y_rhs, coord_t z_rhs) { self. _x = x_rhs; self. _y = y_rhs; self. _z = z_rhs; return self; }   \
     template <typename self_t> inline constexpr auto&& _x##_y##_z(this self_t&& self, const vec3_t<coord_t>& rhs) { self ._x = rhs.x; self. _y = rhs.y; self. _z = rhs.z; return self; }                    \
@@ -17,63 +17,63 @@ namespace null::sdk {
     template <typename coord_t>
     struct vec3_getter_t {
     public:
-        __fast_defs__vec2_setter(x, y);
-        __fast_defs__vec2_setter(x, z);
-        __fast_defs__vec2_setter(y, x);
-        __fast_defs__vec2_setter(y, z);
-        __fast_defs__vec2_setter(z, x);
-        __fast_defs__vec2_setter(z, y);
+        FAST_DEFS__VEC2_SETTER(x, y);
+        FAST_DEFS__VEC2_SETTER(x, z);
+        FAST_DEFS__VEC2_SETTER(y, x);
+        FAST_DEFS__VEC2_SETTER(y, z);
+        FAST_DEFS__VEC2_SETTER(z, x);
+        FAST_DEFS__VEC2_SETTER(z, y);
 
-        __fast_defs__vec3_setter(x, y, z);
-        __fast_defs__vec3_setter(x, z, y);
-        __fast_defs__vec3_setter(y, x, z);
-        __fast_defs__vec3_setter(y, z, x);
-        __fast_defs__vec3_setter(z, x, y);
-        __fast_defs__vec3_setter(z, y, x);
+        FAST_DEFS__VEC3_SETTER(x, y, z);
+        FAST_DEFS__VEC3_SETTER(x, z, y);
+        FAST_DEFS__VEC3_SETTER(y, x, z);
+        FAST_DEFS__VEC3_SETTER(y, z, x);
+        FAST_DEFS__VEC3_SETTER(z, x, y);
+        FAST_DEFS__VEC3_SETTER(z, y, x);
 
 
-        __fast_defs__vec2_getter(x, x);
-        __fast_defs__vec2_getter(x, y);
-        __fast_defs__vec2_getter(x, z);
-        __fast_defs__vec2_getter(y, x);
-        __fast_defs__vec2_getter(y, y);
-        __fast_defs__vec2_getter(y, z);
-        __fast_defs__vec2_getter(z, x);
-        __fast_defs__vec2_getter(z, y);
-        __fast_defs__vec2_getter(z, z);
+        FAST_DEFS__VEC2_GETTER(x, x);
+        FAST_DEFS__VEC2_GETTER(x, y);
+        FAST_DEFS__VEC2_GETTER(x, z);
+        FAST_DEFS__VEC2_GETTER(y, x);
+        FAST_DEFS__VEC2_GETTER(y, y);
+        FAST_DEFS__VEC2_GETTER(y, z);
+        FAST_DEFS__VEC2_GETTER(z, x);
+        FAST_DEFS__VEC2_GETTER(z, y);
+        FAST_DEFS__VEC2_GETTER(z, z);
 
-        __fast_defs__vec3_getter(x, x, x);
-        __fast_defs__vec3_getter(x, x, y);
-        __fast_defs__vec3_getter(x, x, z);
-        __fast_defs__vec3_getter(x, y, x);
-        __fast_defs__vec3_getter(x, y, y);
-        __fast_defs__vec3_getter(x, y, z);
-        __fast_defs__vec3_getter(x, z, x);
-        __fast_defs__vec3_getter(x, z, y);
-        __fast_defs__vec3_getter(x, z, z);
-        __fast_defs__vec3_getter(y, x, x);
-        __fast_defs__vec3_getter(y, x, y);
-        __fast_defs__vec3_getter(y, x, z);
-        __fast_defs__vec3_getter(y, y, x);
-        __fast_defs__vec3_getter(y, y, y);
-        __fast_defs__vec3_getter(y, y, z);
-        __fast_defs__vec3_getter(y, z, x);
-        __fast_defs__vec3_getter(y, z, y);
-        __fast_defs__vec3_getter(y, z, z);
-        __fast_defs__vec3_getter(z, x, x);
-        __fast_defs__vec3_getter(z, x, y);
-        __fast_defs__vec3_getter(z, x, z);
-        __fast_defs__vec3_getter(z, y, x);
-        __fast_defs__vec3_getter(z, y, y);
-        __fast_defs__vec3_getter(z, y, z);
-        __fast_defs__vec3_getter(z, z, x);
-        __fast_defs__vec3_getter(z, z, y);
-        __fast_defs__vec3_getter(z, z, z);
+        FAST_DEFS__VEC3_GETTER(x, x, x);
+        FAST_DEFS__VEC3_GETTER(x, x, y);
+        FAST_DEFS__VEC3_GETTER(x, x, z);
+        FAST_DEFS__VEC3_GETTER(x, y, x);
+        FAST_DEFS__VEC3_GETTER(x, y, y);
+        FAST_DEFS__VEC3_GETTER(x, y, z);
+        FAST_DEFS__VEC3_GETTER(x, z, x);
+        FAST_DEFS__VEC3_GETTER(x, z, y);
+        FAST_DEFS__VEC3_GETTER(x, z, z);
+        FAST_DEFS__VEC3_GETTER(y, x, x);
+        FAST_DEFS__VEC3_GETTER(y, x, y);
+        FAST_DEFS__VEC3_GETTER(y, x, z);
+        FAST_DEFS__VEC3_GETTER(y, y, x);
+        FAST_DEFS__VEC3_GETTER(y, y, y);
+        FAST_DEFS__VEC3_GETTER(y, y, z);
+        FAST_DEFS__VEC3_GETTER(y, z, x);
+        FAST_DEFS__VEC3_GETTER(y, z, y);
+        FAST_DEFS__VEC3_GETTER(y, z, z);
+        FAST_DEFS__VEC3_GETTER(z, x, x);
+        FAST_DEFS__VEC3_GETTER(z, x, y);
+        FAST_DEFS__VEC3_GETTER(z, x, z);
+        FAST_DEFS__VEC3_GETTER(z, y, x);
+        FAST_DEFS__VEC3_GETTER(z, y, y);
+        FAST_DEFS__VEC3_GETTER(z, y, z);
+        FAST_DEFS__VEC3_GETTER(z, z, x);
+        FAST_DEFS__VEC3_GETTER(z, z, y);
+        FAST_DEFS__VEC3_GETTER(z, z, z);
     };
 }
 
 template <typename coord_t>
-struct vec3_t : public null::sdk::vec3_getter_t<coord_t> {
+struct vec3_t : public ntl::sdk::vec3_getter_t<coord_t> {
 public:
     static constexpr size_t array_size = 3; //@note: size array{ x, y, z }
 
@@ -96,8 +96,8 @@ public:
     inline vec3_t(const std::tuple<coord_t, coord_t, coord_t>& tuple) : coordinates(std::apply([](auto... n) { return std::array(n...); }, tuple)) { }
     inline vec3_t(const std::tuple<coord_t, coord_t>& tuple, coord_t _z = { }) : coordinates(std::apply([&](auto... n) { return std::array(n..., _z); }, tuple)) { }
 
-    template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, vec3_t<coord_t>>
-    inline constexpr vec3_t(const type_t& value) : vec3_t(null::compatibility::data_type_converter_t<type_t, vec3_t<coord_t>>::convert(value)) { }
+    template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, vec3_t<coord_t>>
+    inline constexpr vec3_t(const type_t& value) : vec3_t(ntl::compatibility::data_type_converter_t<type_t, vec3_t<coord_t>>::convert(value)) { }
 
 public:
     inline float length() const { return std::hypot(x, y, z); }
@@ -109,23 +109,23 @@ public:
     template <typename self_t> inline void normalize(this self_t&& self) { self /= self.length(); }
 
 public:
-    fast_ops_structure_convert_operator(inline constexpr, template <typename other_t>, vec3_t<other_t>() const, vec3_t<other_t>, (other_t), x, y, z);
-    fast_ops_structure_convert_operator(inline constexpr, , fast_ops_args_pack(std::tuple<coord_t, coord_t, coord_t>)() const, std::make_tuple, , x, y, z);
+    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, template <typename other_t>, vec3_t<other_t>() const, vec3_t<other_t>, (other_t), x, y, z);
+    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , FAST_OPS_ARGS_PACK(std::tuple<coord_t, coord_t, coord_t>)() const, std::make_tuple, , x, y, z);
 
-    template <typename type_t> requires null::compatibility::data_type_convertertable<vec3_t<coord_t>, type_t>
-    inline constexpr operator type_t() const { return null::compatibility::data_type_converter_t<vec3_t<coord_t>, type_t>::convert(*this); }
+    template <typename type_t> requires ntl::compatibility::data_type_convertertable<vec3_t<coord_t>, type_t>
+    inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<vec3_t<coord_t>, type_t>::convert(*this); }
 
     template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.coordinates[i]; }
 
-    fast_ops_structure_all_prefix_operators(inline constexpr, x, y, z);
-    fast_ops_structure_all_postfix_operators(inline constexpr, x, y, z);
+    FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, x, y, z);
+    FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, x, y, z);
 
-    fast_ops_structure_all_arithmetic_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, typename other_t>), const vec3_t<other_t>&, rhs_field, x, y, z);
-    fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, coord_t, rhs_value, x, y, z);
+    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec3_t<other_t>&, RHS_FIELD, x, y, z);
+    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, coord_t, RHS_VALUE, x, y, z);
 
-    fast_ops_structure_equal_operator(inline constexpr, template <typename other_t>, const vec3_t<other_t>&, rhs_field, x, y, z);
-    fast_ops_structure_equal_operator(inline constexpr, , coord_t, rhs_value, x, y, z);
+    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const vec3_t<other_t>&, RHS_FIELD, x, y, z);
+    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , coord_t, RHS_VALUE, x, y, z);
 
-    fast_ops_structure_all_comparison_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, typename other_t>), const vec3_t<other_t>&, rhs_field, x, y, z);
-    fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, coord_t, rhs_value, x, y, z);
+    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec3_t<other_t>&, RHS_FIELD, x, y, z);
+    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, coord_t, RHS_VALUE, x, y, z);
 };

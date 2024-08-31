@@ -1,8 +1,9 @@
 #pragma once
-#include "../win/win.h"
+#include <Windows.h>
+
 #include "base85.h"
 
-namespace utils::encoding {
+namespace ntl::encoding {
     static std::string utf16_to_ascii(std::wstring_view utf16) {
         std::string ascii(WideCharToMultiByte(CP_ACP, 0, utf16.data(), utf16.size(), 0, 0, 0, 0), '\0');
         WideCharToMultiByte(CP_ACP, 0, utf16.data(), utf16.size(), ascii.data(), ascii.length(), 0, 0);

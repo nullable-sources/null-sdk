@@ -1,8 +1,9 @@
 #pragma once
-#include "address.h"
 #include <minhook/include/MinHook.h>
 
-namespace memory {
+#include "address.h"
+
+namespace ntl::mem {
     enum class e_hook_type {
         standard,
         proxy
@@ -37,33 +38,33 @@ namespace memory {
 
 /*@note: what structures with different e_hook_type should look like
 *
-* 	- e_hook_type::standard
+*   - e_hook_type::standard
 * struct my_hook_t : memory::hook_t<my_hook_t, void(*)()> {
-*	static void hook() {
-*		...
-*		original();
-*		...
-*	}
+*   static void hook() {
+*       ...
+*       original();
+*       ...
+*   }
 * };
 *
-*	- e_hook_type::proxy
+*   - e_hook_type::proxy
 * struct my_hook_t : memory::hook_t<my_hook_t, void(*)(), memory::e_hook_type::proxy> {
-*	static void hook() {
-*		...
-*		original_proxy();
-*		...
-*	}
+*   static void hook() {
+*       ...
+*       original_proxy();
+*       ...
+*   }
 *
-*	static void hook_proxy() {
-*		...
-*		hook();
-*		...
-*	}
+*   static void hook_proxy() {
+*       ...
+*       hook();
+*       ...
+*   }
 *
-*	static void original_proxy() {
-*		...
-*		original();
-*		...
-*	}
+*   static void original_proxy() {
+*       ...
+*       original();
+*       ...
+*   }
 * };
 */

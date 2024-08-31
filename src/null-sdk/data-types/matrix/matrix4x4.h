@@ -2,7 +2,7 @@
 #include "matrix.h"
 
 template <typename major_type_t>
-class c_matrix4x4 : public null::sdk::i_matrix<major_type_t, float, 4, 4> {
+class c_matrix4x4 : public ntl::sdk::i_matrix<major_type_t, float, 4, 4> {
 public:
     static inline c_matrix4x4 projection_ortho(float left, float right, float bottom, float top, float near_plane, float far_plane) {
         return c_matrix4x4{
@@ -23,7 +23,7 @@ public:
     }
 
 public:
-    using null::sdk::i_matrix<major_type_t, float, 4, 4>::i_matrix;
-    inline c_matrix4x4(const null::sdk::i_matrix<major_type_t, float, 4, 4>& matrix) : null::sdk::i_matrix<major_type_t, float, 4, 4>(matrix) { }
+    using ntl::sdk::i_matrix<major_type_t, float, 4, 4>::i_matrix;
+    inline c_matrix4x4(const ntl::sdk::i_matrix<major_type_t, float, 4, 4>& matrix) : ntl::sdk::i_matrix<major_type_t, float, 4, 4>(matrix) { }
 };
-using matrix4x4_t = c_matrix4x4<null::sdk::column_major_t>;
+using matrix4x4_t = c_matrix4x4<ntl::sdk::column_major_t>;

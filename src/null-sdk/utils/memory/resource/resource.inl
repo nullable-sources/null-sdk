@@ -1,6 +1,6 @@
 #include "null-sdk.h"
 
-namespace memory {
+namespace ntl::mem {
     auto&& resource_t::load(this auto&& self) {
         if(!self.empty()) return self;
 

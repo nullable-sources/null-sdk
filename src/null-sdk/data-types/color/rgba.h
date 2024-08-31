@@ -5,7 +5,7 @@ template <typename channel_t>
 struct color_t { };
 
 template <>
-struct color_t<int> : public null::sdk::i_color<int> {
+struct color_t<int> : public ntl::sdk::i_color<int> {
 public:
     struct palette_t {
     public:
@@ -38,7 +38,7 @@ public:
 };
 
 template <>
-struct color_t<float> : null::sdk::i_color<float> {
+struct color_t<float> : ntl::sdk::i_color<float> {
 public:
     struct palette_t {
     public:

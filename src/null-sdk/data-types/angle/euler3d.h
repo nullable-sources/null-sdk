@@ -4,7 +4,7 @@
 #include "../matrix/matrix3x3.h"
 #include "angle.h"
 
-namespace null::sdk {
+namespace ntl::sdk {
     enum class e_coordinate_system {
         left_handed, //@note: the value increases when turned clockwise
         right_handed //@note: the value increases when turned counterclockwise
@@ -26,7 +26,7 @@ namespace null::sdk {
     };
     
     template <is_angle_type_t angle_value_t,
-        math::e_rotation rotation,
+        ntl::math::e_rotation rotation,
         e_coordinate_system coordinate_system,
         e_up_axis up_axis
     >
@@ -39,16 +39,16 @@ namespace null::sdk {
     public:
         static constexpr axis_definition_t<angle_value_t> roll_definition{ }, pitch_definition{ }, yaw_definition{ };
 
-        static constexpr inline math::e_rotation directions_rotation() {
-            if constexpr(coordinate_system == e_coordinate_system::right_handed) return math::e_rotation::cw;
-            else return math::e_rotation::ccw;
+        static constexpr inline ntl::math::e_rotation directions_rotation() {
+            if constexpr(coordinate_system == e_coordinate_system::right_handed) return ntl::math::e_rotation::cw;
+            else return ntl::math::e_rotation::ccw;
         }
 
     public:
         inline constexpr i_euler3d() { }
 
-        template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, euler_t>
-        inline constexpr i_euler3d(const type_t& value) : i_euler3d(null::compatibility::data_type_converter_t<type_t, euler_t>::convert(value)) { }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, euler_t>
+        inline constexpr i_euler3d(const type_t& value) : i_euler3d(ntl::compatibility::data_type_converter_t<type_t, euler_t>::convert(value)) { }
 
     public:
         template <typename self_t, typename point_t>
@@ -190,26 +190,26 @@ namespace null::sdk {
         }
 
     public:
-        template <typename type_t> requires null::compatibility::data_type_convertertable<euler_t, type_t>
-        inline constexpr operator type_t() const { return null::compatibility::data_type_converter_t<euler_t, type_t>::convert(*this); }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<euler_t, type_t>
+        inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<euler_t, type_t>::convert(*this); }
 
         template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.axies[i]; }
 
-        fast_ops_structure_all_comparison_operators(inline constexpr, fast_ops_args_pack(template <typename self_t, is_angle_type_t angle_other_t>), const euler_type_t<angle_other_t>&, rhs_field, x, y, z);
-        fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, angle_value_t, rhs_value, x, y, z);
+        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
     };
 
-#define __fast_defs__unpack_tuple_element__euler_raw_ctor(i, data, elem)                        \
-    another_angle_value_t BOOST_PP_CAT(_, __fast_defs__unpack_tuple_element__(i, data, elem))   \
+#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_RAW_CTOR(i, data, elem)                        \
+    another_angle_value_t BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
 
-#define __fast_defs__unpack_tuple_element__euler_type_ctor(i, data, elem)                                       \
-    const angle_t<another_angle_value_t>& BOOST_PP_CAT(_, __fast_defs__unpack_tuple_element__(i, data, elem))   \
+#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_TYPE_CTOR(i, data, elem)                                       \
+    const angle_t<another_angle_value_t>& BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
 
-#define __make_euler_implementation(implementation_name, ...)                                                                           \
-    template <is_angle_type_t angle_value_t, math::e_rotation rotation,                                                                 \
+#define FAST_DEFS_MAKE_EULER_IMPLEMENTATION(implementation_name, ...)                                                                   \
+    template <is_angle_type_t angle_value_t, ntl::math::e_rotation rotation,                                                            \
         e_coordinate_system coordinate_system, e_up_axis up_axis                                                                        \
     >                                                                                                                                   \
-    class i_##implementation_name##_euler3d : public i_euler3d<angle_value_t, rotation, coordinate_system, up_axis> {                   \
+    class i_##implementation_name##_euler3d : public i_euler3d<angle_value_t, rotation, coordinate_system, up_axis> {       \
     public: using i_euler3d<angle_value_t, rotation, coordinate_system, up_axis>::i_euler3d;                                            \
     public:                                                                                                                             \
         using euler_interface_t = i_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;                                       \
@@ -218,46 +218,46 @@ namespace null::sdk {
                                                                                                                                         \
     public:                                                                                                                             \
         union {                                                                                                                         \
-            struct { angle_t<angle_value_t> __fast_defs__unpack_seq_enum(0, , __VA_ARGS__); };                                          \
-            struct { angle_t<angle_value_t> __fast_defs__unpack_seq_enum(1, , __VA_ARGS__); };                                          \
+            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__); };                                            \
+            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(1, , __VA_ARGS__); };                                            \
             std::array<angle_t<angle_value_t>, 3> axises{ };                                                                            \
         };                                                                                                                              \
                                                                                                                                         \
     public:                                                                                                                             \
         inline constexpr i_##implementation_name##_euler3d() { }                                                                        \
-        template <null::sdk::is_angle_type_t another_angle_value_t>                                                                     \
-        inline constexpr i_##implementation_name##_euler3d(__fast_defs__unpack_seq_enum(1, euler_raw_ctor, __VA_ARGS__))                \
+        template <ntl::sdk::is_angle_type_t another_angle_value_t>                                                                      \
+        inline constexpr i_##implementation_name##_euler3d(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_RAW_CTOR, __VA_ARGS__))                  \
             : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                                                 \
-        template <null::sdk::is_angle_type_t another_angle_value_t>                                                                     \
-        inline constexpr i_##implementation_name##_euler3d(__fast_defs__unpack_seq_enum(1, euler_type_ctor, __VA_ARGS__))               \
+        template <ntl::sdk::is_angle_type_t another_angle_value_t>                                                                      \
+        inline constexpr i_##implementation_name##_euler3d(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_TYPE_CTOR, __VA_ARGS__))                 \
             : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                                                 \
         template <typename direction_t>                                                                                                 \
         inline i_##implementation_name##_euler3d(const vec3_t<direction_t>& direction) { euler_interface_t::set_angles(direction); }    \
                                                                                                                                         \
     public:                                                                                                                             \
-        fast_ops_structure_all_arithmetic_operators(                                                                                    \
-            inline constexpr, fast_ops_args_pack(template <typename self_t, is_angle_type_t angle_other_t>),                            \
-            const euler_implementation_type_t<angle_other_t>&, rhs_field, __fast_defs__unpack_seq_enum(0, , __VA_ARGS__)                \
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(                                                                                    \
+            inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>),                            \
+            const euler_implementation_type_t<angle_other_t>&, RHS_FIELD, FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__)                  \
         );                                                                                                                              \
-        fast_ops_structure_all_arithmetic_operators(                                                                                    \
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(                                                                                    \
             inline constexpr, template <typename self_t>,                                                                               \
-            angle_value_t, rhs_value, __fast_defs__unpack_seq_enum(0, , __VA_ARGS__)                                                    \
+            angle_value_t, RHS_VALUE, FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__)                                                      \
         );                                                                                                                              \
                                                                                                                                         \
-        fast_ops_structure_equal_operator(                                                                                              \
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(                                                                                              \
             inline constexpr, template <is_angle_type_t angle_other_t>,                                                                 \
-            const i_euler3d::euler_type_t<angle_other_t>&, rhs_field, x, y, z                                                           \
+            const i_euler3d::euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z                                                           \
         );                                                                                                                              \
-        fast_ops_structure_equal_operator(inline constexpr, , angle_value_t, rhs_value, x, y, z);                                       \
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , angle_value_t, RHS_VALUE, x, y, z);                                       \
     };                                                                                                                                  \
 
-#define __make_euler_implementation_shortcat(implementation_name)                                                                                   \
-    template <null::sdk::is_angle_type_t angle_value_t,                                                                                             \
-        math::e_rotation rotation = math::e_rotation::ccw,                                                                                          \
-        null::sdk::e_coordinate_system coordinate_system = null::sdk::e_coordinate_system::right_handed,                                            \
-        null::sdk::e_up_axis up_axis = null::sdk::e_up_axis::z                                                                                      \
-    >                                                                                                                                               \
-    using euler3d_##implementation_name##_t = null::sdk::i_##implementation_name##_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;    \
+#define FAST_DEFS_MAKE_EULER_IMPLEMENTATION_SHORTCAT(implementation_name)                                                                       \
+    template <ntl::sdk::is_angle_type_t angle_value_t,                                                                                          \
+        ntl::math::e_rotation rotation = ntl::math::e_rotation::ccw,                                                                            \
+        ntl::sdk::e_coordinate_system coordinate_system = ntl::sdk::e_coordinate_system::right_handed,                                          \
+        ntl::sdk::e_up_axis up_axis = ntl::sdk::e_up_axis::z                                                                                    \
+    >                                                                                                                                           \
+    using euler3d_##implementation_name##_t = ntl::sdk::i_##implementation_name##_euler3d<angle_value_t, rotation, coordinate_system, up_axis>; \
 
     //@note: For the standard description of the coordinate order, the coordinate system from aviation is used,
     //       in which roll - x, pitch - y, yaw - z.
@@ -267,21 +267,21 @@ namespace null::sdk {
     // 
     //       x      y     z  | the order of this implementation
     //      roll, pitch, yaw |
-    __make_euler_implementation(xyz, (x, roll), (y, pitch),(z, yaw))
+    FAST_DEFS_MAKE_EULER_IMPLEMENTATION(xyz, (x, roll), (y, pitch),(z, yaw))
 
     //@note: x      y     z  | standard order
     //      roll, pitch, yaw |
     // 
     //        y     z    x   | the order of this implementation
     //      pitch, yaw, roll |
-    __make_euler_implementation(yzx, (y, pitch), (z, yaw), (x, roll))
+    FAST_DEFS_MAKE_EULER_IMPLEMENTATION(yzx, (y, pitch), (z, yaw), (x, roll))
 }
 
-template <null::sdk::is_angle_type_t angle_value_t,
-    math::e_rotation rotation = math::e_rotation::ccw,
-    null::sdk::e_coordinate_system coordinate_system = null::sdk::e_coordinate_system::right_handed,
-    null::sdk::e_up_axis up_axis = null::sdk::e_up_axis::z
+template <ntl::sdk::is_angle_type_t angle_value_t,
+    ntl::math::e_rotation rotation = ntl::math::e_rotation::ccw,
+    ntl::sdk::e_coordinate_system coordinate_system = ntl::sdk::e_coordinate_system::right_handed,
+    ntl::sdk::e_up_axis up_axis = ntl::sdk::e_up_axis::z
 >
-using euler3d_t = null::sdk::i_xyz_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;
+using euler3d_t = ntl::sdk::i_xyz_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;
 
-__make_euler_implementation_shortcat(yzx)
+FAST_DEFS_MAKE_EULER_IMPLEMENTATION_SHORTCAT(yzx)

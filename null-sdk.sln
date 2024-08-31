@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32422.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "null-sdk", "null-sdk.vcxproj", "{F7A10A5C-0FAE-424B-8F2B-6CC4E4D898D1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "null-sdk.static-linking", "msvc\null-sdk.static-linking.vcxproj", "{F7A10A5C-0FAE-424B-8F2B-6CC4E4D898D1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win-utils", "examples\win-utils\win-utils.vcxproj", "{4D0B61D1-1831-471E-ADFE-D0E30DE1626B}"
 EndProject

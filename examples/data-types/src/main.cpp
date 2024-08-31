@@ -21,9 +21,9 @@ void callbacks() {
     {
         std::cout << "\tsingle example {" << std::endl;
 
-        utils::callbacks_tuple_t<
-            utils::callback_t<e_calls::first, void()>,
-            utils::callback_t<e_calls::second, int()>
+        ntl::callbacks_tuple_t<
+            ntl::callback_t<e_calls::first, void()>,
+            ntl::callback_t<e_calls::second, int()>
         > callbacks{ };
         callbacks.at<e_calls::first>().set([] { std::cout << "\t\te_calls::first called" << std::endl; });
         callbacks.at<e_calls::first>().call();
@@ -39,9 +39,9 @@ void callbacks() {
 
     {
         std::cout << "\tarray example {" << std::endl;
-        utils::callbacks_tuple_t<
-            utils::callbacks_t<e_calls::first, void()>,
-            utils::callbacks_t<e_calls::second, int()>
+        ntl::callbacks_tuple_t<
+            ntl::callbacks_t<e_calls::first, void()>,
+            ntl::callbacks_t<e_calls::second, int()>
         > callbacks{ };
 
         callbacks.at<e_calls::second>().add([] { return 1; });
@@ -160,15 +160,15 @@ void rect() {
         std::cout << "\torigin from rect {" << std::endl;
         print_type("\t\trect ->", rect_t(0.f, 100.f));
         std::cout << std::endl;
-        print("rect_t::top	| rect_t::left  ->", null::e_rect_origin::top | null::e_rect_origin::left);
-        print("rect_t::top	| rect_t::right ->", null::e_rect_origin::top | null::e_rect_origin::right);
-        print("rect_t::bottom | rect_t::left  ->", null::e_rect_origin::bottom | null::e_rect_origin::left);
-        print("rect_t::bottom | rect_t::right ->", null::e_rect_origin::bottom | null::e_rect_origin::right);
-        print("rect_t::center				 ->", null::e_rect_origin::center);
-        print("rect_t::center | rect_t::top   ->", null::e_rect_origin::center | null::e_rect_origin::top);
-        print("rect_t::center | rect_t::bottom->", null::e_rect_origin::center | null::e_rect_origin::bottom);
-        print("rect_t::center | rect_t::left  ->", null::e_rect_origin::center | null::e_rect_origin::left);
-        print("rect_t::center | rect_t::right ->", null::e_rect_origin::center | null::e_rect_origin::right);
+        print("rect_t::top	| rect_t::left  ->", ntl::e_rect_origin::top | ntl::e_rect_origin::left);
+        print("rect_t::top	| rect_t::right ->", ntl::e_rect_origin::top | ntl::e_rect_origin::right);
+        print("rect_t::bottom | rect_t::left  ->", ntl::e_rect_origin::bottom | ntl::e_rect_origin::left);
+        print("rect_t::bottom | rect_t::right ->", ntl::e_rect_origin::bottom | ntl::e_rect_origin::right);
+        print("rect_t::center				 ->", ntl::e_rect_origin::center);
+        print("rect_t::center | rect_t::top   ->", ntl::e_rect_origin::center | ntl::e_rect_origin::top);
+        print("rect_t::center | rect_t::bottom->", ntl::e_rect_origin::center | ntl::e_rect_origin::bottom);
+        print("rect_t::center | rect_t::left  ->", ntl::e_rect_origin::center | ntl::e_rect_origin::left);
+        print("rect_t::center | rect_t::right ->", ntl::e_rect_origin::center | ntl::e_rect_origin::right);
         std::cout << "\t}" << std::endl;
     }
 
@@ -183,15 +183,15 @@ void rect() {
         std::cout << "\trect from origin {" << std::endl;
         print_type("\t\tsize ->", vec2_t(100.f));
         std::cout << std::endl;
-        print("rect_t::top | rect_t::left	 ->", null::e_rect_origin::top | null::e_rect_origin::left, 0.f);
-        print("rect_t::top | rect_t::right	->", null::e_rect_origin::top | null::e_rect_origin::right, { 100.f, 0.f });
-        print("rect_t::bottom | rect_t::left  ->", null::e_rect_origin::bottom | null::e_rect_origin::left, { 0.f, 100.f });
-        print("rect_t::bottom | rect_t::right ->", null::e_rect_origin::bottom | null::e_rect_origin::right, 100.f);
-        print("rect_t::center				 ->", null::e_rect_origin::center, 50.f);
-        print("rect_t::center | rect_t::top   ->", null::e_rect_origin::center | null::e_rect_origin::top, { 50.f, 0.f });
-        print("rect_t::center | rect_t::bottom->", null::e_rect_origin::center | null::e_rect_origin::bottom, { 50.f, 100.f });
-        print("rect_t::center | rect_t::left  ->", null::e_rect_origin::center | null::e_rect_origin::left, { 0.f, 50.f });
-        print("rect_t::center | rect_t::right ->", null::e_rect_origin::center | null::e_rect_origin::right, { 100.f, 50.f });
+        print("rect_t::top | rect_t::left	 ->", ntl::e_rect_origin::top | ntl::e_rect_origin::left, 0.f);
+        print("rect_t::top | rect_t::right	->", ntl::e_rect_origin::top | ntl::e_rect_origin::right, { 100.f, 0.f });
+        print("rect_t::bottom | rect_t::left  ->", ntl::e_rect_origin::bottom | ntl::e_rect_origin::left, { 0.f, 100.f });
+        print("rect_t::bottom | rect_t::right ->", ntl::e_rect_origin::bottom | ntl::e_rect_origin::right, 100.f);
+        print("rect_t::center				 ->", ntl::e_rect_origin::center, 50.f);
+        print("rect_t::center | rect_t::top   ->", ntl::e_rect_origin::center | ntl::e_rect_origin::top, { 50.f, 0.f });
+        print("rect_t::center | rect_t::bottom->", ntl::e_rect_origin::center | ntl::e_rect_origin::bottom, { 50.f, 100.f });
+        print("rect_t::center | rect_t::left  ->", ntl::e_rect_origin::center | ntl::e_rect_origin::left, { 0.f, 50.f });
+        print("rect_t::center | rect_t::right ->", ntl::e_rect_origin::center | ntl::e_rect_origin::right, { 100.f, 50.f });
         std::cout << "\t}" << std::endl;
     }
 
@@ -206,15 +206,15 @@ void rect() {
         print_type("\t\trect ->", rect_t(0.f, 100.f));
         print_type("\t\tscale ->", vec2_t(0.5f));
         std::cout << std::endl;
-        print("rect_t::top | rect_t::left	 ->", null::e_rect_origin::top | null::e_rect_origin::left);
-        print("rect_t::top | rect_t::right	->", null::e_rect_origin::top | null::e_rect_origin::right);
-        print("rect_t::bottom | rect_t::left  ->", null::e_rect_origin::bottom | null::e_rect_origin::left);
-        print("rect_t::bottom | rect_t::right ->", null::e_rect_origin::bottom | null::e_rect_origin::right);
-        print("rect_t::center				 ->", null::e_rect_origin::center);
-        print("rect_t::center | rect_t::top   ->", null::e_rect_origin::center | null::e_rect_origin::top);
-        print("rect_t::center | rect_t::bottom->", null::e_rect_origin::center | null::e_rect_origin::bottom);
-        print("rect_t::center | rect_t::left  ->", null::e_rect_origin::center | null::e_rect_origin::left);
-        print("rect_t::center | rect_t::right ->", null::e_rect_origin::center | null::e_rect_origin::right);
+        print("rect_t::top | rect_t::left	 ->", ntl::e_rect_origin::top | ntl::e_rect_origin::left);
+        print("rect_t::top | rect_t::right	->", ntl::e_rect_origin::top | ntl::e_rect_origin::right);
+        print("rect_t::bottom | rect_t::left  ->", ntl::e_rect_origin::bottom | ntl::e_rect_origin::left);
+        print("rect_t::bottom | rect_t::right ->", ntl::e_rect_origin::bottom | ntl::e_rect_origin::right);
+        print("rect_t::center				 ->", ntl::e_rect_origin::center);
+        print("rect_t::center | rect_t::top   ->", ntl::e_rect_origin::center | ntl::e_rect_origin::top);
+        print("rect_t::center | rect_t::bottom->", ntl::e_rect_origin::center | ntl::e_rect_origin::bottom);
+        print("rect_t::center | rect_t::left  ->", ntl::e_rect_origin::center | ntl::e_rect_origin::left);
+        print("rect_t::center | rect_t::right ->", ntl::e_rect_origin::center | ntl::e_rect_origin::right);
         std::cout << "\t}" << std::endl;
     }
     std::cout << "}" << std::endl << std::endl;
@@ -223,12 +223,12 @@ void rect() {
 struct user_vec2_t { float x{ }, y{ }; };
 
 template <typename coordinates_t>
-struct null::compatibility::data_type_converter_t<vec2_t<coordinates_t>, user_vec2_t> {
+struct ntl::compatibility::data_type_converter_t<vec2_t<coordinates_t>, user_vec2_t> {
     static inline constexpr user_vec2_t convert(const vec2_t<coordinates_t>& vec) { return user_vec2_t{ vec.x, vec.y }; }
 };
 
 template <typename coordinates_t>
-struct null::compatibility::data_type_converter_t<user_vec2_t, vec2_t<coordinates_t>> {
+struct ntl::compatibility::data_type_converter_t<user_vec2_t, vec2_t<coordinates_t>> {
     static inline constexpr vec2_t<coordinates_t> convert(const user_vec2_t& vec) { return vec2_t<coordinates_t>(vec.x, vec.y); }
 };
 

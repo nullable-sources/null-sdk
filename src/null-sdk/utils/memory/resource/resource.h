@@ -1,10 +1,11 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+
 #include "../pe-image.h"
 
-namespace memory {
-    struct resource_t {
+namespace ntl::mem {
+    struct NULLSDK_API resource_t {
     public:
         pe_image_t parent_module{ };
         std::string name{ }, type{ };

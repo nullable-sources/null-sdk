@@ -1,9 +1,9 @@
 #include "win.h"
 
-namespace utils {
+namespace ntl {
     namespace win {
         bool c_window::create() {
-            if(!RegisterClassA(&wnd_class)) logger(e_log_type::error, "register class error");
+            if(!RegisterClassA(&wnd_class)) utils::logger(utils::e_log_type::error, "register class error");
 
             wnd_handle = CreateWindowA(wnd_class.lpszClassName, name.c_str(), styles, pos.x, pos.y, size.x, size.y, nullptr, nullptr, wnd_class.hInstance, nullptr);
             if(wnd_handle) {
@@ -17,15 +17,15 @@ namespace utils {
         void c_window::destroy() {
             on_destroy();
 
-            if(!wnd_handle) logger(e_log_type::error, "window handle is nullptr.");
-            if(!wnd_class.hInstance) logger(e_log_type::error, "instance is nullptr.");
+            if(!wnd_handle) utils::logger(utils::e_log_type::error, "window handle is nullptr.");
+            if(!wnd_class.hInstance) utils::logger(utils::e_log_type::error, "instance is nullptr.");
 
             DestroyWindow(wnd_handle);
             UnregisterClassA(name.c_str(), wnd_class.hInstance);
         }
 
         void c_window::main_loop() {
-            if(!wnd_handle) logger(e_log_type::error, "window handle is nullptr.");
+            if(!wnd_handle) utils::logger(utils::e_log_type::error, "window handle is nullptr.");
 
             ShowWindow(wnd_handle, SW_SHOWDEFAULT);
             UpdateWindow(wnd_handle);
@@ -62,7 +62,7 @@ namespace utils {
 
     namespace console {
         void attach() {
-            if(!AllocConsole()) logger(e_log_type::error, "cant alloc console.");
+            if(!AllocConsole()) utils::logger(utils::e_log_type::error, "cant alloc console.");
 
             freopen_s(&old_out, "CONOUT$", "w", stdout);
             freopen_s(&old_in, "CONIN$", "r", stdin);

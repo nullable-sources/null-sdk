@@ -1,7 +1,7 @@
 #pragma once
 #include "../vec4.h"
 
-namespace null::sdk {
+namespace ntl::sdk {
     struct packed_access_t {
     public:
         static inline auto get(auto&& matrix, size_t i) { return matrix.data[i]; }
@@ -116,8 +116,8 @@ namespace null::sdk {
                 set_row(row, matrix.get_row(row));
         }
 
-        template <typename type_t> requires null::compatibility::data_type_convertertable<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>
-        inline constexpr i_matrix(const type_t& value) : i_matrix(null::compatibility::data_type_converter_t<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>::convert(value)) { }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>
+        inline constexpr i_matrix(const type_t& value) : i_matrix(ntl::compatibility::data_type_converter_t<type_t, i_matrix<major_type_t, data_t, rows_num, columns_num>>::convert(value)) { }
 
     public:
         template <typename self_t> inline auto&& get_by_index(this self_t&& self, size_t row, size_t column) { return major_type_t::get_by_index(self, row, column); }
@@ -155,13 +155,13 @@ namespace null::sdk {
     public:
         inline operator transpose_t() const { return transpose(); }
 
-        template <typename type_t> requires null::compatibility::data_type_convertertable<i_matrix<major_type_t, data_t, rows_num, columns_num>, type_t>
-        inline constexpr operator type_t() const { return null::compatibility::data_type_converter_t<i_matrix<major_type_t, data_t, rows_num, columns_num>, type_t>::convert(*this); }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<i_matrix<major_type_t, data_t, rows_num, columns_num>, type_t>
+        inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<i_matrix<major_type_t, data_t, rows_num, columns_num>, type_t>::convert(*this); }
 
         template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.data[i]; }
 
-        fast_ops_structure_all_prefix_operators(inline constexpr, data);
-        fast_ops_structure_all_postfix_operators(inline constexpr, data);
+        FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, data);
+        FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, data);
 
         template <typename other_data_t, size_t other_rows_num, size_t other_columns_num>
         auto operator*(const i_matrix<major_type_t, other_data_t, other_rows_num, other_columns_num>& rhs) const {
@@ -183,19 +183,19 @@ namespace null::sdk {
         template <typename self_t, typename other_data_t> inline auto&& operator*=(this self_t&& self, const different_data_type_t<other_data_t>& rhs) { self = self * rhs; return self; }
         template <typename self_t> inline auto&& operator*=(this self_t&& self, const column_header_t& rhs) { self = self * rhs; return self; }
 
-        fast_ops_structure_equal_operator(inline constexpr, template <typename other_data_t>, const different_data_type_t<other_data_t>&, rhs_field, data);
-        fast_ops_structure_equal_operator(inline constexpr, , data_t, rhs_value, data);
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_data_t>, const different_data_type_t<other_data_t>&, RHS_FIELD, data);
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , data_t, RHS_VALUE, data);
     };
 }
 
-#define make_matrix_definition(rows_num, columns_num)																																						\
-	template <typename major_type_t>																																										\
-	class c_matrix##rows_num##x##columns_num : public null::sdk::i_matrix<major_type_t, float, rows_num, columns_num> {																						\
-	public:																																																	\
-		using null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>::i_matrix;																													\
-		c_matrix##rows_num##x##columns_num##(const null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>& matrix) : null::sdk::i_matrix<major_type_t, float, rows_num, columns_num>(matrix) { }	\
-	};																																																		\
-	using matrix##rows_num##x##columns_num##_t = c_matrix##rows_num##x##columns_num##<null::sdk::column_major_t>;																							\
+#define make_matrix_definition(rows_num, columns_num)                                                                                                                                                   \
+    template <typename major_type_t>                                                                                                                                                                    \
+    class c_matrix##rows_num##x##columns_num : public ntl::sdk::i_matrix<major_type_t, float, rows_num, columns_num> {                                                                                  \
+    public:                                                                                                                                                                                             \
+        using ntl::sdk::i_matrix<major_type_t, float, rows_num, columns_num>::i_matrix;                                                                                                                 \
+        c_matrix##rows_num##x##columns_num##(const ntl::sdk::i_matrix<major_type_t, float, rows_num, columns_num>& matrix) : ntl::sdk::i_matrix<major_type_t, float, rows_num, columns_num>(matrix) { } \
+    };                                                                                                                                                                                                  \
+    using matrix##rows_num##x##columns_num##_t = c_matrix##rows_num##x##columns_num##<ntl::sdk::column_major_t>;                                                                                        \
 
 make_matrix_definition(2, 3);
 make_matrix_definition(2, 4);

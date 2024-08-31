@@ -1,8 +1,8 @@
 #pragma once
 #include "module/module.h"
 
-namespace memory {
-    struct signature_t : public address_t {
+namespace ntl::mem {
+    struct NULLSDK_API signature_t : public address_t {
     public:
         pe_image_t pe_image{ };
         std::string signature{ };

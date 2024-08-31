@@ -6,7 +6,7 @@
 
 #include "../../utils/fast-operators.h"
 
-namespace memory {
+namespace ntl::mem {
     struct address_t {
     public:
         std::uintptr_t address{ };
@@ -35,13 +35,13 @@ namespace memory {
         inline address_t jumped(std::intptr_t offset) const { return address_t(*this).jump(offset); }
 
     public:
-        fast_ops_structure_all_postfix_operators(inline constexpr, address);
+        FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, address);
 
-        fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, const address_t&, rhs_field, address);
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const address_t&, RHS_FIELD, address);
 
-        fast_ops_structure_equal_operator(inline constexpr, , const address_t&, rhs_field, address);
+        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , const address_t&, RHS_FIELD, address);
 
-        fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, const address_t&, rhs_field, address);
+        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, const address_t&, RHS_FIELD, address);
 
         inline constexpr address_t operator &(const address_t& rhs) const { return address & rhs.address; }
 
@@ -82,7 +82,7 @@ namespace memory {
         template <typename self_t>
         static inline constexpr std::uintptr_t* get(self_t self) { return *(std::uintptr_t**)self; }
 
-        template <typename self_t, typename prototype_t = memory::address_t>
+        template <typename self_t, typename prototype_t = address_t>
         static inline constexpr prototype_t get(self_t self, std::size_t index) { return (prototype_t)(get(self)[index]); }
     };
 }

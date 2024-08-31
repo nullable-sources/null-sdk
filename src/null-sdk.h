@@ -4,6 +4,8 @@
 #include <ranges>
 #include <fstream>
 
+#include "null-sdk/utils/win/win.h"
+
 #include "null-sdk/utils/memory/address.h"
 #include "null-sdk/utils/memory/signature.h"
 #include "null-sdk/utils/memory/pe-image.h"

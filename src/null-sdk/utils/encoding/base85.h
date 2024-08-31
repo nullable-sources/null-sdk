@@ -2,18 +2,20 @@
 #include <ranges>
 #include <algorithm>
 
-namespace utils::encoding {
-    struct base85_t {
+#include "null-sdk/api-defines.h"
+
+namespace ntl::encoding {
+    struct NULLSDK_API base85_t {
     public:
         std::vector<std::uint8_t> output{ }, input{ };
 
     public:
-        base85_t(std::string_view _input) : input{ _input.begin(), _input.end() } { }
-        base85_t(const std::vector<std::uint8_t>& _input) : input{ _input } { }
+        base85_t(std::string_view _input) : input(_input.begin(), _input.end()) { }
+        base85_t(const std::vector<std::uint8_t>& _input) : input(_input) { }
 
     public:
         base85_t& decode() {
-            static const auto decode_byte{ [](std::uint8_t c) { return c - (c >= '\\' ? 36 : 35); } };
+            static const auto decode_byte = [](std::uint8_t c) { return c - (c >= '\\' ? 36 : 35); };
             for(auto iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(5)) {
                 std::uint32_t chunk{ };
                 std::ranges::for_each(std::views::iota(iterator) | std::views::take(std::min((int)std::distance(iterator, input.end()), 5)) | std::views::reverse, [&](const auto& chunk_iterator) { chunk = chunk * 85 + decode_byte(*chunk_iterator); });
@@ -25,7 +27,7 @@ namespace utils::encoding {
         }
 
         base85_t& encode() {
-            static const auto encode_byte{ [](std::uint32_t c) { c = (c % 85) + 35; return c + (c >= '\\' ? 1 : 0); } };
+            static const auto encode_byte = [](std::uint32_t c) { c = (c % 85) + 35; return c + (c >= '\\' ? 1 : 0); };
             for(auto iterator : std::views::iota(input.begin(), input.end()) | std::views::stride(4)) {
                 std::uint32_t chunk{ };
                 std::ranges::for_each(std::views::iota(iterator) | std::views::take(std::min((int)std::distance(iterator, input.end()), 4)) | std::views::reverse, [&](const auto& chunk_iterator) { chunk |= *chunk_iterator << 8 * std::distance(iterator, chunk_iterator); });

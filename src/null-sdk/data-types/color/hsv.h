@@ -15,15 +15,15 @@ public:
 
     inline constexpr hsv_color_t(const vec3_t<float> _hsv, float _a) : hsv_color_t(_hsv.x, _hsv.y, _hsv.z, _a) { }
     inline constexpr hsv_color_t(const vec4_t<float> _hsva) : hsv_color_t(_hsva.x, _hsva.y, _hsva.z, _hsva.w) { }
-    hsv_color_t(const null::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
+    hsv_color_t(const ntl::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
         const double max{ std::ranges::max(rgba.channels | std::views::take(3)) };
         const double delta{ max - std::ranges::min(rgba.channels | std::views::take(3)) };
 
         if(delta <= 0.f) channels = { 0.f, 0.f, (float)max, rgba.a };
         else {
-            if(max == rgba.r)			h = std::fmodf((rgba.g - rgba.b) / delta, 6.f);
-            else if(max == rgba.g)	h = (rgba.b - rgba.r) / delta + 2.f;
-            else if(max == rgba.b)	h = (rgba.r - rgba.g) / delta + 4.f;
+            if(max == rgba.r)       h = std::fmodf((rgba.g - rgba.b) / delta, 6.f);
+            else if(max == rgba.g)  h = (rgba.b - rgba.r) / delta + 2.f;
+            else if(max == rgba.b)  h = (rgba.r - rgba.g) / delta + 4.f;
             h *= 60.f;
             if(h < 0.f) h += 360.f;
 
@@ -33,10 +33,10 @@ public:
     }
 
 public:
-    fast_ops_structure_convert_operator(inline constexpr, , vec3_t<float>() const, vec3_t<float>, , h, s, v);
-    fast_ops_structure_convert_operator(inline constexpr, , vec4_t<float>() const, vec4_t<float>, , h, s, v, a);
+    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec3_t<float>() const, vec3_t<float>, , h, s, v);
+    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec4_t<float>() const, vec4_t<float>, , h, s, v, a);
 
-    operator null::sdk::i_color<float>() const {
+    operator ntl::sdk::i_color<float>() const {
         const double chroma{ v * s };
         const double prime{ std::fmod(h / 60.f, 6.f) };
         const double x{ chroma * (1.f - std::fabs(std::fmod(prime, 2.f) - 1.f)) };
@@ -52,18 +52,18 @@ public:
         }
 
         const double m{ v - chroma };
-        return null::sdk::i_color<double>{ rgb + m, a }.cast<float>();
+        return ntl::sdk::i_color<double>{ rgb + m, a }.cast<float>();
     }
 
-    fast_ops_structure_all_prefix_operators(inline constexpr, h, s, v, a);
-    fast_ops_structure_all_postfix_operators(inline constexpr, h, s, v, a);
+    FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, h, s, v, a);
+    FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, h, s, v, a);
 
-    fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, const hsv_color_t&, rhs_field, h, s, v, a);
-    fast_ops_structure_all_arithmetic_operators(inline constexpr, template <typename self_t>, float, rhs_value, h, s, v, a);
+    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const hsv_color_t&, RHS_FIELD, h, s, v, a);
+    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, float, RHS_VALUE, h, s, v, a);
 
-    fast_ops_structure_equal_operator(inline constexpr, , const hsv_color_t&, rhs_field, h, s, v, a);
-    fast_ops_structure_equal_operator(inline constexpr, , float, rhs_value, h, s, v, a);
+    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , const hsv_color_t&, RHS_FIELD, h, s, v, a);
+    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , float, RHS_VALUE, h, s, v, a);
 
-    fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, const hsv_color_t&, rhs_field, h, s, v, a);
-    fast_ops_structure_all_comparison_operators(inline constexpr, template <typename self_t>, float, rhs_value, h, s, v, a);
+    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, const hsv_color_t&, RHS_FIELD, h, s, v, a);
+    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, float, RHS_VALUE, h, s, v, a);
 };

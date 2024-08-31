@@ -1,6 +1,6 @@
 #include "../win/win.h"
 
-namespace utils {
+namespace ntl::utils {
     void c_log_event_dispatcher::c_default_log_listener::process_event(e_log_type id, const event_parameters_t& parameters) {
         switch(id) {
             case e_log_type::info: { std::cout << ((e_dye::blue | e_dye::intensity) << e_dye::on_background | e_dye::white) << "[info]" << e_dye::restore << " " << (e_dye::blue | e_dye::intensity) << std::any_cast<std::string>(parameters.at("text")) << e_dye::restore << std::endl; } break;
@@ -9,4 +9,6 @@ namespace utils {
             case e_log_type::assert: { throw std::runtime_error{ std::any_cast<std::string>(parameters.at("text")) }; } break;
         }
     }
+
+    NULLSDK_API c_log_event_dispatcher logger{ };
 }

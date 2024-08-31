@@ -3,32 +3,32 @@
 #include "../../math/geometry.h"
 
 template <typename major_type_t>
-class c_matrix3x3 : public null::sdk::i_matrix<major_type_t, float, 3, 3> {
+class c_matrix3x3 : public ntl::sdk::i_matrix<major_type_t, float, 3, 3> {
 public:
-    static inline c_matrix3x3 rotation_x(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
+    static inline c_matrix3x3 rotation_x(radians_t angle, ntl::math::e_rotation direction = ntl::math::e_rotation::ccw) {
         const float cos = std::cosf(angle), sin = std::sinf(angle);
         return c_matrix3x3(
-            vec3_t(1.f, 0.f,                                             0.f                                            ),
-            vec3_t(0.f, cos,                                             direction == math::e_rotation::ccw ? -sin : sin),
-            vec3_t(0.f, direction == math::e_rotation::ccw ? sin : -sin, cos                                            )
+            vec3_t(1.f, 0.f,                                             0.f                                                 ),
+            vec3_t(0.f, cos,                                             direction == ntl::math::e_rotation::ccw ? -sin : sin),
+            vec3_t(0.f, direction == ntl::math::e_rotation::ccw ? sin : -sin, cos                                            )
         );
     }
 
-    static inline c_matrix3x3 rotation_y(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
+    static inline c_matrix3x3 rotation_y(radians_t angle, ntl::math::e_rotation direction = ntl::math::e_rotation::ccw) {
         const float cos = std::cosf(angle), sin = std::sinf(angle);
         return c_matrix3x3(
-            vec3_t(cos,                                             0.f, direction == math::e_rotation::ccw ? -sin : sin),
-            vec3_t(0.f,                                             1.f, 0.f                                            ),
-            vec3_t(direction == math::e_rotation::ccw ? sin : -sin, 0.f, cos                                            )
+            vec3_t(cos,                                             0.f, direction == ntl::math::e_rotation::ccw ? -sin : sin),
+            vec3_t(0.f,                                             1.f, 0.f                                                 ),
+            vec3_t(direction == ntl::math::e_rotation::ccw ? sin : -sin, 0.f, cos                                            )
         );
     }
 
-    static inline c_matrix3x3 rotation_z(radians_t angle, math::e_rotation direction = math::e_rotation::ccw) {
+    static inline c_matrix3x3 rotation_z(radians_t angle, ntl::math::e_rotation direction = ntl::math::e_rotation::ccw) {
         const float cos = std::cosf(angle), sin = std::sinf(angle);
         return c_matrix3x3(
-            vec3_t(cos,                                             direction == math::e_rotation::ccw ? sin : -sin, 0.f),
-            vec3_t(direction == math::e_rotation::ccw ? -sin : sin, cos,                                             0.f),
-            vec3_t(0.f,                                             0.f,                                             1.f)
+            vec3_t(cos,                                             direction == ntl::math::e_rotation::ccw ? sin : -sin, 0.f),
+            vec3_t(direction == ntl::math::e_rotation::ccw ? -sin : sin, cos,                                             0.f),
+            vec3_t(0.f,                                             0.f,                                                  1.f)
         );
     }
 
@@ -43,7 +43,7 @@ public:
     }
 
 public:
-    using null::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
-    inline c_matrix3x3(const null::sdk::i_matrix<major_type_t, float, 3, 3>& matrix) : null::sdk::i_matrix<major_type_t, float, 3, 3>(matrix) { }
+    using ntl::sdk::i_matrix<major_type_t, float, 3, 3>::i_matrix;
+    inline c_matrix3x3(const ntl::sdk::i_matrix<major_type_t, float, 3, 3>& matrix) : ntl::sdk::i_matrix<major_type_t, float, 3, 3>(matrix) { }
 };
-using matrix3x3_t = c_matrix3x3<null::sdk::column_major_t>;
+using matrix3x3_t = c_matrix3x3<ntl::sdk::column_major_t>;

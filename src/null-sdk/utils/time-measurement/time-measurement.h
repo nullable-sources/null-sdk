@@ -2,8 +2,8 @@
 #include <chrono>
 #include <deque>
 
-namespace utils {
-    class c_immediate_time_measurement {
+namespace ntl {
+    class NULLSDK_API c_immediate_time_measurement {
     protected:
         std::chrono::steady_clock::time_point measurement_start{ };
 
@@ -16,7 +16,7 @@ namespace utils {
         virtual void begin() { measurement_start = std::chrono::steady_clock::now(); }
     };
 
-    class c_retained_time_measurement : public c_immediate_time_measurement {
+    class NULLSDK_API c_retained_time_measurement : public c_immediate_time_measurement {
     protected:
         std::chrono::steady_clock::time_point last_update{ };
 
@@ -30,7 +30,7 @@ namespace utils {
         virtual void update() { last_update = std::chrono::steady_clock::now(); }
     };
 
-    class c_segment_time_measurement : public c_retained_time_measurement {
+    class NULLSDK_API c_segment_time_measurement : public c_retained_time_measurement {
     protected:
         std::chrono::nanoseconds delta{ };
 
@@ -47,7 +47,7 @@ namespace utils {
         }
     };
 
-    class c_cumulative_time_measurement : public c_segment_time_measurement {
+    class NULLSDK_API c_cumulative_time_measurement : public c_segment_time_measurement {
     protected:
         int max_size{ };
         std::deque<std::chrono::nanoseconds> measurements{ };

@@ -4,10 +4,10 @@
 #include <array>
 #include "../data-types/angle/angle.h"
 
-namespace math {
+namespace ntl::math {
     enum class e_rotation {
-        ccw, //@not: counter-clockwise
-        cw //@note: clockwise
+        ccw,    //@not: counter-clockwise
+        cw      //@note: clockwise
     };
 
     template <typename coordinates_t>
