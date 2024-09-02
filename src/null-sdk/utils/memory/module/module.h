@@ -24,7 +24,7 @@ namespace ntl {
                 *this = *finded;
             } else {
                 pe_image = pe_image_t((std::uintptr_t)GetModuleHandleA(name.data()));
-                if(!pe_image.base_address) utils::logger(utils::e_log_type::warning, "cant get '{}' module.", name);
+                if(!pe_image.base_address) sdk::logger(sdk::e_log_type::warning, "cant get '{}' module.", name);
                 if(store) stored_modules.push_back(this);
             }
         }
@@ -73,7 +73,7 @@ namespace ntl {
         public:
             inline return_t operator()(args_t... args) {
                 if(module && !address) { address = module->load_export(name); }
-                if(!address) utils::logger(utils::e_log_type::warning, "'{}' export address == nullptr", name.empty() ? "unknown" : name);
+                if(!address) sdk::logger(sdk::e_log_type::warning, "'{}' export address == nullptr", name.empty() ? "unknown" : name);
                 return ((prototype_t)address)(std::forward<args_t>(args)...);
             }
         };

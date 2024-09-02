@@ -3,7 +3,7 @@
 #include <format>
 #include "../events/events.h"
 
-namespace ntl::utils {
+namespace ntl::sdk {
     enum class e_log_type { info, warning, error, assert };
     class c_log_event_dispatcher : public c_event_dispatcher<e_log_type> {
     public:

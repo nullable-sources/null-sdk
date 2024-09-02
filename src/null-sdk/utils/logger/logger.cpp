@@ -1,6 +1,6 @@
 #include "../win/win.h"
 
-namespace ntl::utils {
+namespace ntl::sdk {
     void c_log_event_dispatcher::c_default_log_listener::process_event(e_log_type id, const event_parameters_t& parameters) {
         switch(id) {
             case e_log_type::info: { std::cout << ((e_dye::blue | e_dye::intensity) << e_dye::on_background | e_dye::white) << "[info]" << e_dye::restore << " " << (e_dye::blue | e_dye::intensity) << std::any_cast<std::string>(parameters.at("text")) << e_dye::restore << std::endl; } break;

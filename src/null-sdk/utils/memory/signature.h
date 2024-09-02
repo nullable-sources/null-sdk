@@ -12,7 +12,7 @@ namespace ntl {
     public:
         signature_t(const c_module& module, std::string_view _signature) : signature_t(module.pe_image, _signature) { }
         signature_t(const pe_image_t& _pe_image, std::string_view _signature) : pe_image(_pe_image), signature(_signature) {
-            if(signature.empty()) utils::logger(utils::e_log_type::warning, "'{}' signature empty", _signature);
+            if(signature.empty()) sdk::logger(sdk::e_log_type::warning, "'{}' signature empty", _signature);
             to_bytes();
         }
 
@@ -33,7 +33,7 @@ namespace ntl {
                 );
 
                 if(!finded.empty()) address = finded.front();
-                else utils::logger(utils::e_log_type::warning, std::format("cant find '{}' signature", signature));
+                else sdk::logger(sdk::e_log_type::warning, std::format("cant find '{}' signature", signature));
             }
             return *this;
         }

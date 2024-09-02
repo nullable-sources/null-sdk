@@ -64,7 +64,7 @@ namespace ntl {
 
             template <typename char_t>
             void write_clipboard(std::basic_string_view<char_t> str) const {
-                if(!OpenClipboard(wnd_handle)) utils::logger(utils::e_log_type::error, "cant open clipboard");
+                if(!OpenClipboard(wnd_handle)) sdk::logger(sdk::e_log_type::error, "cant open clipboard");
 
                 EmptyClipboard();
                 HGLOBAL data = GlobalAlloc(GMEM_DDESHARE, sizeof(char_t) * (str.length() + 1));
@@ -72,19 +72,19 @@ namespace ntl {
                 GlobalUnlock(data);
 
                 SetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT, data);
-                if(!CloseClipboard()) utils::logger(utils::e_log_type::error, "cant clise clipboard");
+                if(!CloseClipboard()) sdk::logger(sdk::e_log_type::error, "cant clise clipboard");
             }
 
             template <typename char_t>
             std::basic_string<char_t> read_clipboard() const {
-                if(!OpenClipboard(wnd_handle)) utils::logger(utils::e_log_type::error, "cant open clipboard.");
+                if(!OpenClipboard(wnd_handle)) sdk::logger(sdk::e_log_type::error, "cant open clipboard.");
 
                 std::basic_string<char_t> clipboard{ };
                 if(HANDLE data = GetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT)) {
                     clipboard = (char_t*)GlobalLock(data);
-                } else utils::logger(utils::e_log_type::warning, "cant get clipboard data.");
+                } else sdk::logger(sdk::e_log_type::warning, "cant get clipboard data.");
 
-                if(!CloseClipboard()) utils::logger(utils::e_log_type::error, "cant clise clipboard.");
+                if(!CloseClipboard()) sdk::logger(sdk::e_log_type::error, "cant clise clipboard.");
                 return clipboard;
             }
 
