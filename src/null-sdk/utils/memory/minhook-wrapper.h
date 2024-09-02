@@ -3,7 +3,7 @@
 
 #include "address.h"
 
-namespace ntl::mem {
+namespace ntl {
     enum class e_hook_type {
         standard,
         proxy

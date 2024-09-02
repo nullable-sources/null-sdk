@@ -3,8 +3,8 @@
 #include <ranges>
 #include <algorithm>
 
-#include "null-sdk/utils/fast-operators.h"
-#include "null-sdk/data-types/vec4.h"
+#include "../../utils/fast-operators.h"
+#include "../vec4.h"
 
 namespace ntl::sdk {
     template <typename channel_t>

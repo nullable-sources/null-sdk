@@ -1,4 +1,6 @@
 #pragma once
+#include <numeric>
+
 #include "vec2.h"
 
 namespace ntl {

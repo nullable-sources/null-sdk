@@ -4,7 +4,7 @@
 
 #include "../pe-image.h"
 
-namespace ntl::mem {
+namespace ntl {
     struct resource_t {
     public:
         pe_image_t parent_module{ };

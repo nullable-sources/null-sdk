@@ -1,5 +1,7 @@
 ﻿#include <iostream>
-#include <null-sdk.h>
+
+#include <null-sdk/math/math.h>
+#include <null-sdk/data-types/callbacks.h>
 
 FAST_DEFS__MATH_DEFINE_TEMPLATES(vec2_t, coordinates_t)
 void print_type(const std::string_view& str, const vec2_t<coordinates_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}]", vec.x, vec.y) << " }" << std::endl; }
@@ -198,7 +200,7 @@ void rect() {
     std::cout << std::endl;
 
     {
-        static const auto print{ [](std::string_view str, const auto& origin) {
+        static const auto print{ [](std::string_view str, ntl::e_rect_origin origin) {
             print_type(std::string("\t\t").append(str), rect_t(0.f, 100.f).scale(origin, 0.5f));
             } };
 

@@ -3,7 +3,7 @@
 
 #include "address.h"
 
-namespace ntl::mem {
+namespace ntl {
     struct pe_image_t {
     public:
         address_t base_address{ };

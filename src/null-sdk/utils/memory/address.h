@@ -6,7 +6,7 @@
 
 #include "../../utils/fast-operators.h"
 
-namespace ntl::mem {
+namespace ntl {
     struct address_t {
     public:
         std::uintptr_t address{ };

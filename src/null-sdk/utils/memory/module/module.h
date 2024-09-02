@@ -2,7 +2,7 @@
 #include "../../logger/logger.h"
 #include "../resource/resource.h"
 
-namespace ntl::mem {
+namespace ntl {
     class c_module {
     public:
         static inline std::vector<c_module*> stored_modules{ };

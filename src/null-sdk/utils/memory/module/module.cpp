@@ -1,7 +1,7 @@
-#include "null-sdk.h"
+#include "module.h"
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
-namespace ntl::mem {
+namespace ntl {
     c_module& c_module::self() {
         static c_module self(pe_image_t{ (HMODULE)&__ImageBase });
         return self;

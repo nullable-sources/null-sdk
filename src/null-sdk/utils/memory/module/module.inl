@@ -1,6 +1,4 @@
-#include "null-sdk.h"
-
-namespace ntl::mem {
+namespace ntl {
     auto&& c_module::load_resources(this auto&& self) {
         static const auto to_string{
             [](const char* name) {

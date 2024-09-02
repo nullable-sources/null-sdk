@@ -22,6 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\null-sdk.h" />
     <ClInclude Include="src\null-sdk\data-types\angle\angle.h" />
     <ClInclude Include="src\null-sdk\data-types\angle\euler3d.h" />
     <ClInclude Include="src\null-sdk\data-types\angle\euler2d.h" />
@@ -39,7 +40,6 @@
     <ClInclude Include="src\null-sdk\data-types\vec4.h" />
     <ClInclude Include="src\null-sdk\math\geometry.h" />
     <ClInclude Include="src\null-sdk\math\math.h" />
-    <ClInclude Include="src\null-sdk.h" />
     <ClInclude Include="src\null-sdk\utils\compatibility\data-type-converter.h" />
     <ClInclude Include="src\null-sdk\utils\encoding\base85.h" />
     <ClInclude Include="src\null-sdk\utils\encoding\encoding.h" />
@@ -100,7 +100,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FunctionLevelLinking Condition="'$(Configuration)'=='release'">true</FunctionLevelLinking>
       <IntrinsicFunctions Condition="'$(Configuration)'=='release'">true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NOMINMAX;NULLSDK_EXPORTING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Platform)'=='Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)'=='debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)'=='release'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

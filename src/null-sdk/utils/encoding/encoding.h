@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
-
-#include "base85.h"
+#include <string>
 
 namespace ntl::encoding {
     static std::string utf16_to_ascii(std::wstring_view utf16) {

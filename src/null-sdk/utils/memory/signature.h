@@ -1,7 +1,7 @@
 #pragma once
 #include "module/module.h"
 
-namespace ntl::mem {
+namespace ntl {
     struct signature_t : public address_t {
     public:
         pe_image_t pe_image{ };

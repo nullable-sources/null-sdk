@@ -1,5 +1,6 @@
 ﻿#include <iostream>
-#include <null-sdk.h>
+
+#include <null-sdk/utils/win/win.h>
 
 int wnd_proc_1(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
     std::cout << "wnd proc 1" << std::endl;

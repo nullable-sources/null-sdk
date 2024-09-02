@@ -2,6 +2,8 @@
 #include <numbers>
 #include <cmath>
 #include <array>
+#include <algorithm>
+
 #include "../data-types/vec3.h"
 #include "../data-types/vec4.h"
 #include "../data-types/rect.h"

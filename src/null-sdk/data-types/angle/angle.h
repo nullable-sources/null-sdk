@@ -3,7 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include "null-sdk/utils/fast-operators.h"
+#include "../../utils/fast-operators.h"
 
 using radians_t = double;
 using degrees_t = float;
