@@ -72,7 +72,7 @@ namespace ntl {
                 GlobalUnlock(data);
 
                 SetClipboardData(std::is_same_v<char_t, wchar_t> ? CF_UNICODETEXT : CF_TEXT, data);
-                if(!CloseClipboard()) sdk::logger(sdk::e_log_type::error, "cant clise clipboard");
+                if(!CloseClipboard()) sdk::logger(sdk::e_log_type::error, "cant close clipboard");
             }
 
             template <typename char_t>
@@ -84,7 +84,7 @@ namespace ntl {
                     clipboard = (char_t*)GlobalLock(data);
                 } else sdk::logger(sdk::e_log_type::warning, "cant get clipboard data.");
 
-                if(!CloseClipboard()) sdk::logger(sdk::e_log_type::error, "cant clise clipboard.");
+                if(!CloseClipboard()) sdk::logger(sdk::e_log_type::error, "cant close clipboard.");
                 return clipboard;
             }
 

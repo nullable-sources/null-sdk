@@ -17,6 +17,9 @@
     <Filter Include="src\data-types\angle" />
     <Filter Include="src\data-types\matrix" />
     <Filter Include="src\data-types\color" />
+    <Filter Include="src\utils\error-handling">
+      <UniqueIdentifier>{3b4833c7-c149-4ab2-a466-c4b022e8f68e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -118,6 +121,12 @@
     <ClInclude Include="src\null-sdk\utils\fast-defines.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\null-sdk\utils\error-handling\error-handling.h">
+      <Filter>src\utils\error-handling</Filter>
+    </ClInclude>
+    <ClInclude Include="src\null-sdk\utils\error-handling\error-causers.h">
+      <Filter>src\utils\error-handling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk\utils\win\win.cpp">
@@ -134,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="src\null-sdk\utils\memory\resource\resource.cpp">
       <Filter>src\utils\memory\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\null-sdk\utils\error-handling\error-handling.cpp">
+      <Filter>src\utils\error-handling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

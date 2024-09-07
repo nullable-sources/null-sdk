@@ -10,6 +10,7 @@
     <ItemDefinitionGroup>
         <ClCompile>
             <AdditionalIncludeDirectories>$(NullSdkRoot)src;$(NullSdkRoot)third-party;$(NullSdkRoot)third-party\fmt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+            <AdditionalIncludeDirectories Condition='Exists($(BOOST_INCLUDE))'>$(BOOST_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
         </ClCompile>
         <Lib>
             <AdditionalLibraryDirectories>$(NullSdkRoot)build;$(NullSdkRoot)third-party\minhook\lib;$(NullSdkRoot)third-party\fmt\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
