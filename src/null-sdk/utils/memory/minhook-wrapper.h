@@ -45,16 +45,16 @@ namespace ntl {
     template <typename hook_class_t, std::size_t method_index, typename prototype_t>
     struct vtable_hook_t : public i_hook<prototype_t> {
     protected:
-        static inline ntl::vtable_t::copied_t copied_vtable{ };
+        static inline vtable_t::copied_t copied_vtable{ };
 
     public:
-        static void setup(address_t address, std::size_t methods_count) {
-            i_hook<prototype_t>::original = ntl::vtable_t::get(address, method_index);
-            copied_vtable = ntl::vtable_t::copy(address, methods_count);
+        static void initialize(address_t address, std::size_t methods_count) {
+            i_hook<prototype_t>::original = vtable_t::get(address, method_index);
+            copied_vtable = vtable_t::copy(address, methods_count);
             copied_vtable.replace(method_index, &hook_class_t::hook);
-            copied_vtable.override(address);
         }
 
+        static void setup(address_t address) { copied_vtable.override(address); }
         static inline void disable(address_t address) { return copied_vtable.restore(address); }
     };
 

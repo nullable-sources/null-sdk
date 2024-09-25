@@ -67,7 +67,8 @@ void main() {
 
     {
         std::print("\nhook for instance\n");
-        example_vtable_hook_t::setup(first_implementations[0].get(), 2);
+        example_vtable_hook_t::initialize(first_implementations[0].get(), 2);
+        example_vtable_hook_t::setup(first_implementations[0].get());
 
         std::print("first implementation[0]:  "); ntl::vtable_t::func_t<0, void()>::call(first_implementations[0].get());
         std::print("first implementation[1]:  "); ntl::vtable_t::func_t<0, void()>::call(first_implementations[1].get());
