@@ -48,6 +48,7 @@ namespace ntl {
         static inline vtable_t::copied_t copied_vtable{ };
 
     public:
+        static bool initialized() { return !copied_vtable.empty(); }
         static void initialize(address_t address, std::size_t methods_count) {
             i_hook<prototype_t>::original = vtable_t::get(address, method_index);
             copied_vtable = vtable_t::copy(address, methods_count);
