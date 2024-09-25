@@ -53,6 +53,7 @@
     <ClInclude Include="src\null-sdk\utils\memory\pe-image.h" />
     <ClInclude Include="src\null-sdk\utils\memory\resource\resource.h" />
     <ClInclude Include="src\null-sdk\utils\memory\signature.h" />
+    <ClInclude Include="src\null-sdk\utils\memory\vtable.h" />
     <ClInclude Include="src\null-sdk\utils\time-measurement\time-measurement.h" />
     <ClInclude Include="src\null-sdk\utils\win\win.h" />
     <ClCompile Include="src\null-sdk\data-types\angle\angle.cpp" />

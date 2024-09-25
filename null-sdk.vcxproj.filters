@@ -121,11 +121,8 @@
     <ClInclude Include="src\null-sdk\utils\fast-defines.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\error-handling\error-handling.h">
-      <Filter>src\utils\error-handling</Filter>
-    </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\error-handling\error-causers.h">
-      <Filter>src\utils\error-handling</Filter>
+    <ClInclude Include="src\null-sdk\utils\memory\vtable.h">
+      <Filter>src\utils\memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +140,6 @@
     </ClCompile>
     <ClCompile Include="src\null-sdk\utils\memory\resource\resource.cpp">
       <Filter>src\utils\memory\resource</Filter>
-    </ClCompile>
-    <ClCompile Include="src\null-sdk\utils\error-handling\error-handling.cpp">
-      <Filter>src\utils\error-handling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

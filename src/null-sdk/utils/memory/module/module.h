@@ -12,14 +12,14 @@ namespace ntl {
         static c_module& self();
 
     public:
-        std::string name{ };
         pe_image_t pe_image{ };
+        std::string name{ };
 
         std::vector<resource_t> resources{ };
 
     public:
         c_module() { }
-        c_module(const pe_image_t& _pe_image) : pe_image(_pe_image) { }
+        c_module(pe_image_t _pe_image) : pe_image(_pe_image) { }
         c_module(std::string_view _name, bool store = true) : name(_name) {
             if(c_module* finded = find_stored_module(_name)) {
                 *this = *finded;
@@ -36,7 +36,6 @@ namespace ntl {
     };
 
     class c_dll : public c_module {
-    public: using c_module::c_module;
     public:
         class i_export : public address_t {
         public:
@@ -82,6 +81,9 @@ namespace ntl {
 
     public:
         std::vector<i_export*> stored_exports{ };
+
+    public:
+        c_dll(std::string_view _name, bool store = true) : c_module(_name, store) { }
 
     public:
         virtual i_export* find_stored_export(std::string_view _name);
