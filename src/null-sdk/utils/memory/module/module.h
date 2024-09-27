@@ -83,6 +83,7 @@ namespace ntl {
         std::vector<i_export*> stored_exports{ };
 
     public:
+        c_dll() { }
         c_dll(std::string_view _name, bool store = true) : c_module(_name, store) { }
 
     public:
