@@ -26,4 +26,4 @@
 #include "null-sdk/data-types/color/hsv.h"
 #include "null-sdk/data-types/callbacks.h"
 #include "null-sdk/data-types/angle/euler2d.h"
-#include "null-sdk/data-types/angle/euler3d.h"
+#include "null-sdk/data-types/angle/quaternion.h"

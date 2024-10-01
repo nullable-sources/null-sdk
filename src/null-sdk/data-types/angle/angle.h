@@ -36,7 +36,7 @@ namespace ntl::sdk {
         FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, value_t, RHS_VALUE, angle);
 
         inline constexpr auto operator<=>(const i_angle<value_t>&) const = default;
-        inline constexpr auto operator<=>(value_t& other) const { return angle <=> other; }
+        inline constexpr auto operator<=>(const value_t& other) const { return angle <=> other; }
     };
 }
 
@@ -53,9 +53,8 @@ template <>
 struct angle_t<radians_t> : public ntl::sdk::i_angle<radians_t> {
 public:
     static constexpr double pi = 180. / std::numbers::pi;
-    static constexpr radians_t minimal_boundires = std::numbers::pi / 180.;
     static constexpr radians_t maximal_boundires = std::numbers::pi * 2.;
-    static constexpr radians_t default_boundires = std::numbers::pi * 2.;
+    static constexpr radians_t minimal_boundires = maximal_boundires * -1.;
 
 public:
     static angle_t<radians_t> atan2(auto y, auto x) { return angle_t<radians_t>((radians_t)std::atan2(y, x)); }
@@ -69,20 +68,17 @@ public:
     inline constexpr angle_t(const angle_t<degrees_t>& degrees);
 
 public:
-    template <radians_t boundires = default_boundires>
-    angle_t<radians_t> clamped() const { return std::clamp(angle, boundires * -1, boundires); }
+    template <radians_t min = minimal_boundires, radians_t max = maximal_boundires>
+    angle_t<radians_t> clamped() const { return std::clamp(angle, min, max); }
 
-    template <radians_t boundires = default_boundires, typename self_t>
-    auto&& clamp(this self_t&& self) { self = self.clamped<boundires>(); return self; }
+    template <radians_t min = minimal_boundires, radians_t max = maximal_boundires, typename self_t>
+    auto&& clamp(this self_t&& self) { self = self.clamped<min, max>(); return self; }
 
-    template <radians_t boundires = default_boundires>
+    template <radians_t min = minimal_boundires, radians_t max = maximal_boundires>
     angle_t<radians_t> normalized() const {
-        constexpr degrees_t setp = std::clamp(boundires * 2, minimal_boundires, maximal_boundires);
-
-        radians_t new_angle = angle;
-        while(new_angle > boundires) new_angle -= setp;
-        while(new_angle < boundires * -1) new_angle += setp;
-        return new_angle;
+        static constexpr auto constexpr_abs = [](auto val) { return val < 0 ? -val : val; };
+        constexpr auto boundaries = constexpr_abs(min - max);
+        return radians_t(angle - boundaries * std::floor((angle + (boundaries - max)) * (1. / boundaries)));
     }
 
     template <radians_t boundires, typename self_t>
@@ -102,9 +98,8 @@ template <>
 struct angle_t<degrees_t> : public ntl::sdk::i_angle<degrees_t> {
 public:
     static constexpr double pi = std::numbers::pi / 180.f;
-    static constexpr degrees_t minimal_boundires = 1.f;
     static constexpr degrees_t maximal_boundires = 360.f;
-    static constexpr degrees_t default_boundires = 360.f;
+    static constexpr degrees_t minimal_boundires = maximal_boundires * -1.f;
 
 public:
     static angle_t<degrees_t> atan2(const auto& y, const auto& x) { return angle_t<degrees_t>((radians_t)std::atan2(y, x)); }
@@ -118,24 +113,21 @@ public:
     inline constexpr angle_t(const angle_t<radians_t>& radians);
 
 public:
-    template <degrees_t boundires = default_boundires>
-    angle_t<degrees_t> clamped() const { return std::clamp(angle, boundires * -1, boundires); }
+    template <degrees_t min = minimal_boundires, degrees_t max = maximal_boundires>
+    angle_t<degrees_t> clamped() const { return std::clamp(angle, min, max); }
 
-    template <degrees_t boundires = default_boundires, typename self_t>
-    auto&& clamp(this self_t&& self) { self = self.clamped<boundires>(); return self; }
+    template <degrees_t min = minimal_boundires, degrees_t max = maximal_boundires, typename self_t>
+    auto&& clamp(this self_t&& self) { self = self.clamped<min, max>(); return self; }
 
-    template <degrees_t boundires = default_boundires>
+    template <degrees_t min = minimal_boundires, degrees_t max = maximal_boundires>
     angle_t<degrees_t> normalized() const {
-        constexpr degrees_t setp = std::clamp(boundires * 2, minimal_boundires, maximal_boundires);
-
-        degrees_t new_angle = angle;
-        while(new_angle > boundires) new_angle -= setp;
-        while(new_angle < boundires * -1) new_angle += setp;
-        return new_angle;
+        static constexpr auto constexpr_abs = [](auto val) { return val < 0 ? -val : val; };
+        constexpr auto boundaries = constexpr_abs(min - max);
+        return degrees_t(angle - boundaries * std::floor((angle + (boundaries - max)) * (1. / boundaries)));
     }
 
-    template <degrees_t boundires = default_boundires, typename self_t>
-    auto&& normalize(this self_t&& self) { self = self.normalized<boundires>(); return self; }
+    template <degrees_t min = minimal_boundires, degrees_t max = maximal_boundires, typename self_t>
+    auto&& normalize(this self_t&& self) { self = self.normalized<min, max>(); return self; }
 
     inline constexpr radians_t cast() const { return angle * pi; }
     inline constexpr operator radians_t() const { return cast(); }

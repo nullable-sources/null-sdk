@@ -5,155 +5,247 @@
 #include "angle.h"
 
 namespace ntl::sdk {
-    enum class e_coordinate_system {
-        left_handed, //@note: the value increases when turned clockwise
-        right_handed //@note: the value increases when turned counterclockwise
+    //@note: by default - x: pitch
+    //                    y: yaw
+    //                    z: roll
+    enum class e_euler_sequence {
+        //@note: i don't see much point in using true euler angles with two axes
+        xyz, xzy, yxz,
+        zyx, yzx, zxy,
+        num,
+    }; ENUM_CREATE_CAST_OPERATOR(e_euler_sequence, -);
+    static inline constexpr e_euler_sequence invert_euler_sequence(e_euler_sequence sequence) {
+        int id = -sequence;
+        constexpr int half_sequence = -e_euler_sequence::num / 2;
+        return id < half_sequence ? e_euler_sequence(id + half_sequence) : e_euler_sequence(id - half_sequence);
+    }
+
+    enum class e_euler_up_axis { z, y };
+    enum class e_euler_hand { left, right };
+    enum class e_euler_construction { extrinsic, intrinsic };
+    enum class e_euler_representation { active, pasive };
+
+    enum class e_euler_boundires_behaviour {
+        none,      //@note: the axis will not change
+        normalize, //@note: The axis will be normalized between normalize_boundires
+        clamp      //@note: The axis will be clamped between the clamp_boundires
     };
 
-    enum class e_up_axis { y, z };
-
-    enum class e_axis_boundires_behaviour {
-        none,
-        normalize,
-        clamp
-    };
-
-    template <is_angle_type_t angle_value_t>
-    struct axis_definition_t {
+    struct euler_boundires_t {
     public:
-        e_axis_boundires_behaviour normalize_behaviour{ e_axis_boundires_behaviour::normalize }, clamp_behaviour{ e_axis_boundires_behaviour::clamp };
-        angle_value_t normalize_boundires{ angle_t<angle_value_t>::default_boundires }, clamp_boundires{ angle_t<angle_value_t>::default_boundires };
-    };
-    
-    template <is_angle_type_t angle_value_t,
-        ntl::math::e_rotation rotation,
-        e_coordinate_system coordinate_system,
-        e_up_axis up_axis
-    >
-    class i_euler3d {
+        template <is_angle_type_t angle_value_t>
+        static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::none; }
+
+        template <is_angle_type_t angle_value_t>
+        static inline constexpr angle_value_t minimal() { return angle_t<angle_value_t>::minimal_boundires; }
+
+        template <is_angle_type_t angle_value_t>
+        static inline constexpr angle_value_t maximal() { return angle_t<angle_value_t>::maximal_boundires; };
+
     public:
-        using euler_t = i_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;
+        template <typename boundires_implementation_t, is_angle_type_t angle_value_t>
+        static inline constexpr auto append(angle_t<angle_value_t>& val) {
+            constexpr auto behaviour = boundires_implementation_t::template behaviour<angle_value_t>();
+            constexpr auto minimal = boundires_implementation_t::template minimal<angle_value_t>();
+            constexpr auto maximal = boundires_implementation_t::template maximal<angle_value_t>();
+
+            if constexpr(behaviour == e_euler_boundires_behaviour::normalize)
+                val.normalize<minimal, maximal>();
+            else if constexpr(behaviour == e_euler_boundires_behaviour::clamp)
+                val.clamp<minimal, maximal>();
+        }
+    };
+
+    struct euler_description_t {
+    public:
+        static constexpr e_euler_sequence sequence = e_euler_sequence::xyz;
+
+        //@note: or an understanding of e_construction and e_represents, see https://github.com/kam3k/euler?tab=readme-ov-file#active-vs-passive
+        static constexpr e_euler_construction construction = e_euler_construction::extrinsic;
+        static constexpr e_euler_representation representation = e_euler_representation::active;
+
+        struct pitch_normalize_t : public euler_boundires_t {
+        public:
+            template <is_angle_type_t angle_value_t>
+            static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::normalize; }
+        };
+
+        struct pitch_clamp_t : public euler_boundires_t {
+        public:
+            template <is_angle_type_t angle_value_t>
+            static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::clamp; }
+        };
+
+        struct yaw_normalize_t : public euler_boundires_t {
+        public:
+            template <is_angle_type_t angle_value_t>
+            static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::normalize; }
+        };
+
+        struct yaw_clamp_t : public euler_boundires_t {
+        public:
+            template <is_angle_type_t angle_value_t>
+            static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::clamp; }
+        };
+
+        struct roll_normalize_t : public euler_boundires_t {
+        public:
+            template <is_angle_type_t angle_value_t>
+            static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::normalize; }
+        };
+
+        struct roll_clamp_t : public euler_boundires_t {
+        public:
+            template <is_angle_type_t angle_value_t>
+            static inline constexpr auto behaviour() { return e_euler_boundires_behaviour::clamp; }
+        };
+    };
+
+    struct default_euler_description_t final : public euler_description_t {
+    public:
+        //@note: currently not in use
+        static constexpr e_euler_hand hand = e_euler_hand::right;
+        static constexpr e_euler_up_axis up_axis = e_euler_up_axis::z;
+
+        //@note: these vectors differ in different coordinate systems
+        //       as ø understand it, there are only 4 variants of these vectors,
+        //       they depend on the left/right handed and on the upper y/z axis.
+        //       
+        //       for example:
+        //       unity:  left-handed y-up
+        //          forward = 0 0 1
+        //          right   = 1 0 0
+        //          up      = 0 1 0
+        //       ue:     left-handed z-up
+        //          forward = 1 0 0
+        //          right   = 0 1 0
+        //          up      = 0 0 1
+        //       source: right-handed z-up
+        //          forward = -1  0 0
+        //          right   =  0 -1 0
+        //          up      =  0  0 1
+        //
+        //      adjust these vectors according to your tasks, or just use the standard version of the right-handed z-up
+        static constexpr vec3_t<float> forward = vec3_t<float>(-1.f, 0.f, 0.f);
+        static constexpr vec3_t<float> right = vec3_t<float>(0.f, -1.f, 0.f);
+        static constexpr vec3_t<float> up = vec3_t<float>(0.f, 0.f, 1.f);
+    };
+
+    template <is_angle_type_t angle_value_t, typename description_t, typename memory_layout_t>
+        requires std::is_base_of_v<euler_description_t, description_t>
+    class c_euler3d : public memory_layout_t {
+    public: using memory_layout_t::memory_layout_t;
+    public:
+        using used_description_t = description_t;
+        using used_memory_layout_t = memory_layout_t;
+
         template <is_angle_type_t _angle_value_t>
-        using euler_type_t = i_euler3d<_angle_value_t, rotation, coordinate_system, up_axis>;
+        using self_euler_type_t = c_euler3d<_angle_value_t, description_t, memory_layout_t>;
+        using self_euler_t = self_euler_type_t<angle_value_t>;
 
-    public:
-        static constexpr axis_definition_t<angle_value_t> roll_definition{ }, pitch_definition{ }, yaw_definition{ };
-
-        static constexpr inline ntl::math::e_rotation directions_rotation() {
-            if constexpr(coordinate_system == e_coordinate_system::right_handed) return ntl::math::e_rotation::cw;
-            else return ntl::math::e_rotation::ccw;
+        static inline constexpr e_euler_sequence construction_sequence(e_euler_sequence sequence = description_t::sequence) {
+            if constexpr(description_t::construction == e_euler_construction::extrinsic) return invert_euler_sequence(sequence);
+            else return sequence;
         }
 
     public:
-        inline constexpr i_euler3d() { }
-
-        template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, euler_t>
-        inline constexpr i_euler3d(const type_t& value) : i_euler3d(ntl::compatibility::data_type_converter_t<type_t, euler_t>::convert(value)) { }
+        template <is_angle_type_t angle_value_t>
+        static c_euler3d from_strong_order(angle_value_t pitch, angle_value_t yaw, angle_value_t roll) {
+            c_euler3d result{ };
+            result.pitch = pitch;
+            result.yaw = yaw;
+            result.roll = roll;
+            return result;
+        }
 
     public:
+        inline constexpr c_euler3d() { }
+        inline constexpr c_euler3d(const memory_layout_t& _memory_layout) : memory_layout_t(_memory_layout) { }
+
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<type_t, c_euler3d>
+        inline constexpr c_euler3d(const type_t& value) : c_euler3d(ntl::compatibility::data_type_converter_t<type_t, c_euler3d>::convert(value)) { }
+
+    public:
+        template <e_euler_representation representation = description_t::representation, typename self_t>
+        auto matrix(this self_t&& self, e_euler_sequence sequence = construction_sequence()) {
+            matrix3x3_t matrix{ };
+            switch(sequence) {
+                case e_euler_sequence::xyz: matrix = matrix3x3_t::rotation_xyz(self.pitch, self.yaw, self.roll); break;
+                case e_euler_sequence::xzy: matrix = matrix3x3_t::rotation_xzy(self.pitch, self.yaw, self.roll); break;
+                case e_euler_sequence::yxz: matrix = matrix3x3_t::rotation_yxz(self.pitch, self.yaw, self.roll); break;
+                case e_euler_sequence::zyx: matrix = matrix3x3_t::rotation_zyx(self.pitch, self.yaw, self.roll); break;
+                case e_euler_sequence::yzx: matrix = matrix3x3_t::rotation_yzx(self.pitch, self.yaw, self.roll); break;
+                case e_euler_sequence::zxy: matrix = matrix3x3_t::rotation_zxy(self.pitch, self.yaw, self.roll); break;
+            }
+
+            if constexpr(representation == e_euler_representation::pasive) return matrix.transpose();
+            else return matrix;
+        }
+
         template <typename self_t, typename point_t>
-        vec3_t<point_t> rotate(this self_t&& self, vec3_t<point_t> rotation_point) {
-            rotation_point = matrix3x3_t::rotation_x(self.roll, rotation) * rotation_point;
-            rotation_point = matrix3x3_t::rotation_y(self.pitch, rotation) * rotation_point;
-            return matrix3x3_t::rotation_z(self.yaw, rotation) * rotation_point;
+        vec3_t<point_t> rotate(this self_t&& self, const vec3_t<point_t>& point) {
+            return self.matrix() * point;
         }
 
         template <typename self_t>
         std::tuple<vec3_t<float>, vec3_t<float>, vec3_t<float>> directions(this self_t&& self) {
-            return std::tuple(self.forward(), self.right(), self.up());
+            matrix3x3_t matrix = self.matrix();
+            return std::tuple(
+                vec3_t<float>(matrix * description_t::forward).normalized(),
+                vec3_t<float>(matrix * description_t::right).normalized(),
+                vec3_t<float>(matrix * description_t::up).normalized()
+            );
         }
 
         template <typename self_t>
         vec3_t<float> forward(this self_t&& self) {
-            vec3_t<float> vector(1.f, 0.f, 0.f);
-            vector = matrix3x3_t::rotation_y(self.pitch, directions_rotation()) * vector;
-            vector = matrix3x3_t::rotation_z(self.yaw, directions_rotation()) * vector;
-            return vector.normalized();
+            return vec3_t<float>(self.matrix() * description_t::forward).normalized();
         }
 
         template <typename self_t>
         vec3_t<float> right(this self_t&& self) {
-            constexpr float direction = coordinate_system == e_coordinate_system::right_handed ? -1.f : 1.f;
-
-            vec3_t<float> vector(0.f, 0.f, 0.f);
-            if constexpr(up_axis == e_up_axis::z) vector.y = direction;
-            else vector.z = direction;
-
-            vector = matrix3x3_t::rotation_x(self.roll, directions_rotation()) * vector;
-            vector = matrix3x3_t::rotation_z(self.yaw, directions_rotation()) * vector;
-            return vector.normalized();
+            return vec3_t<float>(self.matrix() * description_t::right).normalized();
         }
 
         template <typename self_t>
         vec3_t<float> up(this self_t&& self) {
-            vec3_t<float> vector(0.f, 0.f, 0.f);
-            if constexpr(up_axis == e_up_axis::z) vector.z = 1.f;
-            else vector.y = 1.f;
-
-            vector = matrix3x3_t::rotation_x(self.roll, directions_rotation()) * vector;
-            vector = matrix3x3_t::rotation_y(self.pitch, directions_rotation()) * vector;
-            vector = matrix3x3_t::rotation_z(self.yaw, directions_rotation()) * vector;
-            return vector.normalized();
+            return vec3_t<float>(self.matrix() * description_t::up).normalized();
         }
 
     public:
         template <typename self_t>
         auto&& roll_clamp(this self_t&& self) {
-            if constexpr(std::decay_t<self_t>::roll_definition.clamp_behaviour == e_axis_boundires_behaviour::clamp)
-                self.roll.clamp<std::decay_t<self_t>::roll_definition.clamp_boundires>();
-            else if(std::decay_t<self_t>::roll_definition.clamp_behaviour == e_axis_boundires_behaviour::normalize)
-                self.roll.normalize<std::decay_t<self_t>::roll_definition.clamp_boundires>();
-
+            euler_boundires_t::append<typename description_t::roll_clamp_t>(self.roll);
             return self;
         }
 
         template <typename self_t>
         auto&& roll_normalize(this self_t&& self) {
-            if constexpr(std::decay_t<self_t>::roll_definition.normalize_behaviour == e_axis_boundires_behaviour::normalize)
-                self.roll.normalize<std::decay_t<self_t>::roll_definition.normalize_boundires>();
-            else if(std::decay_t<self_t>::roll_definition.normalize_behaviour == e_axis_boundires_behaviour::clamp)
-                self.roll.clamp<std::decay_t<self_t>::roll_definition.normalize_boundires>();
-
+            euler_boundires_t::append<typename description_t::roll_normalize_t>(self.roll);
             return self;
         }
 
         template <typename self_t>
         auto&& pitch_clamp(this self_t&& self) {
-            if constexpr(std::decay_t<self_t>::pitch_definition.clamp_behaviour == e_axis_boundires_behaviour::clamp)
-                self.pitch.clamp<std::decay_t<self_t>::pitch_definition.clamp_boundires>();
-            else if(std::decay_t<self_t>::pitch_definition.clamp_behaviour == e_axis_boundires_behaviour::normalize)
-                self.pitch.normalize<std::decay_t<self_t>::pitch_definition.clamp_boundires>();
-
+            euler_boundires_t::append<typename description_t::pitch_clamp_t>(self.pitch);
             return self;
         }
 
         template <typename self_t>
         auto&& pitch_normalize(this self_t&& self) {
-            if constexpr(std::decay_t<self_t>::pitch_definition.normalize_behaviour == e_axis_boundires_behaviour::normalize)
-                self.pitch.normalize<std::decay_t<self_t>::pitch_definition.normalize_boundires>();
-            else if(std::decay_t<self_t>::pitch_definition.normalize_behaviour == e_axis_boundires_behaviour::clamp)
-                self.pitch.clamp<std::decay_t<self_t>::pitch_definition.normalize_boundires>();
-
+            euler_boundires_t::append<typename description_t::pitch_normalize_t>(self.pitch);
             return self;
         }
 
         template <typename self_t>
         auto&& yaw_clamp(this self_t&& self) {
-            if constexpr(std::decay_t<self_t>::yaw_definition.clamp_behaviour == e_axis_boundires_behaviour::clamp)
-                self.yaw.clamp<std::decay_t<self_t>::yaw_definition.clamp_boundires>();
-            else if(std::decay_t<self_t>::yaw_definition.clamp_behaviour == e_axis_boundires_behaviour::normalize)
-                self.yaw.normalize<std::decay_t<self_t>::yaw_definition.clamp_boundires>();
-
+            euler_boundires_t::append<typename description_t::yaw_clamp_t>(self.yaw);
             return self;
         }
 
         template <typename self_t>
         auto&& yaw_normalize(this self_t&& self) {
-            if constexpr(std::decay_t<self_t>::yaw_definition.normalize_behaviour == e_axis_boundires_behaviour::normalize)
-                self.yaw.normalize<std::decay_t<self_t>::yaw_definition.normalize_boundires>();
-            else if(std::decay_t<self_t>::yaw_definition.normalize_behaviour == e_axis_boundires_behaviour::clamp)
-                self.yaw.clamp<std::decay_t<self_t>::yaw_definition.normalize_boundires>();
-
+            euler_boundires_t::append<typename description_t::yaw_normalize_t>(self.yaw);
             return self;
         }
 
@@ -170,118 +262,98 @@ namespace ntl::sdk {
         auto&& normalize(this self_t&& self) { self = self.normalized(); return self; }
 
         template <typename self_t, typename direction_t>
-        auto&& set_angles(this self_t&& self, const vec3_t<direction_t>& direction) {
-            self.roll = angle_value_t{ };
+        auto&& look_rotation(this self_t&& self, vec3_t<direction_t> forward, vec3_t<direction_t> up = description_t::up) {
+            forward.normalize();
+            up.normalize();
 
-            const float length{ };
-            if constexpr(up_axis == e_up_axis::z) {
-                self.pitch = angle_t<radians_t>::atan2(direction.z, direction.xy().length());
-                self.yaw = -angle_t<radians_t>::atan2(direction.y, direction.x);
-            } else {
-                self.pitch = angle_t<radians_t>::atan2(direction.y, direction.xz().length());
-                self.yaw = -angle_t<radians_t>::atan2(direction.z, direction.x);
-            }
+            self.pitch = -angle_t<angle_value_t>::atan2(description_t::up.dot(forward), forward.xz().length());
+            self.yaw = angle_t<angle_value_t>::atan2(description_t::right.dot(forward), description_t::forward.dot(forward));
+            self.roll = -angle_t<angle_value_t>::atan2(description_t::forward.dot(up), up.xy().length());
 
-            if constexpr(coordinate_system == e_coordinate_system::right_handed) {
-                self.pitch *= -1.f;
-                self.yaw *= -1.f;
-            }
+            self.normalize();
             return self;
         }
 
     public:
-        template <typename type_t> requires ntl::compatibility::data_type_convertertable<euler_t, type_t>
-        inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<euler_t, type_t>::convert(*this); }
+        template <typename type_t> requires ntl::compatibility::data_type_convertertable<c_euler3d, type_t>
+        inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<c_euler3d, type_t>::convert(*this); }
 
-        template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.axies[i]; }
+        template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.axes[i]; }
 
-        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
+        FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
+
+        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
         FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
     };
 
-#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_RAW_CTOR(i, data, elem)                        \
-    another_angle_value_t BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
+    std::false_type is_euler3d_type_impl(...);
+    template <is_angle_type_t angle_value_t, typename description_t, typename memory_layout_t>
+    std::true_type is_euler3d_type_impl(c_euler3d<angle_value_t, description_t, memory_layout_t>);
 
-#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_TYPE_CTOR(i, data, elem)                                       \
-    const angle_t<another_angle_value_t>& BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
-
-#define FAST_DEFS_MAKE_EULER_IMPLEMENTATION(implementation_name, ...)                                                                   \
-    template <is_angle_type_t angle_value_t, ntl::math::e_rotation rotation,                                                            \
-        e_coordinate_system coordinate_system, e_up_axis up_axis                                                                        \
-    >                                                                                                                                   \
-    class i_##implementation_name##_euler3d : public i_euler3d<angle_value_t, rotation, coordinate_system, up_axis> {       \
-    public: using i_euler3d<angle_value_t, rotation, coordinate_system, up_axis>::i_euler3d;                                            \
-    public:                                                                                                                             \
-        using euler_interface_t = i_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;                                       \
-        template <is_angle_type_t _angle_value_t>                                                                                       \
-        using euler_implementation_type_t = i_##implementation_name##_euler3d<_angle_value_t, rotation, coordinate_system, up_axis>;    \
-                                                                                                                                        \
-    public:                                                                                                                             \
-        union {                                                                                                                         \
-            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__); };                                            \
-            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(1, , __VA_ARGS__); };                                            \
-            std::array<angle_t<angle_value_t>, 3> axises{ };                                                                            \
-        };                                                                                                                              \
-                                                                                                                                        \
-    public:                                                                                                                             \
-        inline constexpr i_##implementation_name##_euler3d() { }                                                                        \
-        template <ntl::sdk::is_angle_type_t another_angle_value_t>                                                                      \
-        inline constexpr i_##implementation_name##_euler3d(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_RAW_CTOR, __VA_ARGS__))                  \
-            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                                                 \
-        template <ntl::sdk::is_angle_type_t another_angle_value_t>                                                                      \
-        inline constexpr i_##implementation_name##_euler3d(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_TYPE_CTOR, __VA_ARGS__))                 \
-            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                                                 \
-        template <typename direction_t>                                                                                                 \
-        inline i_##implementation_name##_euler3d(const vec3_t<direction_t>& direction) { euler_interface_t::set_angles(direction); }    \
-                                                                                                                                        \
-    public:                                                                                                                             \
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(                                                                                    \
-            inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>),                            \
-            const euler_implementation_type_t<angle_other_t>&, RHS_FIELD, FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__)                  \
-        );                                                                                                                              \
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(                                                                                    \
-            inline constexpr, template <typename self_t>,                                                                               \
-            angle_value_t, RHS_VALUE, FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__)                                                      \
-        );                                                                                                                              \
-                                                                                                                                        \
-        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(                                                                                              \
-            inline constexpr, template <is_angle_type_t angle_other_t>,                                                                 \
-            const i_euler3d::euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z                                                           \
-        );                                                                                                                              \
-        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , angle_value_t, RHS_VALUE, x, y, z);                                       \
-    };                                                                                                                                  \
-
-#define FAST_DEFS_MAKE_EULER_IMPLEMENTATION_SHORTCAT(implementation_name)                                                                       \
-    template <ntl::sdk::is_angle_type_t angle_value_t,                                                                                          \
-        ntl::math::e_rotation rotation = ntl::math::e_rotation::ccw,                                                                            \
-        ntl::sdk::e_coordinate_system coordinate_system = ntl::sdk::e_coordinate_system::right_handed,                                          \
-        ntl::sdk::e_up_axis up_axis = ntl::sdk::e_up_axis::z                                                                                    \
-    >                                                                                                                                           \
-    using euler3d_##implementation_name##_t = ntl::sdk::i_##implementation_name##_euler3d<angle_value_t, rotation, coordinate_system, up_axis>; \
-
-    //@note: For the standard description of the coordinate order, the coordinate system from aviation is used,
-    //       in which roll - x, pitch - y, yaw - z.
-
-    //@note: x      y     z  | standard order
-    //      roll, pitch, yaw |
-    // 
-    //       x      y     z  | the order of this implementation
-    //      roll, pitch, yaw |
-    FAST_DEFS_MAKE_EULER_IMPLEMENTATION(xyz, (x, roll), (y, pitch),(z, yaw))
-
-    //@note: x      y     z  | standard order
-    //      roll, pitch, yaw |
-    // 
-    //        y     z    x   | the order of this implementation
-    //      pitch, yaw, roll |
-    FAST_DEFS_MAKE_EULER_IMPLEMENTATION(yzx, (y, pitch), (z, yaw), (x, roll))
+    template <typename type_t>
+    using is_euler3d_type_t = decltype(is_euler3d_type_impl(std::declval<type_t>()));
 }
 
-template <ntl::sdk::is_angle_type_t angle_value_t,
-    ntl::math::e_rotation rotation = ntl::math::e_rotation::ccw,
-    ntl::sdk::e_coordinate_system coordinate_system = ntl::sdk::e_coordinate_system::right_handed,
-    ntl::sdk::e_up_axis up_axis = ntl::sdk::e_up_axis::z
->
-using euler3d_t = ntl::sdk::i_xyz_euler3d<angle_value_t, rotation, coordinate_system, up_axis>;
+#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_RAW_CTOR(i, data, elem)                        \
+    angle_type_t BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
 
-FAST_DEFS_MAKE_EULER_IMPLEMENTATION_SHORTCAT(yzx)
+#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_TYPE_CTOR(i, data, elem)                                       \
+    const angle_t<angle_type_t>& BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
+
+#define NULLSDK_MAKE_EULER_MEMORY_LAYOUT(layout_name, ...)                                                      \
+namespace ntl::sdk {                                                                                            \
+    template <is_angle_type_t angle_value_t>                                                                    \
+    struct euler_##layout_name##_memory_layout_t {                                                              \
+    public:                                                                                                     \
+        template <is_angle_type_t angle_type_t>                                                                 \
+        using order_t = vec3_t<angle_type_t>;                                                                   \
+        template <is_angle_type_t angle_type_t>                                                                 \
+        using angles_order_t = vec3_t<angle_t<angle_type_t>>;                                                   \
+                                                                                                                \
+        union {                                                                                                 \
+            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__); };                    \
+            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(1, , __VA_ARGS__); };                    \
+            angles_order_t<angle_value_t> axes{ };                                                              \
+        };                                                                                                      \
+                                                                                                                \
+    public:                                                                                                     \
+        euler_##layout_name##_memory_layout_t() { }                                                             \
+        template <is_angle_type_t angle_type_t>                                                                 \
+        euler_##layout_name##_memory_layout_t(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_RAW_CTOR, __VA_ARGS__))       \
+            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                         \
+        template <is_angle_type_t angle_type_t>                                                                 \
+        euler_##layout_name##_memory_layout_t(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_TYPE_CTOR, __VA_ARGS__))      \
+            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                         \
+        template <is_angle_type_t angle_type_t>                                                                 \
+        euler_##layout_name##_memory_layout_t(const order_t<angle_type_t>& _axes) : axes(_axes) { }             \
+        template <is_angle_type_t angle_type_t>                                                                 \
+        euler_##layout_name##_memory_layout_t(const angles_order_t<angle_type_t>& _axes) : axes(_axes) { }      \
+    };                                                                                                          \
+}                                                                                                               \
+                                                                                                                \
+
+#define NULLSDK_MAKE_EULER_MEMORY_LAYOUT_SHORTCAT(impl_name)                                                                                        \
+    template <ntl::sdk::is_angle_type_t angle_value_t, typename description_t = ntl::sdk::default_euler_description_t>                              \
+    using euler3d_##impl_name##_t = ntl::sdk::c_euler3d<angle_value_t, description_t, ntl::sdk::euler_##impl_name##_memory_layout_t<angle_value_t>>;\
+
+//@note: For the standard description of the coordinate order, the coordinate system from aviation is used,
+//       in which roll - x, pitch - y, yaw - z.
+
+//@note: x      y     z  | standard order
+//      roll, pitch, yaw |
+// 
+//       x      y     z  | the order of this implementation
+//      roll, pitch, yaw |
+NULLSDK_MAKE_EULER_MEMORY_LAYOUT(xyz, (x, roll), (y, pitch), (z, yaw));
+//        y     z    x   | the order of this implementation
+//      pitch, yaw, roll |
+NULLSDK_MAKE_EULER_MEMORY_LAYOUT(yzx, (y, pitch), (z, yaw), (x, roll));
+
+
+template <ntl::sdk::is_angle_type_t angle_value_t, typename description_t = ntl::sdk::default_euler_description_t>
+using euler3d_t = ntl::sdk::c_euler3d<angle_value_t, description_t, ntl::sdk::euler_xyz_memory_layout_t<angle_value_t>>;
+
+NULLSDK_MAKE_EULER_MEMORY_LAYOUT_SHORTCAT(yzx);

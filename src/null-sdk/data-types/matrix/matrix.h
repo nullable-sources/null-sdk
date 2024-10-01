@@ -1,4 +1,7 @@
 #pragma once
+#include <ranges>
+#include <algorithm>
+
 #include "../vec4.h"
 
 namespace ntl::sdk {
@@ -66,7 +69,7 @@ namespace ntl::sdk {
     template <typename major_type_t, typename data_t, size_t rows_num, size_t columns_num>
     class i_matrix {
     public:
-        static i_matrix identity() { return i_matrix{ }.set_diagonal({ 1.f }); }
+        static inline i_matrix identity() { return i_matrix{ }.set_diagonal({ 1.f }); }
 
     public:
         static constexpr size_t diagonal_size = std::min(rows_num, columns_num);

@@ -59,6 +59,7 @@ public:
 
 public:
     inline float length() const { return std::hypot(x, y); }
+    inline float length_sqrt() const { return std::pow(x, 2) + std::pow(y, 2); }
     inline constexpr float dot(const vec2_t<coord_t>& vec) const { return x * vec.x + y * vec.y; }
     inline constexpr float cross(const vec2_t<coord_t>& vec) const { return x * vec.y - y * vec.x; }
 

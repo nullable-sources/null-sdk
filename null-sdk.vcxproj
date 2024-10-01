@@ -26,6 +26,7 @@
     <ClInclude Include="src\null-sdk\data-types\angle\angle.h" />
     <ClInclude Include="src\null-sdk\data-types\angle\euler3d.h" />
     <ClInclude Include="src\null-sdk\data-types\angle\euler2d.h" />
+    <ClInclude Include="src\null-sdk\data-types\angle\quaternion.h" />
     <ClInclude Include="src\null-sdk\data-types\callbacks.h" />
     <ClInclude Include="src\null-sdk\data-types\color\color.h" />
     <ClInclude Include="src\null-sdk\data-types\color\hsv.h" />

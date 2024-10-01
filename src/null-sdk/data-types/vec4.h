@@ -451,7 +451,8 @@ public:
     inline constexpr vec4_t(const type_t& value) : vec4_t(ntl::compatibility::data_type_converter_t<type_t, vec4_t<coord_t>>::convert(value)) { }
 
 public:
-    inline float length() const { return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2)); }
+    inline float length() const { return std::sqrt(length()); }
+    inline float length_sqrt() const { return std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2); }
     inline float dist_to(const vec4_t& vec) const { return vec4_t(*this - vec).length(); }
     inline constexpr float dot(const vec4_t& vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
 

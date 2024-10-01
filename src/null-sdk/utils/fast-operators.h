@@ -98,6 +98,9 @@
 #define FAST_OPS_STRUCTURE_EQUAL_OPERATOR(specifiers, templates, rhs_t, body_variant, ... /*members*/)                                                                  \
     IMPL_FAST_OPS_CREATE_RHS_OP(specifiers, bool, rhs_t, ==, const IMPL_FAST_OPS_LOGICAL_OP_FN(== , THIS_##body_variant, __VA_ARGS__), FAST_OPS_ARGS_PACK(templates))   \
 
+#define FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(specifiers, templates, rhs_t, body_variant, ... /*members*/)                                                                 \
+    IMPL_FAST_OPS_CREATE_LHS_RHS_OP(specifiers, bool, rhs_t, ==, IMPL_FAST_OPS_LOGICAL_OP_FN(== , SELF_##body_variant, __VA_ARGS__), FAST_OPS_ARGS_PACK(templates))   \
+
 #define FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(specifiers, templates, rhs_t, body_variant, ... /*members*/)                    \
     FAST_OPS_STRUCTURE_COMPARISON_OPERATORS(specifiers, FAST_OPS_ARGS_PACK(templates), rhs_t, <, SELF_##body_variant, __VA_ARGS__)  \
     FAST_OPS_STRUCTURE_COMPARISON_OPERATORS(specifiers, FAST_OPS_ARGS_PACK(templates), rhs_t, >, SELF_##body_variant, __VA_ARGS__)  \

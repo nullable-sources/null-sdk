@@ -2,6 +2,88 @@
 
 #include <null-sdk/math/math.h>
 #include <null-sdk/data-types/callbacks.h>
+#include <null-sdk/data-types/angle/euler3d.h>
+
+//@note: for example, this is what the description for use in unity should look like
+struct unity_euler_description : public ntl::sdk::euler_description_t {
+public:
+    static constexpr ntl::sdk::e_euler_sequence sequence = ntl::sdk::e_euler_sequence::zxy;
+    static constexpr ntl::sdk::e_euler_construction construction = ntl::sdk::e_euler_construction::extrinsic;
+
+    //@note: currently not in use
+    static constexpr ntl::sdk::e_euler_hand hand = ntl::sdk::e_euler_hand::left;
+    static constexpr ntl::sdk::e_euler_up_axis up_axis = ntl::sdk::e_euler_up_axis::y;
+
+    static constexpr vec3_t<float> forward = vec3_t<float>(0.f, 0.f, 1.f);
+    static constexpr vec3_t<float> right   = vec3_t<float>(1.f, 0.f, 0.f);
+    static constexpr vec3_t<float> up      = vec3_t<float>(0.f, 1.f, 0.f);
+
+    struct pitch_normalize_t : public ntl::sdk::euler_description_t::pitch_normalize_t {
+    public:
+        template <typename> static inline constexpr auto minimal();
+        template <typename> static inline constexpr auto maximal();
+
+        template <> static inline constexpr auto minimal<degrees_t>() { return 0.f; }
+        template <> static inline constexpr auto maximal<degrees_t>() { return 360.f; }
+        template <> static inline constexpr auto minimal<radians_t>() { return 0.; }
+        template <> static inline constexpr auto maximal<radians_t>() { return std::numbers::pi * 2.; }
+    };
+
+    struct pitch_clamp_t : public ntl::sdk::euler_description_t::pitch_clamp_t {
+    public:
+        template <typename> static inline constexpr auto minimal();
+        template <typename> static inline constexpr auto maximal();
+
+        template <> static inline constexpr auto minimal<degrees_t>() { return 0.f; }
+        template <> static inline constexpr auto maximal<degrees_t>() { return 360.f; }
+        template <> static inline constexpr auto minimal<radians_t>() { return 0.; }
+        template <> static inline constexpr auto maximal<radians_t>() { return std::numbers::pi * 2.; }
+    };
+
+    struct yaw_normalize_t : public ntl::sdk::euler_description_t::yaw_normalize_t {
+    public:
+        template <typename> static inline constexpr auto minimal();
+        template <typename> static inline constexpr auto maximal();
+
+        template <> static inline constexpr auto minimal<degrees_t>() { return 0.f; }
+        template <> static inline constexpr auto maximal<degrees_t>() { return 360.f; }
+        template <> static inline constexpr auto minimal<radians_t>() { return 0.; }
+        template <> static inline constexpr auto maximal<radians_t>() { return std::numbers::pi * 2.; }
+    };
+
+    struct yaw_clamp_t : public ntl::sdk::euler_description_t::yaw_clamp_t {
+    public:
+        template <typename> static inline constexpr auto minimal();
+        template <typename> static inline constexpr auto maximal();
+
+        template <> static inline constexpr auto minimal<degrees_t>() { return 0.f; }
+        template <> static inline constexpr auto maximal<degrees_t>() { return 360.f; }
+        template <> static inline constexpr auto minimal<radians_t>() { return 0.; }
+        template <> static inline constexpr auto maximal<radians_t>() { return std::numbers::pi * 2.; }
+    };
+
+    struct roll_normalize_t : public ntl::sdk::euler_description_t::roll_normalize_t {
+    public:
+        template <typename> static inline constexpr auto minimal();
+        template <typename> static inline constexpr auto maximal();
+
+        template <> static inline constexpr auto minimal<degrees_t>() { return 0.f; }
+        template <> static inline constexpr auto maximal<degrees_t>() { return 360.f; }
+        template <> static inline constexpr auto minimal<radians_t>() { return 0.; }
+        template <> static inline constexpr auto maximal<radians_t>() { return std::numbers::pi * 2.; }
+    };
+
+    struct roll_clamp_t : public ntl::sdk::euler_description_t::roll_clamp_t {
+    public:
+        template <typename> static inline constexpr auto minimal();
+        template <typename> static inline constexpr auto maximal();
+
+        template <> static inline constexpr auto minimal<degrees_t>() { return 0.f; }
+        template <> static inline constexpr auto maximal<degrees_t>() { return 360.f; }
+        template <> static inline constexpr auto minimal<radians_t>() { return 0.; }
+        template <> static inline constexpr auto maximal<radians_t>() { return std::numbers::pi * 2.; }
+    };
+};
 
 FAST_DEFS__MATH_DEFINE_TEMPLATES(vec2_t, coordinates_t)
 void print_type(const std::string_view& str, const vec2_t<coordinates_t>& vec) { std::cout << str << "{ " << std::format("[{}; {}]", vec.x, vec.y) << " }" << std::endl; }

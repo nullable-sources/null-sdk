@@ -124,6 +124,9 @@
     <ClInclude Include="src\null-sdk\utils\memory\vtable.h">
       <Filter>src\utils\memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\null-sdk\data-types\angle\quaternion.h">
+      <Filter>src\data-types\angle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk\utils\win\win.cpp">

@@ -100,12 +100,16 @@ public:
 
 public:
     inline float length() const { return std::hypot(x, y, z); }
+    inline float length_sqrt() const { return std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2); }
     inline float dist_to(const vec3_t<coord_t>& vec) const { return vec3_t(*this - vec).length(); }
     inline constexpr float dot(const vec3_t<coord_t>& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
     inline constexpr vec3_t<coord_t> cross(const vec3_t<coord_t>& vec) const { return { y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x }; }
 
     template <typename self_t> inline vec3_t<coord_t> normalized(this self_t&& self) { return self / self.length(); }
     template <typename self_t> inline void normalize(this self_t&& self) { self /= self.length(); }
+
+    vec3_t<coord_t> project_to_norm(const vec3_t<float> dir) const { return dir * dot(dir); }
+    vec3_t<coord_t> project_to(const vec3_t<float> dir) const { return project_to_norm(dir) / dir.length_sqrt(); }
 
 public:
     FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, template <typename other_t>, vec3_t<other_t>() const, vec3_t<other_t>, (other_t), x, y, z);

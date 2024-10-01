@@ -28,4 +28,25 @@ namespace ntl::math {
     static inline vec2_t<coordinates_t> vectors_bisector(const vec2_t<coordinates_t>& point1, const vec2_t<coordinates_t>& point2, e_rotation rotation = e_rotation::ccw) {
         return vec2_t(invert_vector_axis(point1, rotation) + invert_vector_axis(point2, rotation)).normalized();
     }
+
+
+    template <typename coordinates_t>
+    static inline void orthonormalize(vec3_t<coordinates_t>& normal, vec3_t<coordinates_t>& tangent) {
+        normal.normalize();
+
+        tangent -= tangent.project_to_norm(normal);
+        tangent.normalize();
+    }
+
+    template <typename coordinates_t>
+    static inline void orthonormalize(vec3_t<coordinates_t>& normal, vec3_t<coordinates_t>& tangent, vec3_t<coordinates_t>& binormal) {
+        normal.normalize();
+
+        tangent -= tangent.project_to_norm(normal);
+        tangent.normalize();
+
+        binormal -= binormal.project_to_norm(normal);
+        binormal -= binormal.project_to_norm(tangent);
+        binormal.normalize();
+    }
 }
