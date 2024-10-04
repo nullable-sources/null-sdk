@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 
-#include <null-sdk/utils/memory/module/module.h>
+#include <null-sdk/memory/module/module.h>
 
 class c_kernel32_dll : public ntl::c_dll {
 public: using c_dll::c_dll;

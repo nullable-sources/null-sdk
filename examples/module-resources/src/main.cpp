@@ -1,6 +1,6 @@
 ﻿#include <format>
 
-#include <null-sdk/utils/memory/module/module.h>
+#include <null-sdk/memory/module/module.h>
 
 int main() {
     try {

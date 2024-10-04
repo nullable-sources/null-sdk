@@ -4,3 +4,8 @@ build/
 *.log
 
 third-party/boost/
+third-party/asmjit/
+third-party/asmtk/
+third-party/polyhook2/
+third-party/Zycore/
+third-party/Zydis/

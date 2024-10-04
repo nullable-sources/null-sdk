@@ -41,6 +41,7 @@
     <ClInclude Include="src\null-sdk\data-types\vec4.h" />
     <ClInclude Include="src\null-sdk\math\geometry.h" />
     <ClInclude Include="src\null-sdk\math\math.h" />
+    <ClInclude Include="src\null-sdk\memory\polyhook-wrapper.h" />
     <ClInclude Include="src\null-sdk\utils\compatibility\data-type-converter.h" />
     <ClInclude Include="src\null-sdk\utils\encoding\base85.h" />
     <ClInclude Include="src\null-sdk\utils\encoding\encoding.h" />
@@ -48,22 +49,22 @@
     <ClInclude Include="src\null-sdk\utils\fast-defines.h" />
     <ClInclude Include="src\null-sdk\utils\fast-operators.h" />
     <ClInclude Include="src\null-sdk\utils\logger\logger.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\address.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\minhook-wrapper.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\module\module.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\pe-image.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\resource\resource.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\signature.h" />
-    <ClInclude Include="src\null-sdk\utils\memory\vtable.h" />
+    <ClInclude Include="src\null-sdk\memory\address.h" />
+    <ClInclude Include="src\null-sdk\memory\minhook-wrapper.h" />
+    <ClInclude Include="src\null-sdk\memory\module\module.h" />
+    <ClInclude Include="src\null-sdk\memory\pe-image.h" />
+    <ClInclude Include="src\null-sdk\memory\resource\resource.h" />
+    <ClInclude Include="src\null-sdk\memory\signature.h" />
+    <ClInclude Include="src\null-sdk\memory\vtable.h" />
     <ClInclude Include="src\null-sdk\utils\time-measurement\time-measurement.h" />
     <ClInclude Include="src\null-sdk\utils\win\win.h" />
     <ClCompile Include="src\null-sdk\data-types\angle\angle.cpp" />
     <ClCompile Include="src\null-sdk\utils\logger\logger.cpp" />
-    <ClCompile Include="src\null-sdk\utils\memory\module\module.cpp" />
-    <ClCompile Include="src\null-sdk\utils\memory\resource\resource.cpp" />
+    <ClCompile Include="src\null-sdk\memory\module\module.cpp" />
+    <ClCompile Include="src\null-sdk\memory\resource\resource.cpp" />
     <ClCompile Include="src\null-sdk\utils\win\win.cpp" />
-    <None Include="src\null-sdk\utils\memory\module\module.inl" />
-    <None Include="src\null-sdk\utils\memory\resource\resource.inl" />
+    <None Include="src\null-sdk\memory\module\module.inl" />
+    <None Include="src\null-sdk\memory\resource\resource.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -119,6 +120,16 @@
       <AdditionalOptions>/ignore:4221,4006 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies Condition="'$(Configuration)'=='debug'">fmt-debug-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalDependencies Condition="'$(Configuration)'=='release'">fmt-release-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="Exists($(POLYHOOK_PATH))">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(POLYHOOK_PATH)\asmjit;$(POLYHOOK_PATH)\asmtk;$(POLYHOOK_PATH)\polyhook2;$(POLYHOOK_PATH)\Zycore;$(POLYHOOK_PATH)\Zydis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NULLSDK_POLYHOOK_EXIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>$(POLYHOOK_PATH)\asmjit\libs;$(POLYHOOK_PATH)\asmtk\libs;$(POLYHOOK_PATH)\polyhook2\libs;$(POLYHOOK_PATH)\Zycore\libs;$(POLYHOOK_PATH)\Zydis\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>polyhook2-$(Configuration)-$(LibrariesArchitecture).lib;asmjit-$(Configuration)-$(LibrariesArchitecture).lib;asmtk-$(Configuration)-$(LibrariesArchitecture).lib;Zydis-$(Configuration)-$(LibrariesArchitecture).lib;Zycore-$(Configuration)-$(LibrariesArchitecture).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

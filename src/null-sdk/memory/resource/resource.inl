@@ -1,4 +1,4 @@
-#include "../../logger/logger.h"
+#include "../../utils/logger/logger.h"
 
 namespace ntl {
     auto&& resource_t::load(this auto&& self) {

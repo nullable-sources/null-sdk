@@ -4,7 +4,7 @@
 #include <ranges>
 #include <algorithm>
 
-#include "../../utils/fast-operators.h"
+#include "../utils/fast-operators.h"
 
 namespace ntl {
     struct address_t {

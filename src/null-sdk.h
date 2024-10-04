@@ -6,12 +6,12 @@
 
 #include "null-sdk/utils/win/win.h"
 
-#include "null-sdk/utils/memory/address.h"
-#include "null-sdk/utils/memory/signature.h"
-#include "null-sdk/utils/memory/pe-image.h"
-#include "null-sdk/utils/memory/module/module.h"
-#include "null-sdk/utils/memory/minhook-wrapper.h"
-#include "null-sdk/utils/memory/resource/resource.h"
+#include "null-sdk/memory/address.h"
+#include "null-sdk/memory/signature.h"
+#include "null-sdk/memory/pe-image.h"
+#include "null-sdk/memory/module/module.h"
+#include "null-sdk/memory/minhook-wrapper.h"
+#include "null-sdk/memory/resource/resource.h"
 
 #include "null-sdk/utils/logger/logger.h"
 

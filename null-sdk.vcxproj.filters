@@ -6,11 +6,8 @@
     <Filter Include="src\utils" />
     <Filter Include="src\math" />
     <Filter Include="src\utils\win" />
-    <Filter Include="src\utils\memory" />
     <Filter Include="src\utils\encoding" />
     <Filter Include="src\utils\time-measurement" />
-    <Filter Include="src\utils\memory\module" />
-    <Filter Include="src\utils\memory\resource" />
     <Filter Include="src\utils\compatibility" />
     <Filter Include="src\utils\events" />
     <Filter Include="src\utils\logger" />
@@ -20,6 +17,9 @@
     <Filter Include="src\utils\error-handling">
       <UniqueIdentifier>{3b4833c7-c149-4ab2-a466-c4b022e8f68e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\memory" />
+    <Filter Include="src\memory\module" />
+    <Filter Include="src\memory\resource" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\null-sdk.h">
@@ -43,17 +43,17 @@
     <ClInclude Include="src\null-sdk\math\math.h">
       <Filter>src\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\address.h">
-      <Filter>src\utils\memory</Filter>
+    <ClInclude Include="src\null-sdk\memory\address.h">
+      <Filter>src\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\signature.h">
-      <Filter>src\utils\memory</Filter>
+    <ClInclude Include="src\null-sdk\memory\signature.h">
+      <Filter>src\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\pe-image.h">
-      <Filter>src\utils\memory</Filter>
+    <ClInclude Include="src\null-sdk\memory\pe-image.h">
+      <Filter>src\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\minhook-wrapper.h">
-      <Filter>src\utils\memory</Filter>
+    <ClInclude Include="src\null-sdk\memory\minhook-wrapper.h">
+      <Filter>src\memory</Filter>
     </ClInclude>
     <ClInclude Include="src\null-sdk\data-types\vec3.h">
       <Filter>src\data-types</Filter>
@@ -70,11 +70,11 @@
     <ClInclude Include="src\null-sdk\data-types\vec4.h">
       <Filter>src\data-types</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\module\module.h">
-      <Filter>src\utils\memory\module</Filter>
+    <ClInclude Include="src\null-sdk\memory\module\module.h">
+      <Filter>src\memory\module</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\resource\resource.h">
-      <Filter>src\utils\memory\resource</Filter>
+    <ClInclude Include="src\null-sdk\memory\resource\resource.h">
+      <Filter>src\memory\resource</Filter>
     </ClInclude>
     <ClInclude Include="src\null-sdk\utils\compatibility\data-type-converter.h">
       <Filter>src\utils\compatibility</Filter>
@@ -121,19 +121,22 @@
     <ClInclude Include="src\null-sdk\utils\fast-defines.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\null-sdk\utils\memory\vtable.h">
-      <Filter>src\utils\memory</Filter>
+    <ClInclude Include="src\null-sdk\memory\vtable.h">
+      <Filter>src\memory</Filter>
     </ClInclude>
     <ClInclude Include="src\null-sdk\data-types\angle\quaternion.h">
       <Filter>src\data-types\angle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\null-sdk\memory\polyhook-wrapper.h">
+      <Filter>src\memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\null-sdk\utils\win\win.cpp">
       <Filter>src\utils\win</Filter>
     </ClCompile>
-    <ClCompile Include="src\null-sdk\utils\memory\module\module.cpp">
-      <Filter>src\utils\memory\module</Filter>
+    <ClCompile Include="src\null-sdk\memory\module\module.cpp">
+      <Filter>src\memory\module</Filter>
     </ClCompile>
     <ClCompile Include="src\null-sdk\utils\logger\logger.cpp">
       <Filter>src\utils\logger</Filter>
@@ -141,16 +144,16 @@
     <ClCompile Include="src\null-sdk\data-types\angle\angle.cpp">
       <Filter>src\data-types\angle</Filter>
     </ClCompile>
-    <ClCompile Include="src\null-sdk\utils\memory\resource\resource.cpp">
-      <Filter>src\utils\memory\resource</Filter>
+    <ClCompile Include="src\null-sdk\memory\resource\resource.cpp">
+      <Filter>src\memory\resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\null-sdk\utils\memory\module\module.inl">
-      <Filter>src\utils\memory\module</Filter>
+    <None Include="src\null-sdk\memory\module\module.inl">
+      <Filter>src\memory\module</Filter>
     </None>
-    <None Include="src\null-sdk\utils\memory\resource\resource.inl">
-      <Filter>src\utils\memory\resource</Filter>
+    <None Include="src\null-sdk\memory\resource\resource.inl">
+      <Filter>src\memory\resource</Filter>
     </None>
   </ItemGroup>
 </Project>

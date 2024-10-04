@@ -3,7 +3,7 @@
 
 #include "vtable.h"
 
-namespace ntl {
+namespace ntl::minhook {
     template <typename prototype_t>
     class i_hook {
     protected:
@@ -59,8 +59,6 @@ namespace ntl {
         static inline void disable(address_t address) { return copied_vtable.restore(address); }
     };
 
-    namespace minhook {
-        static inline MH_STATUS initialize() { return MH_Initialize(); }
-        static inline MH_STATUS destroy() { return MH_Uninitialize(); }
-    }
+    static inline MH_STATUS initialize() { return MH_Initialize(); }
+    static inline MH_STATUS destroy() { return MH_Uninitialize(); }
 }

@@ -1,8 +1,8 @@
 ﻿#include <print>
 #include <memory>
 
-#include <null-sdk/utils/memory/vtable.h>
-#include <null-sdk/utils/memory/minhook-wrapper.h>
+#include <null-sdk/memory/vtable.h>
+#include <null-sdk/memory/minhook-wrapper.h>
 
 class i_example_interface {
 public:
@@ -22,7 +22,7 @@ public:
     void method2() override { std::print("second method2\n"); }
 };
 
-struct example_hook_t : public ntl::hook_t<example_hook_t, void(*)(i_example_interface*)> {
+struct example_hook_t : public ntl::minhook::hook_t<example_hook_t, void(*)(i_example_interface*)> {
 public:
     static void hook(i_example_interface* self) {
         std::print("[hooked] ");
@@ -30,7 +30,7 @@ public:
     }
 };
 
-struct example_vtable_hook_t : public ntl::vtable_hook_t<example_vtable_hook_t, 0, void(*)(i_example_interface*)> {
+struct example_vtable_hook_t : public ntl::minhook::vtable_hook_t<example_vtable_hook_t, 0, void(*)(i_example_interface*)> {
 public:
     static void hook(i_example_interface* self) {
         std::print("[vtable hooked] ");
