@@ -16,9 +16,11 @@ namespace ntl::polyhook {
         static inline address_t hooked_address{ };
 
     public:
+        static inline void reconfigure_detour() { }
         static bool setup(const address_t& address) {
             hooked_address = address;
             detour = std::make_unique<PLH::NatDetour>(address.cast<std::uint64_t>(), (uint64_t)hook_class_t::hook, (uint64_t*)&original);
+            hook_class_t::reconfigure_detour();
             return detour->hook();
         }
 
@@ -33,9 +35,11 @@ namespace ntl::polyhook {
         static inline address_t hooked_address{ };
 
     public:
+        static inline void reconfigure_detour() { }
         static bool setup(address_t address) {
             hooked_address = address;
             detour = std::make_unique<PLH::NatDetour>(address.cast<std::uint64_t>(), (uint64_t)hook_class_t::hook_proxy, (uint64_t*)&original);
+            hook_class_t::reconfigure_detour();
             return detour->hook();
         }
 

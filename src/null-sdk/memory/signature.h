@@ -36,24 +36,22 @@ namespace ntl {
         }
 
     public:
-        std::vector<address_t> find_all() {
-            PIMAGE_NT_HEADERS nt_headers = pe_image.nt_headers();
-            auto finded = std::ranges::search(std::views::iota((std::uintptr_t)nt_headers->OptionalHeader.ImageBase) | std::views::take((std::uintptr_t)nt_headers->OptionalHeader.SizeOfImage), bytes,
-                [](std::uint8_t image_byte, std::int32_t byte) { return byte == -1 || image_byte == byte; },
-                [](std::uintptr_t image_byte) { return *(std::uint8_t*)image_byte; }, [](std::int32_t byte) { return byte; }
-            );
+        template <typename self_t>
+        auto&& find(this self_t&& self) {
+            if(!self.address) {
+                PIMAGE_NT_HEADERS nt_headers = self.pe_image.nt_headers();
+                auto finded = std::ranges::search(
+                    std::views::iota((std::uintptr_t)nt_headers->OptionalHeader.ImageBase) | std::views::take((std::uintptr_t)nt_headers->OptionalHeader.SizeOfImage),
+                    self.bytes,
+                    [](std::uintptr_t image_byte, std::int32_t byte) { return byte == -1 || *(std::uint8_t*)image_byte == byte; }
+                );
 
 
-            if(!finded.empty()) return finded | std::views::transform([](std::uintptr_t addr) { return address_t(addr); }) | std::ranges::to<std::vector>();
-            else sdk::logger(sdk::e_log_type::warning, std::format("cant find \"{}\" signature", to_string()));
-            return { };
-        }
+                if(!finded.empty()) self.address = finded.front();
+                else sdk::logger(sdk::e_log_type::warning, std::format("cant find \"{}\" signature", self.to_string()));
+            }
 
-        const address_t& find() {
-            if(std::vector<address_t> results = find_all(); !results.empty())
-                address = results.front();
-
-            return address;
+            return self;
         }
     };
 }
