@@ -17,10 +17,6 @@
             <AdditionalIncludeDirectories>$(NullSdkRoot)src;$(NullSdkRoot)third-party;$(NullSdkRoot)third-party\fmt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
             <AdditionalIncludeDirectories Condition='Exists($(BOOST_INCLUDE))'>$(BOOST_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
         </ClCompile>
-        <Lib>
-            <AdditionalLibraryDirectories>$(NullSdkRoot)build;$(NullSdkRoot)third-party\minhook\lib;$(NullSdkRoot)third-party\fmt\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-            <AdditionalDependencies>null-sdk-$(NullSdkLibPostfix).lib;fmt-$(NullSdkConfiguration)-$(LibrariesArchitecture).lib;libMinHook-$(LibrariesArchitecture)-v141-mdd.lib;%(AdditionalDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-        </Lib>
         <Link>
             <AdditionalLibraryDirectories>$(NullSdkRoot)build;$(NullSdkRoot)third-party\minhook\lib;$(NullSdkRoot)third-party\fmt\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
             <AdditionalDependencies>null-sdk-$(NullSdkLibPostfix).lib;fmt-$(NullSdkLibPostfix).lib;libMinHook-$(LibrariesArchitecture)-v141-mdd.lib;%(AdditionalDependencies);%(AdditionalDependencies)</AdditionalDependencies>
@@ -31,10 +27,6 @@
             <AdditionalIncludeDirectories>$(POLYHOOK_PATH)\asmjit;$(POLYHOOK_PATH)\asmtk;$(POLYHOOK_PATH)\polyhook2;$(POLYHOOK_PATH)\Zycore;$(POLYHOOK_PATH)\Zydis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
             <PreprocessorDefinitions>NULLSDK_POLYHOOK_EXIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
         </ClCompile>
-        <Lib>
-            <AdditionalLibraryDirectories>$(POLYHOOK_PATH)\asmjit\libs;$(POLYHOOK_PATH)\asmtk\libs;$(POLYHOOK_PATH)\polyhook2\libs;$(POLYHOOK_PATH)\Zycore\libs;$(POLYHOOK_PATH)\Zydis\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-            <AdditionalDependencies>polyhook2-$(NullSdkLibPostfix).lib;asmjit-$(NullSdkLibPostfix).lib;asmtk-$(NullSdkLibPostfix).lib;Zydis-$(NullSdkLibPostfix).lib;Zycore-$(NullSdkLibPostfix).lib;%(AdditionalDependencies)</AdditionalDependencies>
-        </Lib>
         <Link>
             <AdditionalLibraryDirectories>$(POLYHOOK_PATH)\asmjit\libs;$(POLYHOOK_PATH)\asmtk\libs;$(POLYHOOK_PATH)\polyhook2\libs;$(POLYHOOK_PATH)\Zycore\libs;$(POLYHOOK_PATH)\Zydis\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
             <AdditionalDependencies>polyhook2-$(NullSdkLibPostfix).lib;asmjit-$(NullSdkLibPostfix).lib;asmtk-$(NullSdkLibPostfix).lib;Zydis-$(NullSdkLibPostfix).lib;Zycore-$(NullSdkLibPostfix).lib;%(AdditionalDependencies)</AdditionalDependencies>
