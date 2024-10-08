@@ -33,8 +33,8 @@ public:
     }
 
 public:
-    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec3_t<float>() const, vec3_t<float>, , h, s, v);
-    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec4_t<float>() const, vec4_t<float>, , h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec3_t<float>() const, vec3_t<float>, , h, s, v);
+    NULLSDK_FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , vec4_t<float>() const, vec4_t<float>, , h, s, v, a);
 
     operator ntl::sdk::i_color<float>() const {
         const double chroma{ v * s };
@@ -55,15 +55,15 @@ public:
         return ntl::sdk::i_color<double>{ rgb + m, a }.cast<float>();
     }
 
-    FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, h, s, v, a);
-    FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, h, s, v, a);
 
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const hsv_color_t&, RHS_FIELD, h, s, v, a);
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, float, RHS_VALUE, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const hsv_color_t&, RHS_FIELD, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, float, RHS_VALUE, h, s, v, a);
 
-    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , const hsv_color_t&, RHS_FIELD, h, s, v, a);
-    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , float, RHS_VALUE, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , const hsv_color_t&, RHS_FIELD, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , float, RHS_VALUE, h, s, v, a);
 
-    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, const hsv_color_t&, RHS_FIELD, h, s, v, a);
-    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, float, RHS_VALUE, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, const hsv_color_t&, RHS_FIELD, h, s, v, a);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, float, RHS_VALUE, h, s, v, a);
 };

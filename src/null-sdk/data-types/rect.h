@@ -23,8 +23,8 @@ namespace ntl {
 
         vertival_mask   = top | bottom,
         horizontal_mask = left | right
-    }; ENUM_CREATE_BIT_OPERATORS(e_rect_origin, false);
-    ENUM_CREATE_CAST_OPERATOR(e_rect_origin, -);
+    }; NULLSDK_ENUM_CREATE_BIT_OPERATORS(e_rect_origin, false);
+    NULLSDK_ENUM_CREATE_CAST_OPERATOR(e_rect_origin, -);
 }
 
 template <typename corner_t>
@@ -89,26 +89,26 @@ public:
     template <typename self_t> inline constexpr auto&& origin(this self_t&& self, ntl::e_rect_origin _origin, const vec2_t<corner_t>& size) { return self.origin(scale_from_origin(_origin), size); }
 
 public:
-    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, template <typename other_t>, rect_t<other_t>() const, rect_t<other_t>, (vec2_t<other_t>), min, max);
-    FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , FAST_OPS_ARGS_PACK(std::tuple<corner_t, corner_t, corner_t, corner_t>)() const, std::make_tuple, , min.x, min.y, max.x, max.y);
+    NULLSDK_FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, template <typename other_t>, rect_t<other_t>() const, rect_t<other_t>, (vec2_t<other_t>), min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_CONVERT_OPERATOR(inline constexpr, , NULLSDK_FAST_OPS_ARGS_PACK(std::tuple<corner_t, corner_t, corner_t, corner_t>)() const, std::make_tuple, , min.x, min.y, max.x, max.y);
 
     template <typename type_t> requires ntl::compatibility::data_type_convertertable<rect_t<corner_t>, type_t>
     inline constexpr operator type_t() const { return ntl::compatibility::data_type_converter_t<rect_t<corner_t>, type_t>::convert(*this); }
 
     template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.corners[i]; }
 
-    FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, min, max);
-    FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, min, max);
 
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const rect_t<other_t>&, RHS_FIELD, min, max);
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec2_t<other_t>&, RHS_VALUE, min, max);
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, corner_t, RHS_VALUE, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const rect_t<other_t>&, RHS_FIELD, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec2_t<other_t>&, RHS_VALUE, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, corner_t, RHS_VALUE, min, max);
 
-    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const rect_t<other_t>&, RHS_FIELD, min, max);
-    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const vec2_t<other_t>&, RHS_VALUE, min, max);
-    FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , corner_t, RHS_VALUE, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const rect_t<other_t>&, RHS_FIELD, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_t>, const vec2_t<other_t>&, RHS_VALUE, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , corner_t, RHS_VALUE, min, max);
 
-    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const rect_t<other_t>&, RHS_FIELD, min, max);
-    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec2_t<other_t>&, RHS_VALUE, min, max);
-    FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, corner_t, RHS_VALUE, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const rect_t<other_t>&, RHS_FIELD, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, typename other_t>), const vec2_t<other_t>&, RHS_VALUE, min, max);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, corner_t, RHS_VALUE, min, max);
 };

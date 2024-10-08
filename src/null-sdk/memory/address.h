@@ -35,13 +35,13 @@ namespace ntl {
         inline address_t jumped(std::intptr_t offset) const { return address_t(*this).jump(offset); }
 
     public:
-        FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, address);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, address);
 
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const address_t&, RHS_FIELD, address);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const address_t&, RHS_FIELD, address);
 
-        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , const address_t&, RHS_FIELD, address);
+        NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , const address_t&, RHS_FIELD, address);
 
-        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, const address_t&, RHS_FIELD, address);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, const address_t&, RHS_FIELD, address);
 
         inline constexpr address_t operator &(const address_t& rhs) const { return address & rhs.address; }
 

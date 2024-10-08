@@ -29,22 +29,22 @@ namespace ntl::sdk {
     public:
         template <typename self_t> inline constexpr operator value_t(this self_t&& self) { return self.angle; }
 
-        FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, angle);
-        FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, angle);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, angle);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, angle);
 
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const i_angle<value_t>&, RHS_FIELD, angle);
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, value_t, RHS_VALUE, angle);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const i_angle<value_t>&, RHS_FIELD, angle);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, value_t, RHS_VALUE, angle);
 
         inline constexpr auto operator<=>(const i_angle<value_t>&) const = default;
         inline constexpr auto operator<=>(const value_t& other) const { return angle <=> other; }
     };
 }
 
-#define angle_impl_make_functions(return_t, name)   \
-    return_t name() const;                          \
-    return_t a##name() const;                       \
-    return_t name##h() const;                       \
-    return_t a##name##h() const;                    \
+#define NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(return_t, name)   \
+    return_t name() const;                                  \
+    return_t a##name() const;                               \
+    return_t name##h() const;                               \
+    return_t a##name##h() const;                            \
 
 template <ntl::sdk::is_angle_type_t value_t>
 struct angle_t { };
@@ -89,9 +89,9 @@ public:
     inline constexpr operator angle_t<degrees_t>() const;
 
 public:
-    angle_impl_make_functions(radians_t, sin);
-    angle_impl_make_functions(radians_t, cos);
-    angle_impl_make_functions(radians_t, tan);
+    NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(radians_t, sin);
+    NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(radians_t, cos);
+    NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(radians_t, tan);
 };
 
 template <>
@@ -134,9 +134,9 @@ public:
     inline constexpr operator angle_t<radians_t>() const;
 
 public:
-    angle_impl_make_functions(degrees_t, sin);
-    angle_impl_make_functions(degrees_t, cos);
-    angle_impl_make_functions(degrees_t, tan);
+    NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(degrees_t, sin);
+    NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(degrees_t, cos);
+    NULLSDK_ANGLE_IMPL_MAKE_FUNCTIONS(degrees_t, tan);
 };
 
 inline constexpr angle_t<radians_t>::angle_t(const i_angle<degrees_t>& degrees) : angle_t(degrees.angle) { }

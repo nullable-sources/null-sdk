@@ -135,7 +135,7 @@ namespace ntl {
         yellow = red | green,
 
         restore = white,
-    }; ENUM_CREATE_BIT_OPERATORS(e_dye, false);
-    ENUM_CREATE_CAST_OPERATOR(e_dye, -);
+    }; NULLSDK_ENUM_CREATE_BIT_OPERATORS(e_dye, false);
+    NULLSDK_ENUM_CREATE_CAST_OPERATOR(e_dye, -);
     static std::ostream& operator<<(std::ostream& os, e_dye dye) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), -dye); return os; }
 }

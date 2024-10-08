@@ -28,12 +28,12 @@ public:
     auto&& set_angle(this self_t&& self, const vec2_t<point_t>& point) { self.angle = angle_t<radians_t>((radians_t)std::atan2(point.y, point.x)); return self; }
 
 public:
-    FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, angle);
-    FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, angle);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, angle);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, angle);
 
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const euler2d_t<angle_value_t>&, RHS_FIELD, angle);
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const angle_t<angle_value_t>&, RHS_FIELD, angle);
-    FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, angle);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const euler2d_t<angle_value_t>&, RHS_FIELD, angle);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, const angle_t<angle_value_t>&, RHS_FIELD, angle);
+    NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, angle);
 
     inline constexpr auto operator<=>(const euler2d_t<angle_value_t, rotation>&) const = default;
     inline constexpr auto operator<=>(const angle_t<angle_value_t>& rhs) const { return angle <=> rhs.angle; }

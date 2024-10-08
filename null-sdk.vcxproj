@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Label="NullVCXProperties">
-    <NullSdkConfigProps Condition="Exists('$(SolutionDir)third-party\null-projects-config\null-sdk-config.props')">$(SolutionDir)third-party\null-projects-config\null-sdk-config.props</NullSdkConfigProps>
-  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="debug|Win32">
       <Configuration>debug</Configuration>
@@ -133,4 +130,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <PropertyGroup Label="NullVCXProperties">
+    <NullSdkConfigProps Condition="Exists('$(SolutionDir)third-party\null-projects-config\null-sdk-config.props')">$(SolutionDir)third-party\null-projects-config\null-sdk-config.props</NullSdkConfigProps>
+        <NullSdkConfigProps Condition="!Exists('$(SolutionDir)third-party\null-projects-config\null-sdk-config.props')">..\null-projects-config\null-sdk-config.props</NullSdkConfigProps>
+  </PropertyGroup>
+  <Import Condition="Exists('$(NullSdkConfigProps)')" Project="$(NullSdkConfigProps)" />
 </Project>

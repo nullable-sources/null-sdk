@@ -5,7 +5,12 @@
         <NullSdkConfiguration Condition="'$(UseDebugLibraries)' == 'true'">debug</NullSdkConfiguration>
         <NullSdkConfiguration Condition="'$(UseDebugLibraries)' == 'false'">release</NullSdkConfiguration>
         <NullSdkLibPostfix>$(NullSdkConfiguration)-$(LibrariesArchitecture)</NullSdkLibPostfix>
+
+        <NullSdkConfigProps Condition="Exists('$(SolutionDir)third-party\null-projects-config\null-sdk-config.props')">$(SolutionDir)third-party\null-projects-config\null-sdk-config.props</NullSdkConfigProps>
+        <NullSdkConfigProps Condition="!Exists('$(SolutionDir)third-party\null-projects-config\null-sdk-config.props')">..\null-projects-config\null-sdk-config.props</NullSdkConfigProps>
     </PropertyGroup>
+
+    <Import Condition="Exists('$(NullSdkConfigProps)')" Project="$(NullSdkConfigProps)" />
 
     <ItemDefinitionGroup>
         <ClCompile>

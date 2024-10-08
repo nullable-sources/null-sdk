@@ -13,7 +13,7 @@ namespace ntl::sdk {
         xyz, xzy, yxz,
         zyx, yzx, zxy,
         num,
-    }; ENUM_CREATE_CAST_OPERATOR(e_euler_sequence, -);
+    }; NULLSDK_ENUM_CREATE_CAST_OPERATOR(e_euler_sequence, -);
     static inline constexpr e_euler_sequence invert_euler_sequence(e_euler_sequence sequence) {
         int id = -sequence;
         constexpr int half_sequence = -e_euler_sequence::num / 2;
@@ -280,13 +280,13 @@ namespace ntl::sdk {
 
         template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.axes[i]; }
 
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
-        FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
-        FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
-        FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_ARITHMETIC_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
+        NULLSDK_FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        NULLSDK_FAST_OPS_STRUCTURE_SELF_EQUAL_OPERATOR(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
 
-        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
-        FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, NULLSDK_FAST_OPS_ARGS_PACK(template <typename self_t, is_angle_type_t angle_other_t>), const self_euler_type_t<angle_other_t>&, RHS_FIELD, x, y, z);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_COMPARISON_OPERATORS(inline constexpr, template <typename self_t>, angle_value_t, RHS_VALUE, x, y, z);
     };
 
     std::false_type is_euler3d_type_impl(...);
@@ -297,43 +297,43 @@ namespace ntl::sdk {
     using is_euler3d_type_t = decltype(is_euler3d_type_impl(std::declval<type_t>()));
 }
 
-#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_RAW_CTOR(i, data, elem)                        \
-    angle_type_t BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
+#define NULLSDK_FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_RAW_CTOR(i, data, elem)              \
+    angle_type_t BOOST_PP_CAT(_, NULLSDK_FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))  \
 
-#define FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_TYPE_CTOR(i, data, elem)                                       \
-    const angle_t<angle_type_t>& BOOST_PP_CAT(_, FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))   \
+#define NULLSDK_FAST_DEFS__UNPACK_TUPLE_ELEMENT__EULER_TYPE_CTOR(i, data, elem)                             \
+    const angle_t<angle_type_t>& BOOST_PP_CAT(_, NULLSDK_FAST_DEFS__UNPACK_TUPLE_ELEMENT__(i, data, elem))  \
 
-#define NULLSDK_MAKE_EULER_MEMORY_LAYOUT(layout_name, ...)                                                      \
-namespace ntl::sdk {                                                                                            \
-    template <is_angle_type_t angle_value_t>                                                                    \
-    struct euler_##layout_name##_memory_layout_t {                                                              \
-    public:                                                                                                     \
-        template <is_angle_type_t angle_type_t>                                                                 \
-        using order_t = vec3_t<angle_type_t>;                                                                   \
-        template <is_angle_type_t angle_type_t>                                                                 \
-        using angles_order_t = vec3_t<angle_t<angle_type_t>>;                                                   \
-                                                                                                                \
-        union {                                                                                                 \
-            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__); };                    \
-            struct { angle_t<angle_value_t> FAST_DEFS__UNPACK_SEQ_ENUM(1, , __VA_ARGS__); };                    \
-            angles_order_t<angle_value_t> axes{ };                                                              \
-        };                                                                                                      \
-                                                                                                                \
-    public:                                                                                                     \
-        euler_##layout_name##_memory_layout_t() { }                                                             \
-        template <is_angle_type_t angle_type_t>                                                                 \
-        euler_##layout_name##_memory_layout_t(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_RAW_CTOR, __VA_ARGS__))       \
-            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                         \
-        template <is_angle_type_t angle_type_t>                                                                 \
-        euler_##layout_name##_memory_layout_t(FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_TYPE_CTOR, __VA_ARGS__))      \
-            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                         \
-        template <is_angle_type_t angle_type_t>                                                                 \
-        euler_##layout_name##_memory_layout_t(const order_t<angle_type_t>& _axes) : axes(_axes) { }             \
-        template <is_angle_type_t angle_type_t>                                                                 \
-        euler_##layout_name##_memory_layout_t(const angles_order_t<angle_type_t>& _axes) : axes(_axes) { }      \
-    };                                                                                                          \
-}                                                                                                               \
-                                                                                                                \
+#define NULLSDK_MAKE_EULER_MEMORY_LAYOUT(layout_name, ...)                                                          \
+namespace ntl::sdk {                                                                                                \
+    template <is_angle_type_t angle_value_t>                                                                        \
+    struct euler_##layout_name##_memory_layout_t {                                                                  \
+    public:                                                                                                         \
+        template <is_angle_type_t angle_type_t>                                                                     \
+        using order_t = vec3_t<angle_type_t>;                                                                       \
+        template <is_angle_type_t angle_type_t>                                                                     \
+        using angles_order_t = vec3_t<angle_t<angle_type_t>>;                                                       \
+                                                                                                                    \
+        union {                                                                                                     \
+            struct { angle_t<angle_value_t> NULLSDK_FAST_DEFS__UNPACK_SEQ_ENUM(0, , __VA_ARGS__); };                \
+            struct { angle_t<angle_value_t> NULLSDK_FAST_DEFS__UNPACK_SEQ_ENUM(1, , __VA_ARGS__); };                \
+            angles_order_t<angle_value_t> axes{ };                                                                  \
+        };                                                                                                          \
+                                                                                                                    \
+    public:                                                                                                         \
+        euler_##layout_name##_memory_layout_t() { }                                                                 \
+        template <is_angle_type_t angle_type_t>                                                                     \
+        euler_##layout_name##_memory_layout_t(NULLSDK_FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_RAW_CTOR, __VA_ARGS__))   \
+            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                             \
+        template <is_angle_type_t angle_type_t>                                                                     \
+        euler_##layout_name##_memory_layout_t(NULLSDK_FAST_DEFS__UNPACK_SEQ_ENUM(1, EULER_TYPE_CTOR, __VA_ARGS__))  \
+            : roll(_roll), pitch(_pitch), yaw(_yaw) { }                                                             \
+        template <is_angle_type_t angle_type_t>                                                                     \
+        euler_##layout_name##_memory_layout_t(const order_t<angle_type_t>& _axes) : axes(_axes) { }                 \
+        template <is_angle_type_t angle_type_t>                                                                     \
+        euler_##layout_name##_memory_layout_t(const angles_order_t<angle_type_t>& _axes) : axes(_axes) { }          \
+    };                                                                                                              \
+}                                                                                                                   \
+                                                                                                                    \
 
 #define NULLSDK_MAKE_EULER_MEMORY_LAYOUT_SHORTCAT(impl_name)                                                                                        \
     template <ntl::sdk::is_angle_type_t angle_value_t, typename description_t = ntl::sdk::default_euler_description_t>                              \

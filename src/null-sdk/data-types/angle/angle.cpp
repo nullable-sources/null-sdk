@@ -1,16 +1,16 @@
 #include "angle.h"
 
-#define make_function(type, name, body) type angle_t<type>::name##() const { return body; }
+#define NULLSDK_MAKE_ANGLE_FUNCTION(type, name, body) type angle_t<type>::name##() const { return body; }
 
-#define make_degrees_functuin(name) make_function(degrees_t, name, std::name##(cast()) * angle_t<radians_t>::pi)
-#define make_radians_functuin(name) make_function(radians_t, name, std::name##(angle))
+#define NULLSDK_MAKE_DEGREES_FUNCTUIN(name) NULLSDK_MAKE_ANGLE_FUNCTION(degrees_t, name, std::name##(cast()) * angle_t<radians_t>::pi)
+#define NULLSDK_MAKE_RADIANS_FUNCTUIN(name) NULLSDK_MAKE_ANGLE_FUNCTION(radians_t, name, std::name##(angle))
 
-#define make_functions(type, name) type(name) type(a##name) type(name##h) type(a##name##h)
+#define NULLSDK_MAKE_ANGLE_FUNCTIONS(type, name) type(name) type(a##name) type(name##h) type(a##name##h)
 
-make_functions(make_degrees_functuin, sin);
-make_functions(make_degrees_functuin, cos);
-make_functions(make_degrees_functuin, tan);
+NULLSDK_MAKE_ANGLE_FUNCTIONS(NULLSDK_MAKE_DEGREES_FUNCTUIN, sin);
+NULLSDK_MAKE_ANGLE_FUNCTIONS(NULLSDK_MAKE_DEGREES_FUNCTUIN, cos);
+NULLSDK_MAKE_ANGLE_FUNCTIONS(NULLSDK_MAKE_DEGREES_FUNCTUIN, tan);
 
-make_functions(make_radians_functuin, sin);
-make_functions(make_radians_functuin, cos);
-make_functions(make_radians_functuin, tan);
+NULLSDK_MAKE_ANGLE_FUNCTIONS(NULLSDK_MAKE_RADIANS_FUNCTUIN, sin);
+NULLSDK_MAKE_ANGLE_FUNCTIONS(NULLSDK_MAKE_RADIANS_FUNCTUIN, cos);
+NULLSDK_MAKE_ANGLE_FUNCTIONS(NULLSDK_MAKE_RADIANS_FUNCTUIN, tan);

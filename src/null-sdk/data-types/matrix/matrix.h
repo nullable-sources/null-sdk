@@ -163,8 +163,8 @@ namespace ntl::sdk {
 
         template <typename self_t> inline auto&& operator [](this self_t&& self, int i) { return self.data[i]; }
 
-        FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, data);
-        FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, data);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_PREFIX_OPERATORS(inline constexpr, data);
+        NULLSDK_FAST_OPS_STRUCTURE_ALL_POSTFIX_OPERATORS(inline constexpr, data);
 
         template <typename other_data_t, size_t other_rows_num, size_t other_columns_num>
         auto operator*(const i_matrix<major_type_t, other_data_t, other_rows_num, other_columns_num>& rhs) const {
@@ -186,12 +186,12 @@ namespace ntl::sdk {
         template <typename self_t, typename other_data_t> inline auto&& operator*=(this self_t&& self, const different_data_type_t<other_data_t>& rhs) { self = self * rhs; return self; }
         template <typename self_t> inline auto&& operator*=(this self_t&& self, const column_header_t& rhs) { self = self * rhs; return self; }
 
-        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_data_t>, const different_data_type_t<other_data_t>&, RHS_FIELD, data);
-        FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , data_t, RHS_VALUE, data);
+        NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, template <typename other_data_t>, const different_data_type_t<other_data_t>&, RHS_FIELD, data);
+        NULLSDK_FAST_OPS_STRUCTURE_EQUAL_OPERATOR(inline constexpr, , data_t, RHS_VALUE, data);
     };
 }
 
-#define make_matrix_definition(rows_num, columns_num)                                                                                                                                                   \
+#define NULLSDK_MAKE_MATRIX_DEFINITION(rows_num, columns_num)                                                                                                                                           \
     template <typename major_type_t>                                                                                                                                                                    \
     class c_matrix##rows_num##x##columns_num : public ntl::sdk::i_matrix<major_type_t, float, rows_num, columns_num> {                                                                                  \
     public:                                                                                                                                                                                             \
@@ -200,13 +200,11 @@ namespace ntl::sdk {
     };                                                                                                                                                                                                  \
     using matrix##rows_num##x##columns_num##_t = c_matrix##rows_num##x##columns_num##<ntl::sdk::column_major_t>;                                                                                        \
 
-make_matrix_definition(2, 3);
-make_matrix_definition(2, 4);
+NULLSDK_MAKE_MATRIX_DEFINITION(2, 3);
+NULLSDK_MAKE_MATRIX_DEFINITION(2, 4);
 
-make_matrix_definition(3, 2);
-make_matrix_definition(3, 4);
+NULLSDK_MAKE_MATRIX_DEFINITION(3, 2);
+NULLSDK_MAKE_MATRIX_DEFINITION(3, 4);
 
-make_matrix_definition(4, 2);
-make_matrix_definition(4, 3);
-
-#undef make_matrix_definition
+NULLSDK_MAKE_MATRIX_DEFINITION(4, 2);
+NULLSDK_MAKE_MATRIX_DEFINITION(4, 3);
