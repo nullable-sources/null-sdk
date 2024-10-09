@@ -18,7 +18,7 @@ int main() {
         std::cout << std::format("sys_info.dwPageSize == {}\n", sys_info.dwPageSize);
 
         {
-            ntl::c_dll _kernel32{ "kernel32.dll" };
+            ntl::c_dll _kernel32("kernel32.dll");
             ntl::c_dll::c_export<BOOL(DWORD dwFreq, DWORD dwDuration)> beep(&_kernel32, "Beep");
             beep(750, 300);
         }

@@ -50,8 +50,5 @@ namespace ntl {
     };
 
     template <typename value_t>
-    concept is_not_sdk_address_t = !std::is_same_v<value_t, address_t>;
-
-    template <typename value_t>
-    concept is_sdk_address_t = std::is_same_v<value_t, address_t>;
+    concept is_allowed_address_construct = !std::is_same_v<value_t, address_t> && !std::is_convertible_v<value_t, std::string> && !std::is_convertible_v<value_t, std::wstring>;
 }

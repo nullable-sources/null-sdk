@@ -10,7 +10,7 @@ namespace ntl {
 
     public:
         inline constexpr pe_image_t() { }
-        template <is_not_sdk_address_t value_t>
+        template <is_allowed_address_construct value_t>
         inline constexpr pe_image_t(value_t value) : base_address(value) { }
 
     public:
@@ -26,7 +26,7 @@ namespace ntl {
         }
 
     public:
-        template <typename cast_t> inline constexpr operator cast_t() const { return cast<cast_t>(); }
+        template <is_allowed_address_construct cast_t> inline constexpr operator cast_t() const { return cast<cast_t>(); }
         inline constexpr operator bool() const { return base_address; }
     };
 }
