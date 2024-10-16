@@ -3,6 +3,7 @@
 #include <vector>
 #include <ranges>
 #include <algorithm>
+#include <string>
 
 #include "../utils/fast-operators.h"
 
