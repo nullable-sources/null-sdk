@@ -16,8 +16,9 @@ public:
     inline constexpr hsv_color_t(const vec3_t<float> _hsv, float _a) : hsv_color_t(_hsv.x, _hsv.y, _hsv.z, _a) { }
     inline constexpr hsv_color_t(const vec4_t<float> _hsva) : hsv_color_t(_hsva.x, _hsva.y, _hsva.z, _hsva.w) { }
     hsv_color_t(const ntl::sdk::i_color<float>& rgba) : channels{ rgba.channels } {
-        const double max{ std::ranges::max(rgba.channels | std::views::take(3)) };
-        const double delta{ max - std::ranges::min(rgba.channels | std::views::take(3)) };
+        const auto hsv = rgba.channels | std::views::take(3);
+        const double max{ std::ranges::max(hsv) };
+        const double delta{ max - std::ranges::min(hsv) };
 
         if(delta <= 0.f) channels = { 0.f, 0.f, (float)max, rgba.a };
         else {

@@ -55,7 +55,7 @@ namespace ntl {
             copied_t copied_vtable{ };
             copied_vtable.original_ptr = get(self);
 
-            for(std::size_t index : std::views::iota(0u, methods_count))
+            for(std::size_t index = 0; index < methods_count; index++)
                 copied_vtable.vtable.push_back(get(self, index));
 
             return copied_vtable;

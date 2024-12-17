@@ -5,29 +5,35 @@
 #include "../vec4.h"
 
 namespace ntl::sdk {
+    template <size_t size, typename data_t> struct vec_type_selector_t { using vec_t = data_t; };
+    template <typename data_t> struct vec_type_selector_t<2, data_t> { using vec_t = vec2_t<data_t>; };
+    template <typename data_t> struct vec_type_selector_t<3, data_t> { using vec_t = vec3_t<data_t>; };
+    template <typename data_t> struct vec_type_selector_t<4, data_t> { using vec_t = vec4_t<data_t>; };
+
     struct packed_access_t {
     public:
-        static inline auto get(auto&& matrix, size_t i) { return matrix.data[i]; }
         static inline void set(auto&& matrix, size_t i, const auto& new_data) { matrix.data[i] = new_data; }
+        template <typename value_t> static inline auto& get(auto&& matrix, size_t i) { return matrix.data[i]; }
     };
 
     template <size_t stride_size>
     struct stride_access_t {
     public:
-        static inline void set(auto&& matrix, size_t i, const auto& new_data) {
-            for(int data_i{ }; auto& data : matrix.linear_array | std::views::drop(i) | std::views::stride(stride_size))
-                data = new_data[data_i++];
+        static inline void set(auto&& matrix, size_t i, const auto& new_value) {
+            for(int value_idx = 0; i < matrix.linear_array.size(); i += stride_size)
+                matrix.linear_array[i] = new_value[value_idx++];
         }
 
+        template <typename value_t>
         static inline auto get(auto&& matrix, size_t i) {
-            return matrix.linear_array | std::views::drop(i) | std::views::stride(stride_size) | std::ranges::to<std::vector>();
+            typename vec_type_selector_t<stride_size, value_t>::vec_t result{ };
+
+            for(int idx = 0; i < matrix.linear_array.size(); i += stride_size)
+                result[idx++] = matrix.linear_array[i];
+
+            return result;
         }
     };
-
-    template <size_t size, typename data_t> struct vec_type_selector_t { using vec_t = data_t; };
-    template <typename data_t> struct vec_type_selector_t<2, data_t> { using vec_t = vec2_t<data_t>; };
-    template <typename data_t> struct vec_type_selector_t<3, data_t> { using vec_t = vec3_t<data_t>; };
-    template <typename data_t> struct vec_type_selector_t<4, data_t> { using vec_t = vec4_t<data_t>; };
 
     struct row_major_t;
     struct column_major_t;
@@ -112,10 +118,11 @@ namespace ntl::sdk {
 
         template <size_t another_rows_num, size_t another_columns_num>
         i_matrix(const i_matrix<major_type_t, data_t, another_rows_num, another_columns_num>& matrix) {
-            if(diagonal_size > std::min(another_rows_num, another_columns_num))
+            if constexpr(diagonal_size > std::min(another_rows_num, another_columns_num))
                 set_diagonal(1.f);
 
-            for(int row : std::views::iota(0u, std::min(rows_num, another_rows_num)))
+            constexpr size_t min_rows_num = std::min(rows_num, another_rows_num);
+            for(int row = 0; row < min_rows_num; row++)
                 set_row(row, matrix.get_row(row));
         }
 
@@ -124,34 +131,34 @@ namespace ntl::sdk {
 
     public:
         template <typename self_t> inline auto&& get_by_index(this self_t&& self, size_t row, size_t column) { return major_type_t::get_by_index(self, row, column); }
-        template <typename self_t> inline auto&& fill_rows(this self_t&& self, const row_header_t& row) { for(int i : std::views::iota(0u, rows_num)) self.set_row(i, row); return self; }
-        template <typename self_t> inline auto&& fill_columns(this self_t&& self, const column_header_t& column) { for(int i : std::views::iota(0u, columns_num)) self.set_column(i, column); return self; }
+        template <typename self_t> inline auto&& fill_rows(this self_t&& self, const row_header_t& row) { for(int i = 0; i < rows_num; i++) self.set_row(i, row); return self; }
+        template <typename self_t> inline auto&& fill_columns(this self_t&& self, const column_header_t& column) { for(int i = 0; i < columns_num; i++) self.set_column(i, column); return self; }
 
-        template <typename self_t> inline auto&& set_rows(this self_t&& self, const rows_t& rows) { for(int i : std::views::iota(0u, rows_num)) self.set_row(i, rows[i]); return self; }
+        template <typename self_t> inline auto&& set_rows(this self_t&& self, const rows_t& rows) { for(int i = 0; i < rows_num; i++) self.set_row(i, rows[i]); return self; }
         template <typename self_t> inline auto&& set_row(this self_t&& self, size_t i, const row_header_t& row) { row_access_t::set(self, i, row); return self; }
-        template <typename self_t> inline row_header_t get_row(this self_t&& self, size_t i) { return row_access_t::get(self, i); }
+        template <typename self_t> inline row_header_t get_row(this self_t&& self, size_t i) { return row_access_t::template get<data_t>(self, i); }
 
-        template <typename self_t> inline auto&& set_columns(this self_t&& self, const columns_t& columns) { for(int i : std::views::iota(0u, columns_num)) self.set_column(i, columns[i]); return self; }
+        template <typename self_t> inline auto&& set_columns(this self_t&& self, const columns_t& columns) { for(int i = 0; i < columns_num; i++) self.set_column(i, columns[i]); return self; }
         template <typename self_t> inline auto&& set_column(this self_t&& self, size_t i, const column_header_t& column) { column_access_t::set(self, i, column); return self; }
-        template <typename self_t> inline column_header_t get_column(this self_t&& self, size_t i) { return column_access_t::get(self, i); }
+        template <typename self_t> inline column_header_t get_column(this self_t&& self, size_t i) { return column_access_t::template get<data_t>(self, i); }
 
     public:
         inline transpose_t transpose() const {
             transpose_t transpose{ };
-            for(int i : std::views::iota(0u, rows_num))
+            for(int i = 0; i < rows_num; i++)
                 transpose.set_row(i, get_row(i));
             return transpose;
         }
 
         template <typename self_t>
         inline auto&& set_diagonal(this self_t&& self, const diagonal_t& value) {
-            for(int i : std::views::iota(0u, diagonal_size)) self.data[i][i] = value[i];
+            for(int i = 0; i < diagonal_size; i++) self.data[i][i] = value[i];
             return self;
         }
 
         inline diagonal_t get_diagonal() const {
             diagonal_t result{ };
-            for(int i : std::views::iota(0u, diagonal_size)) { result[i] = data[i][i]; }
+            for(int i = 0; i < diagonal_size; i++) { result[i] = data[i][i]; }
             return result;
         }
 
@@ -170,15 +177,17 @@ namespace ntl::sdk {
         auto operator*(const i_matrix<major_type_t, other_data_t, other_rows_num, other_columns_num>& rhs) const {
             constexpr size_t rows = std::min(rows_num, other_rows_num), columns = std::min(columns_num, other_columns_num);
             i_matrix<major_type_t, other_data_t, rows, other_columns_num> result{ };
-            for(int row : std::views::iota(0u, rows))
-                for(int column : std::views::iota(0u, other_columns_num))
-                    result.get_by_index(row, column) = get_row(row).dot(rhs.get_column(column));
+            for(int row = 0; row < rows; row++) {
+                auto vec_row = get_row(row);
+                for(int column = 0; column < other_columns_num; column++)
+                    result.get_by_index(row, column) = vec_row.dot(rhs.get_column(column));
+            }
             return result;
         }
 
         auto operator*(const column_header_t& rhs) const {
             column_header_t result{ };
-            for(int row : std::views::iota(0u, rows_num))
+            for(int row = 0; row < rows_num; row++)
                 result[row] = get_row(row).dot(rhs);
             return result;
         }
